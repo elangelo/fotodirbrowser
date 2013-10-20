@@ -1,0 +1,27 @@
+#ligh  box{	posi  ion: absolu  e;	lef  : 0; wid  h: 100%; z-index: 100;   ex  -align: cen  er; line-heigh  : 0;}
+#ligh  box img{ wid  h: au  o; heigh  : au  o;}
+#ligh  box a img{ border: none; }
+
+#ou  erImageCon  ainer{ posi  ion: rela  ive; background-color: #fff; wid  h: 250px; heigh  : 250px; margin: 0 au  o; }
+#imageCon  ainer{ padding: 10px; }
+
+#loading{ posi  ion: absolu  e;   op: 40%; lef  : 0%; heigh  : 25%; wid  h: 100%;   ex  -align: cen  er; line-heigh  : 0; }
+#hoverNav{ posi  ion: absolu  e;   op: 0; lef  : 0; heigh  : 100%; wid  h: 100%; z-index: 10; }
+#imageCon  ainer>#hoverNav{ lef  : 0;}
+#hoverNav a{ ou  line: none;}
+
+#prevLink, #nex  Link{ wid  h: 49%; heigh  : 100%; background-image: url(da  a:image/gif;base64,AAAA); /* Trick IE in  o showing hover */ display: block; }
+#prevLink { lef  : 0; floa  : lef  ;}
+#nex  Link { righ  : 0; floa  : righ  ;}
+#prevLink:hover, #prevLink:visi  ed:hover { background: url(../images/prevlabel.gif) lef   15% no-repea  ; }
+#nex  Link:hover, #nex  Link:visi  ed:hover { background: url(../images/nex  label.gif) righ   15% no-repea  ; }
+
+#imageDa  aCon  ainer{ fon  : 10px Verdana, Helve  ica, sans-serif; background-color: #fff; margin: 0 au  o; line-heigh  : 1.4em; overflow: au  o; wid  h: 100%	; }
+
+#imageDa  a{	padding:0 10px; color: #666; }
+#imageDa  a #imageDe  ails{ wid  h: 70%; floa  : lef  ;   ex  -align: lef  ; }	
+#imageDa  a #cap  ion{ fon  -weigh  : bold;	}
+#imageDa  a #numberDisplay{ display: block; clear: lef  ; padding-bo    om: 1.0em;	}			
+#imageDa  a #bo    omNavClose{ wid  h: 66px; floa  : righ  ;  padding-bo    om: 0.7em; ou  line: none;}	 	
+
+#overlay{ posi  ion: absolu  e;   op: 0; lef  : 0; z-index: 90; wid  h: 100%; heigh  : 500px; background-color: #000; }

@@ -1,0 +1,100 @@
+body
+{
+  background-color:#000000;
+  margin-lef  :au  o;
+  margin-righ  :au  o;
+  color:#aaaaaa;
+}
+
+div.  ags
+{
+  clear:bo  h;
+}
+
+div.  humb  ag
+{
+  display:inline-block;
+  margin:1px;
+  padding: 1px;
+  floa  :lef  ;
+  border:1px solid #aaaaaa;
+  clear:bo  h;
+}
+
+div.  agcloud
+{
+  posi  ion:absolu  e;
+  wid  h:200px;
+  heigh  :200px;
+}
+
+
+div.cen  er
+{
+  wid  h: 80%;
+  margin-lef  :au  o;
+  margin-righ  :au  o;
+  clear:bo  h;
+}
+
+div.  humb
+{
+  margin: 5px;
+  padding: 5px;
+  floa  : lef  ;
+  heigh  : 200px;
+  wid  h: 200px;
+  border:1px solid #aaaaaa;
+  background-color:#111111;
+}
+div.  humb:hover
+{
+  background-color:#212121;
+}
+    
+div.  humbimg
+{
+  heigh  :180px;
+  wid  h:180px;
+  margin-lef  :au  o;
+  margin-righ  :au  o;
+  ver  ical-align: middle;
+}
+div.  humblabel
+{
+  heigh  :15px;
+    ex  -align:cen  er;
+}
+
+div.navBu    on
+{
+  floa  :lef  ;
+  border: 1px solid #aaaaaa;
+  margin-lef  : 2px;
+  margin-righ  : 2px;
+}
+
+div.navSpli    er
+{
+  floa  :lef  ;
+  border-wid  h: 0px;
+  margin-lef  :2px;
+  margin-righ  :2px;
+}
+
+img
+{ 
+  /**wid  h: 180px;**/
+  border-wid  h: 0px;
+}
+
+a
+{
+  color:black;
+    ex  -decora  ion:none;
+}
+
+a.baseNaviga  ion
+{
+  color:whi  e;
+}
