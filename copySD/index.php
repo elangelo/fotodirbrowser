@@ -1,3 +1,5 @@
+/*probably not working*/
+
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="style.css" />
@@ -11,15 +13,16 @@
 
   $debug = true;
 
-
-  if ( $debug ){
-        var_dump($targetPath);
-	echo "<br />"; 
-  	var_dump($args); 
-	echo "<br />"; 
+  if ( $debug )
+  {
+    var_dump($targetPath);
+    echo "<br />"; 
+    var_dump($args); 
+    echo "<br />"; 
   }
 
-  switch ($command) {
+  switch ($command) 
+  {
     case "":
     case "getSDcards":
       getSDcards();
@@ -36,29 +39,30 @@
       echo "foo";
   }
 
-
-function foo($mountpoint){
-  $content = getContent($mountpoint);
-
-
-
-}
-
-function getContent($folder){
-  $content = new folderContent();
-  if (is_dir($folder)) {
-    $lastSlashOccured = strrpos($folder, "/");
-    $content->$folderName = substr($folder, $lastSlashOccured + 1);
-    $content->$parentPath = substr($folder, 0, $lastSlashOccured);
-    if ($folderhandle = opendir($folder)) {
-
-
-    }
+  function foo($mountpoint)
+  {
+    $content = getContent($mountpoint);
   }
-  return content;
-}
 
-class folderContent{
+  function getContent($folder)
+  {
+    $content = new folderContent();
+    if (is_dir($folder)) 
+    {
+      $lastSlashOccured = strrpos($folder, "/");
+      $content->$folderName = substr($folder, $lastSlashOccured + 1);
+      $content->$parentPath = substr($folder, 0, $lastSlashOccured);
+      if ($folderhandle = opendir($folder))
+      {
+
+
+      } 
+    }
+    return content;
+  }
+
+class folderContent
+{
   public $folderName; //string
   public $parentPath; //string 
   public $hasSubFolders; //boolean
@@ -72,38 +76,43 @@ class folderContent{
 function listContent($dir)
 {
   $targetPath = "/mnt/raid/pictures/";
-  if (is_dir($dir)) {
-    if ($dh = opendir($dir)) {
-      while (($file = readdir($dh)) != false) {
-        if ($file != "." && $file != ".."){
-          if (filetype($dir . $file) == "dir"){
+  if (is_dir($dir)) 
+  {
+    if ($dh = opendir($dir)) 
+    {
+      while (($file = readdir($dh)) != false) 
+      {
+        if ($file != "." && $file != "..")
+        {
+          if (filetype($dir . $file) == "dir")
+          {
             echo "<input type=checkbox /><a href=index.php?command=browse&args=$dir$file>$file</a><br />";
-  	  }
-	  else{
-	  // check if image is JPG TODO:what with raws??? and movies???
-	  // get the exif data (the @ surpresses the warning)
-	  $exif = @ exif_read_data($dir . $file);
+          }
+          else
+          {
+            // check if image is JPG TODO:what with raws??? and movies???
+            // get the exif data (the @ surpresses the warning)
+            $exif = @ exif_read_data($dir . $file);
+            // get date
+            $date = strptime($exif['DateTime'], "%Y:%m:%d %H:%M:%S");
 
-	  // get date
-          $date = strptime($exif['DateTime'], "%Y:%m:%d %H:%M:%S");
-
-	  // propose folder based on exif data (date)
-	  $year = $date['tm_year'] + 1900;
-	  $month = $date['tm_mon'] + 1;
-	  $day = $date['tm_mday'];
-	  echo "<div class=\"cell-container\">";
-	  echo "<div class=\"cell-left\">";
-	  echo "<div class=\"cell\">SOURCE:</div>";
-	  echo "<div class=\"cell\">$dir$file</div>";
-	  echo "</div>";
-	  echo "<div class=\"cell-right\">";
-	  echo "<div class=\"cell\">TARGET:</div>";
-	  echo "<div class=\"cell\">" . $targetPath;
-	  printf("%04d/%04d-%02d-%02d/", $year,$year,$month,$day);
-	  echo "$file</div>";
-	  echo "</div>";
-	  echo "</div>";
-	  }
+            // propose folder based on exif data (date)
+            $year = $date['tm_year'] + 1900;
+            $month = $date['tm_mon'] + 1;
+            $day = $date['tm_mday'];
+            echo "<div class=\"cell-container\">";
+            echo "<div class=\"cell-left\">";
+            echo "<div class=\"cell\">SOURCE:</div>";
+            echo "<div class=\"cell\">$dir$file</div>";
+            echo "</div>";
+            echo "<div class=\"cell-right\">";
+            echo "<div class=\"cell\">TARGET:</div>";
+            echo "<div class=\"cell\">" . $targetPath;
+            printf("%04d/%04d-%02d-%02d/", $year,$year,$month,$day);
+            echo "$file</div>";
+            echo "</div>";
+            echo "</div>";
+          }
         }
       }
       closedir($dh);
@@ -111,27 +120,32 @@ function listContent($dir)
   }
 }
 
-function getFolderOfMountedPartition($device) {
+function getFolderOfMountedPartition($device) 
+{
   $output = exec ("mount | grep $device");
   $substrings = explode(" ", $output);
   return $substrings[2];
 }
 
-function mount($device) {
+function mount($device) 
+{
   exec ("mount $device");
 }
 
-function umount($device) {
+function umount($device) 
+{
   exec ("umount $device");
 }
 
-function getSDcards() {
+function getSDcards() 
+{
   echo "<form action=index.php?command=mount method=post>";
   echo "<select name=\"partitions\">";
   $partitions = listPartitions();
   foreach ($partitions as &$partition)
   {
-    if (isSDcard($partition)){
+    if (isSDcard($partition))
+    {
       echo "<option value=$partition>$partition</option>";
     }
   }
@@ -139,21 +153,27 @@ function getSDcards() {
   echo "<input type=\"Submit\" value=\"Mount\"/>";
   echo "</form>";
 }
-function mountSD($device) {
+
+function mountSD($device) 
+{
   $mountoutput = exec("mount $device");
 }
 
-function listPartitions() {
+function listPartitions()
+{
   exec ("ls /dev/sd??", $partitions);
   return $partitions;
 }
 
-function isSDcard($device){
+function isSDcard($device)
+{
   $output = exec ("udevadm info -a --name=$device | grep SD");
-  if ($output != NULL && $output != "") {
+  if ($output != NULL && $output != "") 
+  {
     return true;
   }
-  else {
+  else 
+  {
     return false;
   }
 }
