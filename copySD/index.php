@@ -1,66 +1,66 @@
-<h  ml>
+<html>
 <head>
-<link rel="s  yleshee  "   ype="  ex  /css" href="s  yle.css" />
+<link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 <body>
 <?
-  $command = h  mlspecialchars($_GET['command']);
-  $args = h  mlspecialchars($_GET['args']);
+  $command = htmlspecialchars($_GET['command']);
+  $args = htmlspecialchars($_GET['args']);
 
-  $  arge  Pa  h = "/mn  /raid/pic  ures/";
+  $targetPath = "/mnt/raid/pictures/";
 
-  $debug =   rue;
+  $debug = true;
 
 
   if ( $debug ){
-        var_dump($  arge  Pa  h);
+        var_dump($targetPath);
 	echo "<br />"; 
   	var_dump($args); 
 	echo "<br />"; 
   }
 
-  swi  ch ($command) {
+  switch ($command) {
     case "":
-    case "ge  SDcards":
-      ge  SDcards();
+    case "getSDcards":
+      getSDcards();
       break;
-    case "moun  ":
-      moun  ($_POST['par  i  ions']);
-      $folder = ge  FolderOfMoun  edPar  i  ion($_POST['par  i  ions']);
-      lis  Con  en  ($folder . "/");
+    case "mount":
+      mount($_POST['partitions']);
+      $folder = getFolderOfMountedPartition($_POST['partitions']);
+      listContent($folder . "/");
       break;
     case "browse":
-      lis  Con  en  ($args . "/");
+      listContent($args . "/");
       break;
-    defaul  :
+    default:
       echo "foo";
   }
 
 
-func  ion foo($moun  poin  ){
-  $con  en   = ge  Con  en  ($moun  poin  );
+function foo($mountpoint){
+  $content = getContent($mountpoint);
 
 
 
 }
 
-func  ion ge  Con  en  ($folder){
-  $con  en   = new folderCon  en  ();
+function getContent($folder){
+  $content = new folderContent();
   if (is_dir($folder)) {
-    $las  SlashOccured = s  rrpos($folder, "/");
-    $con  en  ->$folderName = subs  r($folder, $las  SlashOccured + 1);
-    $con  en  ->$paren  Pa  h = subs  r($folder, 0, $las  SlashOccured);
+    $lastSlashOccured = strrpos($folder, "/");
+    $content->$folderName = substr($folder, $lastSlashOccured + 1);
+    $content->$parentPath = substr($folder, 0, $lastSlashOccured);
     if ($folderhandle = opendir($folder)) {
 
 
     }
   }
-  re  urn con  en  ;
+  return content;
 }
 
-class folderCon  en  {
-  public $folderName; //s  ring
-  public $paren  Pa  h; //s  ring 
+class folderContent{
+  public $folderName; //string
+  public $parentPath; //string 
   public $hasSubFolders; //boolean
   public $hasFiles; //boolean
   public $Files; //array
@@ -69,37 +69,37 @@ class folderCon  en  {
 
 
 
-func  ion lis  Con  en  ($dir)
+function listContent($dir)
 {
-  $  arge  Pa  h = "/mn  /raid/pic  ures/";
+  $targetPath = "/mnt/raid/pictures/";
   if (is_dir($dir)) {
     if ($dh = opendir($dir)) {
       while (($file = readdir($dh)) != false) {
         if ($file != "." && $file != ".."){
-          if (file  ype($dir . $file) == "dir"){
-            echo "<inpu     ype=checkbox /><a href=index.php?command=browse&args=$dir$file>$file</a><br />";
+          if (filetype($dir . $file) == "dir"){
+            echo "<input type=checkbox /><a href=index.php?command=browse&args=$dir$file>$file</a><br />";
   	  }
 	  else{
-	  // check if image is JPG TODO:wha   wi  h raws??? and movies???
-	  // ge     he exif da  a (  he @ surpresses   he warning)
-	  $exif = @ exif_read_da  a($dir . $file);
+	  // check if image is JPG TODO:what with raws??? and movies???
+	  // get the exif data (the @ surpresses the warning)
+	  $exif = @ exif_read_data($dir . $file);
 
-	  // ge   da  e
-          $da  e = s  rp  ime($exif['Da  eTime'], "%Y:%m:%d %H:%M:%S");
+	  // get date
+          $date = strptime($exif['DateTime'], "%Y:%m:%d %H:%M:%S");
 
-	  // propose folder based on exif da  a (da  e)
-	  $year = $da  e['  m_year'] + 1900;
-	  $mon  h = $da  e['  m_mon'] + 1;
-	  $day = $da  e['  m_mday'];
-	  echo "<div class=\"cell-con  ainer\">";
-	  echo "<div class=\"cell-lef  \">";
+	  // propose folder based on exif data (date)
+	  $year = $date['tm_year'] + 1900;
+	  $month = $date['tm_mon'] + 1;
+	  $day = $date['tm_mday'];
+	  echo "<div class=\"cell-container\">";
+	  echo "<div class=\"cell-left\">";
 	  echo "<div class=\"cell\">SOURCE:</div>";
 	  echo "<div class=\"cell\">$dir$file</div>";
 	  echo "</div>";
-	  echo "<div class=\"cell-righ  \">";
+	  echo "<div class=\"cell-right\">";
 	  echo "<div class=\"cell\">TARGET:</div>";
-	  echo "<div class=\"cell\">" . $  arge  Pa  h;
-	  prin  f("%04d/%04d-%02d-%02d/", $year,$year,$mon  h,$day);
+	  echo "<div class=\"cell\">" . $targetPath;
+	  printf("%04d/%04d-%02d-%02d/", $year,$year,$month,$day);
 	  echo "$file</div>";
 	  echo "</div>";
 	  echo "</div>";
@@ -111,53 +111,53 @@ func  ion lis  Con  en  ($dir)
   }
 }
 
-func  ion ge  FolderOfMoun  edPar  i  ion($device) {
-  $ou  pu   = exec ("moun   | grep $device");
-  $subs  rings = explode(" ", $ou  pu  );
-  re  urn $subs  rings[2];
+function getFolderOfMountedPartition($device) {
+  $output = exec ("mount | grep $device");
+  $substrings = explode(" ", $output);
+  return $substrings[2];
 }
 
-func  ion moun  ($device) {
-  exec ("moun   $device");
+function mount($device) {
+  exec ("mount $device");
 }
 
-func  ion umoun  ($device) {
-  exec ("umoun   $device");
+function umount($device) {
+  exec ("umount $device");
 }
 
-func  ion ge  SDcards() {
-  echo "<form ac  ion=index.php?command=moun   me  hod=pos  >";
-  echo "<selec   name=\"par  i  ions\">";
-  $par  i  ions = lis  Par  i  ions();
-  foreach ($par  i  ions as &$par  i  ion)
+function getSDcards() {
+  echo "<form action=index.php?command=mount method=post>";
+  echo "<select name=\"partitions\">";
+  $partitions = listPartitions();
+  foreach ($partitions as &$partition)
   {
-    if (isSDcard($par  i  ion)){
-      echo "<op  ion value=$par  i  ion>$par  i  ion</op  ion>";
+    if (isSDcard($partition)){
+      echo "<option value=$partition>$partition</option>";
     }
   }
-  echo "</selec  >";
-  echo "<inpu     ype=\"Submi  \" value=\"Moun  \"/>";
+  echo "</select>";
+  echo "<input type=\"Submit\" value=\"Mount\"/>";
   echo "</form>";
 }
-func  ion moun  SD($device) {
-  $moun  ou  pu   = exec("moun   $device");
+function mountSD($device) {
+  $mountoutput = exec("mount $device");
 }
 
-func  ion lis  Par  i  ions() {
-  exec ("ls /dev/sd??", $par  i  ions);
-  re  urn $par  i  ions;
+function listPartitions() {
+  exec ("ls /dev/sd??", $partitions);
+  return $partitions;
 }
 
-func  ion isSDcard($device){
-  $ou  pu   = exec ("udevadm info -a --name=$device | grep SD");
-  if ($ou  pu   != NULL && $ou  pu   != "") {
-    re  urn   rue;
+function isSDcard($device){
+  $output = exec ("udevadm info -a --name=$device | grep SD");
+  if ($output != NULL && $output != "") {
+    return true;
   }
   else {
-    re  urn false;
+    return false;
   }
 }
 
 ?>
 </body>
-</h  ml>
+</html>

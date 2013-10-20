@@ -1,21 +1,21 @@
-div.cell-con  ainer{
+div.cell-container{
 	border: 1px solid red;
-	heigh  : 20px;
-	wid  h: 97%;
+	height: 20px;
+	width: 97%;
 
 }
-div.cell-lef  {
-	floa  : lef  ;
-	wid  h: 47.5%;
+div.cell-left{
+	float: left;
+	width: 47.5%;
 }
-div.cell-righ  {
-        floa  : righ  ;
-	wid  h:47.5%;
+div.cell-right{
+        float: right;
+	width:47.5%;
 
 }
 div.cell{
-       floa  : lef  ;
-       padding-righ  :4px;
-       padding-lef  :4px;
+       float: left;
+       padding-right:4px;
+       padding-left:4px;
 }
 

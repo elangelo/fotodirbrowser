@@ -1,100 +1,100 @@
 body
 {
   background-color:#000000;
-  margin-lef  :au  o;
-  margin-righ  :au  o;
+  margin-left:auto;
+  margin-right:auto;
   color:#aaaaaa;
 }
 
-div.  ags
+div.tags
 {
-  clear:bo  h;
+  clear:both;
 }
 
-div.  humb  ag
+div.thumbtag
 {
   display:inline-block;
   margin:1px;
   padding: 1px;
-  floa  :lef  ;
+  float:left;
   border:1px solid #aaaaaa;
-  clear:bo  h;
+  clear:both;
 }
 
-div.  agcloud
+div.tagcloud
 {
-  posi  ion:absolu  e;
-  wid  h:200px;
-  heigh  :200px;
+  position:absolute;
+  width:200px;
+  height:200px;
 }
 
 
-div.cen  er
+div.center
 {
-  wid  h: 80%;
-  margin-lef  :au  o;
-  margin-righ  :au  o;
-  clear:bo  h;
+  width: 80%;
+  margin-left:auto;
+  margin-right:auto;
+  clear:both;
 }
 
-div.  humb
+div.thumb
 {
   margin: 5px;
   padding: 5px;
-  floa  : lef  ;
-  heigh  : 200px;
-  wid  h: 200px;
+  float: left;
+  height: 200px;
+  width: 200px;
   border:1px solid #aaaaaa;
   background-color:#111111;
 }
-div.  humb:hover
+div.thumb:hover
 {
   background-color:#212121;
 }
     
-div.  humbimg
+div.thumbimg
 {
-  heigh  :180px;
-  wid  h:180px;
-  margin-lef  :au  o;
-  margin-righ  :au  o;
-  ver  ical-align: middle;
+  height:180px;
+  width:180px;
+  margin-left:auto;
+  margin-right:auto;
+  vertical-align: middle;
 }
-div.  humblabel
+div.thumblabel
 {
-  heigh  :15px;
-    ex  -align:cen  er;
+  height:15px;
+  text-align:center;
 }
 
-div.navBu    on
+div.navButton
 {
-  floa  :lef  ;
+  float:left;
   border: 1px solid #aaaaaa;
-  margin-lef  : 2px;
-  margin-righ  : 2px;
+  margin-left: 2px;
+  margin-right: 2px;
 }
 
-div.navSpli    er
+div.navSplitter
 {
-  floa  :lef  ;
-  border-wid  h: 0px;
-  margin-lef  :2px;
-  margin-righ  :2px;
+  float:left;
+  border-width: 0px;
+  margin-left:2px;
+  margin-right:2px;
 }
 
 img
 { 
-  /**wid  h: 180px;**/
-  border-wid  h: 0px;
+  /**width: 180px;**/
+  border-width: 0px;
 }
 
 a
 {
   color:black;
-    ex  -decora  ion:none;
+  text-decoration:none;
 }
 
-a.baseNaviga  ion
+a.baseNavigation
 {
-  color:whi  e;
+  color:white;
 }

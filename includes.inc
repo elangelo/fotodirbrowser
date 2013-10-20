@@ -1,5 +1,5 @@
 <?php
-  $baseDir = "/mn  /raid/pic  ures/";
-  $  humbSize = "180";
-  $slideSize = "800";
+$baseDir = "/mnt/raid/pictures/";
+$thumbSize = "180";
+$slideSize = "800";
 ?>

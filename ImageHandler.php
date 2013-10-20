@@ -3,76 +3,76 @@
 
   $debug = false;
 
-  $fileLoca  ion = h  mlspecialchars($_GET['fileLoca  ion']);
-  $fileLoca  ion = s  r_replace("_*_", "&", $fileLoca  ion);
+  $fileLocation = htmlspecialchars($_GET['fileLocation']);
+  $fileLocation = str_replace("_*_", "&", $fileLocation);
 
-  $size = (in  )$_GET['size'];
-  if (!$debug){header('Con  en  -  ype: image/jpeg');}
+  $size = (int)$_GET['size'];
+  if (!$debug){header('Content-type: image/jpeg');}
   $picBaseDir = $baseDir;
 
-  $  humbBaseDir = "/mn  /raid/.pic  ures" . '/' . $size . '/';
-  $fullImagePa  h = $picBaseDir . '/' . $fileLoca  ion;
-  $fullThumbPa  h = $  humbBaseDir . $fileLoca  ion;
+  $thumbBaseDir = "/mnt/raid/.pictures" . '/' . $size . '/';
+  $fullImagePath = $picBaseDir . '/' . $fileLocation;
+  $fullThumbPath = $thumbBaseDir . $fileLocation;
 
-  $fileNameArray = explode('/', $fileLoca  ion);
-  $rela  ivePa  h = '';
+  $fileNameArray = explode('/', $fileLocation);
+  $relativePath = '';
   for ($i = 0; $i < sizeof($fileNameArray) - 1; $i++)
   {
-    $rela  ivePa  h = $rela  ivePa  h . $fileNameArray[$i] . '/';
+    $relativePath = $relativePath . $fileNameArray[$i] . '/';
   }
 
   $fileName = $fileNameArray[sizeof($fileNameArray) - 1];
 
-  if (!file_exis  s($  humbBaseDir . '/' . $rela  ivePa  h)){
-    mkdir($  humbBaseDir . '/' . $rela  ivePa  h, 0770, TRUE);
+  if (!file_exists($thumbBaseDir . '/' . $relativePath)){
+    mkdir($thumbBaseDir . '/' . $relativePath, 0770, TRUE);
   }
-  if (!file_exis  s($fullThumbPa  h))
+  if (!file_exists($fullThumbPath))
   {
-    $image_info = ge  imagesize($fullImagePa  h);
+    $image_info = getimagesize($fullImagePath);
     if ($debug ) { var_dump($image_info[2] . "\n"); }
-    $image_  ype = $image_info[2];
-    $exif = exif_read_da  a($fullImagePa  h);
-    $orien  a  ion = $exif['Orien  a  ion'];
-    $image = imagecrea  efromjpeg($fullImagePa  h);
-    $oWid  h = imagesx($image);
-    $oHeigh   = imagesy($image);
-    if ($oWid  h > $oHeigh  ){
-    $ra  io = $oHeigh  /$oWid  h;
-    $newWid  h = $size;
-    $newHeigh   = $ra  io * $newWid  h;
+    $image_type = $image_info[2];
+    $exif = exif_read_data($fullImagePath);
+    $orientation = $exif['Orientation'];
+    $image = imagecreatefromjpeg($fullImagePath);
+    $oWidth = imagesx($image);
+    $oHeight = imagesy($image);
+    if ($oWidth > $oHeight){
+    $ratio = $oHeight/$oWidth;
+    $newWidth = $size;
+    $newHeight = $ratio * $newWidth;
     }
     else {
-      $ra  io = $oWid  h/$oHeigh  ;
-      $newHeigh   = $size;
-      $newWid  h = $ra  io * $newHeigh  ;
+      $ratio = $oWidth/$oHeight;
+      $newHeight = $size;
+      $newWidth = $ratio * $newHeight;
     }
-    $newImage = imagecrea  e  ruecolor($newWid  h,$newHeigh  );
-    imagecopyresampled($newImage, $image, 0, 0, 0, 0, $newWid  h, $newHeigh  , $oWid  h, $oHeigh  );
-    swi  ch($orien  a  ion)
+    $newImage = imagecreatetruecolor($newWidth,$newHeight);
+    imagecopyresampled($newImage, $image, 0, 0, 0, 0, $newWidth, $newHeight, $oWidth, $oHeight);
+    switch($orientation)
     {
       case 1:
         break;
       case 2:
         break;
       case 3:
-        $newImage = imagero  a  e($newImage,180, 0);
+        $newImage = imagerotate($newImage,180, 0);
         break;
       case 4: 
         break;
       case 5:
-        $newImage = imagero  a  e($newImage, -90, 0);
+        $newImage = imagerotate($newImage, -90, 0);
         break;
       case 6:
-        $newImage = imagero  a  e($newImage, -90, 0);
+        $newImage = imagerotate($newImage, -90, 0);
         break;
       case 7: 
-        $newImage = imagero  a  e($newImage, -90, 0);
+        $newImage = imagerotate($newImage, -90, 0);
         break;
       case 8:
-        $newImage = imagero  a  e($newImage, 90, 0);
+        $newImage = imagerotate($newImage, 90, 0);
         break;
     }
-    imagejpeg($newImage, $fullThumbPa  h, 75);
+    imagejpeg($newImage, $fullThumbPath, 75);
   }
-  readfile($fullThumbPa  h);
+  readfile($fullThumbPath);
 ?>

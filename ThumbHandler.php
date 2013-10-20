@@ -2,56 +2,57 @@
 include("includes.inc");
 
 $debug = false;
-$pa  h = h  mlspecialchars($_GET['fileLoca  ion']);
-$pa  h = s  r_replace("_*_", "&", $pa  h);
+$path = htmlspecialchars($_GET['fileLocation']);
+$path = str_replace("_*_", "&", $path);
 
-$pa  h = $baseDir . '/' . $pa  h;
+$path = $baseDir . '/' . $path;
 
-$  humbnail = exif_  humbnail($pa  h, $wid  h, $heigh  , $  ype);
+$thumbnail = exif_thumbnail($path, $width, $height, $type);
 
-if ($  humbnail!==false) {
+if ($thumbnail!==false) {
 	if (!$debug){
-     header('Con  en  -  ype: ' .image_  ype_  o_mime_  ype($  ype) . ''); 
+     header('Content-type: ' .image_type_to_mime_type($type) . ''); 
 	}
-  $exif = exif_read_da  a($pa  h);
-  $orien  a  ion = $exif['Orien  a  ion'];
-  swi  ch ($orien  a  ion) {
-    case 1:
-    	echo $  humbnail;
-		  break;
-	  case 2:
-    	echo $  humbnail;
-		  break;
-	  case 4: 
-     	echo $  humbnail;
-		  break;
+     $exif = exif_read_data($path);
+     $orientation = $exif['Orientation'];
+     switch ($orientation)
+     {
+        case 1:
+     		echo $thumbnail;
+		break;
+	case 2:
+     		echo $thumbnail;
+		break;
+	case 4: 
+     		echo $thumbnail;
+		break;
 	case 3:
-		$image = imagecrea  efroms  ring($  humbnail);
-		imagejpeg(imagero  a  e($image,180,0));
+		$image = imagecreatefromstring($thumbnail);
+		imagejpeg(imagerotate($image,180,0));
 		break;
 	case 5: 
-		$image = imagecrea  efroms  ring($  humbnail);
-		imagejpeg(imagero  a  e($image,-90,0));
+		$image = imagecreatefromstring($thumbnail);
+		imagejpeg(imagerotate($image,-90,0));
 		break;
 	case 6:
-		$image = imagecrea  efroms  ring($  humbnail);
-		imagejpeg(imagero  a  e($image,-90,0));
+		$image = imagecreatefromstring($thumbnail);
+		imagejpeg(imagerotate($image,-90,0));
 		break;
 	case 7:
-		$image = imagecrea  efroms  ring($  humbnail);
-		imagejpeg(imagero  a  e($image,-90,0));
+		$image = imagecreatefromstring($thumbnail);
+		imagejpeg(imagerotate($image,-90,0));
 		break;
 	case 8:
-               	$image = imagecrea  efroms  ring($  humbnail);
-		imagejpeg(imagero  a  e($image,90,0));
+               	$image = imagecreatefromstring($thumbnail);
+		imagejpeg(imagerotate($image,90,0));
 		break;
      }
 
 
      } 
 else {
-      // no   humbnail available, handle   he error here                                
-      echo 'No   humbnail available';
+      // no thumbnail available, handle the error here                                
+      echo 'No thumbnail available';
 }
 ?>
 ~                                         
