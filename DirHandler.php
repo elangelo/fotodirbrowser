@@ -1,12 +1,13 @@
 <html>
-  <script type="text/javascript" src="js/prototype.js"></script>
-  <script type="text/javascript" src="js/scriptaculous.js?load=effects,builder"></script>
-  <script type="text/javascript" src="js/lightbox.js"></script>
-  <link rel="stylesheet" type="text/css" href="style.css" />
-  <link rel="stylesheet" href="css/lightbox.css" type="text/css" media="screen" />
+<head>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script type="text/javascript" src="js/slimbox2.js"></script>
+  <link rel="stylesheet" href="style.css" type="text/css" media="screen"/>
+  <link rel="stylesheet" href="css/slimbox2.css" type="text/css" media="screen" />
+</head>
 
   <body>
-  <div class="center">
+  <div class="nav">
   <?php
     $saveDirName = htmlspecialchars($_GET['fileLocation']);
     $dir = str_replace("_*_", "&", $saveDirName);
@@ -27,45 +28,75 @@
     }
   ?>
   </div>
-  
-  <div class="tags">
+
   <?php
     include("includes.inc");
-    $dir = htmlspecialchars($_GET['fileLocation']);
-    $dir = str_replace("_*_", "&", $dir);
-    $tagFileName = $baseDir . $dir . '/tags';
-    if (is_file($tagFileName)) {
-      $tags = file_get_contents($tagFileName);
-      $tagarray = explode(';', $tags);
-      foreach ($tagarray as $tag) {
-        echo '<p>' . $tag . '</p>';
+    $saveDirName = htmlspecialchars($_GET['fileLocation']);
+
+    $dir = str_replace("_*_", "&", $saveDirName);
+    $dirNames = explode('/', $dir);
+    $parentDir = $baseDir;
+    for ($i = 1; $i < (sizeof($dirNames) - 1); $i++){
+      $parentDir = $parentDir . "/" . $dirNames[$i];
+    }
+
+    $saveParentDir = "";
+    for ($i = 1; $i < (sizeof($dirNames) - 1); $i++)
+    {
+      $saveParentDir = $saveParentDir . "/" . $dirNames[$i];
+    }
+
+    if ($handle = opendir($parentDir))
+    {
+      while (false !== ($file = readdir($handle)))
+      {
+        if ($file != "." && $file != ".." && is_dir($parentDir . "/" . $file))
+        {
+          $kdirs[] = str_replace("&", "_*_", $saveParentDir . "/" . $file);
+        }
+      }
+      closedir($handle);
+      if(!empty($kdirs))
+      { 
+        if (sizeof($kdirs) > 0)
+        {
+          sort($kdirs);
+          $idx = array_search($dir, $kdirs);
+
+          if ($idx == 0)
+          {
+            $previousDir = "";
+            $nextDir = $kdirs[$idx + 1];
+          }
+          else if ($idx == sizeof($kdirs))
+          {
+            $previousDir = $kdirs[$idx - 1];
+            $nextDir = "";
+          }
+          else
+          {
+            $previousDir = $kdirs[$idx - 1];
+            $nextDir = $kdirs[$idx + 1];
+          }
+
+          echo "<div class=\"metanavprev\">";
+          echo "<div class=\"navButton\">";
+          echo "<a class=\"baseNavigation\" href=\"DirHandler.php?fileLocation=" . $previousDir . "\">previous</a>";
+          echo "</div>";
+          echo "</div>";
+          echo "<div class=\"metanavnext\">";
+          echo "<div class=\"navButton\">";
+          echo "<a class=\"baseNavigation\" href=\"DirHandler.php?fileLocation=" . $nextDir . "\">next</a>";
+          echo "</div>";
+          echo "</div>";
+        }
       }
     }
   ?>
-
-  <form method="post" action="<?php  
-    include("includes.inc");
-    $dir = htmlspecialchars($_GET['fileLocation']);
-    $dir = str_replace("_*_", "&", $dir);
-    echo $_SERVER['PHP_SELF'] . "?fileLocation=" . $dir; ?>">
-    <input name="tag" type="text"></input><input type="submit" value="OK"</input>
-  </form>
-
   </div>
-  <?php  
-    include("includes.inc");
-    $newTag = $_POST["tag"];
-    if (!empty ($newTag)) 
-    {
-      $dir = htmlspecialchars($_GET['fileLocation']);
-      $dir = str_replace("_*_", "&", $dir);
-      $tagFileName = $baseDir . $dir . '/tags';
-      file_put_contents($tagFileName, ';'.$newTag, FILE_APPEND);
-    }
-  ?>
-
-
+  
   <div class="center">
+  <br/><br/>
   <?php
     include("includes.inc");
     $dir = htmlspecialchars($_GET['fileLocation']);
@@ -144,14 +175,15 @@
         for ($i = 0; $i < sizeof($files); $i++)
         {
           $saveFileName = str_replace("&", "_*_", $files[$i]);
+          $realFileName = end(explode('/',$saveFileName));
           echo "<div class=\"thumb\">";
-          echo "<a class=\"baseNavigation\" href=\"ImageHandler.php?fileLocation=" . $saveFileName . "&size=" . $slideSize ."\" rel=\"lightbox[group]\" title=\"&lt;a href=&quot;ImageHandler.php?fileLocation=" . $saveFileName . "&size=" . $slideSize ."&quot;&gt;download&lt;/a&gt;\">";
+          echo "<a class=\"baseNavigation\" href=\"ImageHandler.php?fileLocation=" . $saveFileName . "&size=" . $slideSize . "\" rel=\"lightbox-pics\" title=\"$realFileName&nbsp;:&nbsp;&lt;a href=&quot;ImageHandler.php?fileLocation=" . $saveFileName . "&quot;&gt;original&lt;/a&gt;&nbsp;&nbsp;&lt;a href=&quot;ImageHandler.php?fileLocation=" . $saveFileName . "&size=" . $slideSize ."&quot;&gt;small&lt;/a&gt;\">";
           echo "<div class=\"thumbimg\">";
           echo "<img src=\"ThumbHandler.php?fileLocation=" . $saveFileName . "\" />";
           echo "</div>";
-          echo "<div class=\"thumblabel\">";
+          /*echo "<div class=\"thumblabel\">";
           echo end(explode('/',$files[$i])) . "<br />";
-          echo "</div>";
+          echo "</div>";*/
           echo "</a>";
           echo "</div>";
         }
@@ -159,5 +191,43 @@
     }
   ?>
   </div>
+
+  <div class="tags">
+  <?php
+    include("includes.inc");
+    $dir = htmlspecialchars($_GET['fileLocation']);
+    $dir = str_replace("_*_", "&", $dir);
+    $tagFileName = $baseDir . $dir . '/tags';
+    if (is_file($tagFileName)) {
+      $tags = file_get_contents($tagFileName);
+      $tagarray = explode(';', $tags);
+      foreach ($tagarray as $tag) {
+        echo '<p>' . $tag . '</p>';
+      }
+    }
+  ?>
+
+  <form method="post" action="<?php  
+    include("includes.inc");
+    $dir = htmlspecialchars($_GET['fileLocation']);
+    $dir = str_replace("_*_", "&", $dir);
+    echo $_SERVER['PHP_SELF'] . "?fileLocation=" . $dir; ?>">
+    <input name="tag" type="text"></input><input type="submit" value="OK"</input>
+  </form>
+
+  <?php  
+    include("includes.inc");
+    $newTag = $_POST["tag"];
+    if (!empty ($newTag)) 
+    {
+      $dir = htmlspecialchars($_GET['fileLocation']);
+      $dir = str_replace("_*_", "&", $dir);
+      $tagFileName = $baseDir . $dir . '/tags';
+      file_put_contents($tagFileName, ';'.$newTag, FILE_APPEND);
+    }
+  ?>
+
+  </div>
+
   </body>
 </html>
