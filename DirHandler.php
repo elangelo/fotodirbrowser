@@ -1,6 +1,6 @@
 <html>
 <head>
-  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
   <script type="text/javascript" src="js/slimbox2.js"></script>
   <link rel="stylesheet" href="style.css" type="text/css" media="screen"/>
   <link rel="stylesheet" href="css/slimbox2.css" type="text/css" media="screen" />
@@ -95,7 +95,7 @@
   ?>
   </div>
   
-  <div class="center">
+  <div id="center" class="center">
   <br/><br/>
   <?php
     include("includes.inc");
@@ -146,7 +146,6 @@
           $saveDirName = str_replace("&", "_*_", $dirs[$i]);
           echo "<div class=\"thumb\">";
           echo "<a class=\"baseNavigation\" href=\"DirHandler.php?fileLocation=$saveDirName\">";
-          echo "<div class=\"thumbimg\">";
           echo "<div class=\"tagcloud\">";
           foreach (explode(';',$dirtags[$dirs[$i]]) as $dirTag)
           {
@@ -156,6 +155,7 @@
             }
           }
           echo "</div>";
+          echo "<div class=\"thumbimg\">";
           echo "<img height=" . $thumbSize . " src=\"folder_200.png\">";
           echo "</div>";
           echo "<div class=\"thumblabel\">";
@@ -230,4 +230,15 @@
   </div>
 
   </body>
+  <script type="text/javascript">
+    var availableHeight = window.innerHeight -20;
+    document.getElementById("center").style.height = availableHeight;
+
+    window.onresize = resize;
+
+    function resize() {
+      var availableHeight = window.innerHeight -20;
+      document.getElementById("center").style.height = availableHeight;
+    }
+  </script>
 </html>
