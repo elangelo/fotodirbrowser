@@ -179,7 +179,7 @@
           echo "<div class=\"thumb\">";
           echo "<a class=\"baseNavigation\" href=\"ImageHandler.php?fileLocation=" . $saveFileName . "&size=" . $slideSize . "\" rel=\"lightbox-pics\" title=\"$realFileName&nbsp;:&nbsp;&lt;a href=&quot;ImageHandler.php?fileLocation=" . $saveFileName . "&quot;&gt;original&lt;/a&gt;&nbsp;&nbsp;&lt;a href=&quot;ImageHandler.php?fileLocation=" . $saveFileName . "&size=" . $slideSize ."&quot;&gt;small&lt;/a&gt;\">";
           echo "<div class=\"thumbimg\">";
-          echo "<img src=\"ThumbHandler.php?fileLocation=" . $saveFileName . "\" />";
+          echo "<img src=\"ImageHandler.php?fileLocation=" . $saveFileName . "&size=" . $thumbSize . "\" />";
           echo "</div>";
           /*echo "<div class=\"thumblabel\">";
           echo end(explode('/',$files[$i])) . "<br />";

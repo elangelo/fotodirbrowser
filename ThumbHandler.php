@@ -66,9 +66,7 @@
           $image = imagerotate($image, 90, 0);
           $width = imagesx($image);
           $height = imagesy($image);
-
           $src_Y = ceil(($height - $width) / 2 );
-
           imagecopyresized($sqThumb, $image, 0, 0, 0, $src_Y, $thumbSize, $thumbSize, $width, $width);
           imagedestroy($image);
           imagejpeg($sqThumb);

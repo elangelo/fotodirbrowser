@@ -15,8 +15,8 @@ function resizeImage($image, $old_width, $old_height, $new_width, $new_height)
 
 function trace($message)
 {
-   //$debug = false;
-   $debug = true;
+   $debug = false;
+   //$debug = true;
    if ($debug) 
    {
        print $message . "<br/>";
