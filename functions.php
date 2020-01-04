@@ -60,7 +60,6 @@ function resizeImageFromPath($imagePath, $maxDimension)
       trace("full image path: " . $fullImagePath);
 
       $image_info = getimagesize($fullImagePath);
-
       
       $image_type = $image_info[2];
       $exif = exif_read_data($fullImagePath);
@@ -68,7 +67,6 @@ function resizeImageFromPath($imagePath, $maxDimension)
       $image = imagecreatefromjpeg($fullImagePath);
       $oWidth = imagesx($image);
       $oHeight = imagesy($image);
-
 
       if ($oWidth > $oHeight)
       {   

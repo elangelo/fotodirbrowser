@@ -181,9 +181,6 @@
           echo "<div class=\"thumbimg\">";
           echo "<img src=\"ImageHandler.php?fileLocation=" . $saveFileName . "&size=" . $thumbSize . "\" />";
           echo "</div>";
-          /*echo "<div class=\"thumblabel\">";
-          echo end(explode('/',$files[$i])) . "<br />";
-          echo "</div>";*/
           echo "</a>";
           echo "</div>";
         }
@@ -212,7 +209,7 @@
     $dir = htmlspecialchars($_GET['fileLocation']);
     $dir = str_replace("_*_", "&", $dir);
     echo $_SERVER['PHP_SELF'] . "?fileLocation=" . $dir; ?>">
-    <input name="tag" type="text"></input><input type="submit" value="OK"</input>
+    <input name="tag" type="text"></input><input type="submit" value="OK" />
   </form>
 
   <?php  

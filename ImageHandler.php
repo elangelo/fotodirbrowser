@@ -23,15 +23,7 @@
         $fileParts = explode(".", $basename);
         $newfilename = basename($fileParts[0].'_'.$size.'.'.$fileParts[1]);
         header('Content-Disposition: attachment; filename='.$newfilename);
-        //header('Content-Disposition: attachment; filename='.basename($resizedImage));
   }
-
-  //header('Content-Description: File Transfer');
-  //header('Content-Type: application/octet-stream');
-  //header('Expires: 0');
-  //header('Cache-Control: must-revalidate');
-  //header('Pragma: public');
-  //header('Content-Length: ' . filesize($resizedImage));
 
   ob_clean();
   flush();
