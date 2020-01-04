@@ -28,8 +28,8 @@ function resizeImageFromPath($imagePath, $maxDimension)
   include("includes.inc");
   $size = $maxDimension;
   $fileLocation = $imagePath;
-  trace("fileLocation: " + $fileLocation);
-  trace("maxDimension: " + $maxDimension);
+  trace("fileLocation: " . $fileLocation);
+  trace("maxDimension: " . $maxDimension);
   $picBaseDir = $baseDir;
   $fullImagePath = $picBaseDir . '/' . $fileLocation;
   if($size == 0 )
