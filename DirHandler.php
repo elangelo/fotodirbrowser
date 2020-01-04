@@ -66,7 +66,13 @@
           if ($idx == 0)
           {
             $previousDir = "";
-            $nextDir = $kdirs[$idx + 1];
+            if (sizeof($kdirs) > 1)
+            {
+              $nextDir = $kdirs[$idx + 1];
+            }
+            else {
+              $nextDir = "";
+            }
           }
           else if ($idx == sizeof($kdirs))
           {
@@ -125,7 +131,8 @@
           }
           else 
           {
-            $extension = end(explode('.',$file));
+            $tmp = explode('.', $file);
+            $extension = end($tmp);
             if ($extension == "JPG" || $extension == "jpg")
             {
               $files[] = $dir . '/' . $file;
@@ -175,7 +182,8 @@
         for ($i = 0; $i < sizeof($files); $i++)
         {
           $saveFileName = str_replace("&", "_*_", $files[$i]);
-          $realFileName = end(explode('/',$saveFileName));
+          $tmp = explode('/',$saveFileName);
+          $realFileName = end($tmp);
           echo "<div class=\"thumb\">";
           echo "<a class=\"baseNavigation\" href=\"ImageHandler.php?fileLocation=" . $saveFileName . "&size=" . $slideSize . "\" rel=\"lightbox-pics\" title=\"$realFileName&nbsp;:&nbsp;&lt;a href=&quot;ImageHandler.php?fileLocation=" . $saveFileName . "&quot;&gt;original&lt;/a&gt;&nbsp;&nbsp;&lt;a href=&quot;ImageHandler.php?fileLocation=" . $saveFileName . "&size=" . $slideSize ."&quot;&gt;small&lt;/a&gt;\">";
           echo "<div class=\"thumbimg\">";
@@ -214,13 +222,16 @@
 
   <?php  
     include("includes.inc");
-    $newTag = $_POST["tag"];
-    if (!empty ($newTag)) 
-    {
-      $dir = htmlspecialchars($_GET['fileLocation']);
-      $dir = str_replace("_*_", "&", $dir);
-      $tagFileName = $baseDir . $dir . '/tags';
-      file_put_contents($tagFileName, ';'.$newTag, FILE_APPEND);
+    if (isset($POST) && in_array("tag", $POST)){
+      $newTag = $_POST["tag"];
+    
+      if (!empty ($newTag)) 
+      {
+        $dir = htmlspecialchars($_GET['fileLocation']);
+        $dir = str_replace("_*_", "&", $dir);
+        $tagFileName = $baseDir . $dir . '/tags';
+        file_put_contents($tagFileName, ';'.$newTag, FILE_APPEND);
+      }
     }
   ?>
 

@@ -24,7 +24,7 @@
         $newfilename = basename($fileParts[0].'_'.$size.'.'.$fileParts[1]);
         header('Content-Disposition: attachment; filename='.$newfilename);
   }
-
+ 
   ob_clean();
   flush();
   readfile($resizedImage);

@@ -38,7 +38,7 @@ function resizeImageFromPath($imagePath, $maxDimension)
   }
   else
   {
-    $thumbBaseDir = "/mnt/raid/.pictures" . '/' . $size . '/';
+    $thumbBaseDir = $thumbBaseDir . '/' . $size . '/';
     $fullThumbPath = $thumbBaseDir . $fileLocation;
     $fileNameArray = explode('/', $fileLocation);
     $relativePath = ''; 
