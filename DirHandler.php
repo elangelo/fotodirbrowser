@@ -7,9 +7,13 @@
 </head>
 
   <body>
+  <!-- //Navigation bread crumbs -->
   <div class="nav">
   <?php
-    $saveDirName = htmlspecialchars($_GET['fileLocation']);
+    $saveDirName = "/";
+    if (array_key_exists('fileLocation', $_GET)){
+      $saveDirName = htmlspecialchars($_GET['fileLocation']);
+    }
     $dir = str_replace("_*_", "&", $saveDirName);
     $dirNames = explode('/', $dir);
     
@@ -31,8 +35,11 @@
 
   <?php
     include("includes.inc");
-    $saveDirName = htmlspecialchars($_GET['fileLocation']);
-
+    $saveDirName = "/";
+    if (array_key_exists("fileLocation", $_GET)){
+      $saveDirName = htmlspecialchars($_GET['fileLocation']);
+    }
+    
     $dir = str_replace("_*_", "&", $saveDirName);
     $dirNames = explode('/', $dir);
     $parentDir = $baseDir;
@@ -105,7 +112,10 @@
   <br/><br/>
   <?php
     include("includes.inc");
-    $dir = htmlspecialchars($_GET['fileLocation']);
+    $saveDirName = "/";
+    if (array_key_exists("fileLocation", $_GET)){
+      $saveDirName = htmlspecialchars($_GET['fileLocation']);
+    }
     $dir = str_replace("_*_", "&", $dir);
     $saveDirName = str_replace("&", "_*_", $dir);
     if ($handle = opendir($baseDir . $dir)) 
@@ -166,7 +176,8 @@
           echo "<img height=" . $thumbSize . " src=\"folder_200.png\">";
           echo "</div>";
           echo "<div class=\"thumblabel\">";
-          echo end(explode('/',$dirs[$i])) . "<br />";
+          $tmp = explode('/',$dirs[$i]);
+          echo end($tmp) . "<br />";
           echo "</div>";
           echo "</a>";
           echo "</div>";
@@ -200,7 +211,11 @@
   <div class="tags">
   <?php
     include("includes.inc");
-    $dir = htmlspecialchars($_GET['fileLocation']);
+    $saveDirName = "/";
+    if (array_key_exists("fileLocation", $_GET)){
+      $dir = htmlspecialchars($_GET['fileLocation']);
+    }
+    
     $dir = str_replace("_*_", "&", $dir);
     $tagFileName = $baseDir . $dir . '/tags';
     if (is_file($tagFileName)) {
@@ -214,7 +229,9 @@
 
   <form method="post" action="<?php  
     include("includes.inc");
-    $dir = htmlspecialchars($_GET['fileLocation']);
+    if (array_key_exists("fileLocation", $_GET)){
+      $dir = htmlspecialchars($_GET['fileLocation']);
+    }
     $dir = str_replace("_*_", "&", $dir);
     echo $_SERVER['PHP_SELF'] . "?fileLocation=" . $dir; ?>">
     <input name="tag" type="text"></input><input type="submit" value="OK" />
@@ -227,7 +244,10 @@
     
       if (!empty ($newTag)) 
       {
-        $dir = htmlspecialchars($_GET['fileLocation']);
+        $saveDirName = "/";
+        if (array_key_exists("fileLocation", $_GET)){
+          $dir = htmlspecialchars($_GET['fileLocation']);
+        }
         $dir = str_replace("_*_", "&", $dir);
         $tagFileName = $baseDir . $dir . '/tags';
         file_put_contents($tagFileName, ';'.$newTag, FILE_APPEND);
