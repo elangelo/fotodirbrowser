@@ -16,12 +16,12 @@
   if ( $debug )
   {
     var_dump($targetPath);
-    echo "<br />"; 
-    var_dump($args); 
-    echo "<br />"; 
+    echo "<br />";
+    var_dump($args);
+    echo "<br />";
   }
 
-  switch ($command) 
+  switch ($command)
   {
     case "":
     case "getSDcards":
@@ -47,7 +47,7 @@
   function getContent($folder)
   {
     $content = new folderContent();
-    if (is_dir($folder)) 
+    if (is_dir($folder))
     {
       $lastSlashOccured = strrpos($folder, "/");
       $content->$folderName = substr($folder, $lastSlashOccured + 1);
@@ -56,7 +56,7 @@
       {
 
 
-      } 
+      }
     }
     return content;
   }
@@ -64,7 +64,7 @@
 class folderContent
 {
   public $folderName; //string
-  public $parentPath; //string 
+  public $parentPath; //string
   public $hasSubFolders; //boolean
   public $hasFiles; //boolean
   public $Files; //array
@@ -76,11 +76,11 @@ class folderContent
 function listContent($dir)
 {
   $targetPath = "/mnt/raid/pictures/";
-  if (is_dir($dir)) 
+  if (is_dir($dir))
   {
-    if ($dh = opendir($dir)) 
+    if ($dh = opendir($dir))
     {
-      while (($file = readdir($dh)) != false) 
+      while (($file = readdir($dh)) != false)
       {
         if ($file != "." && $file != "..")
         {
@@ -120,24 +120,24 @@ function listContent($dir)
   }
 }
 
-function getFolderOfMountedPartition($device) 
+function getFolderOfMountedPartition($device)
 {
   $output = exec ("mount | grep $device");
   $substrings = explode(" ", $output);
   return $substrings[2];
 }
 
-function mount($device) 
+function mount($device)
 {
   exec ("mount $device");
 }
 
-function umount($device) 
+function umount($device)
 {
   exec ("umount $device");
 }
 
-function getSDcards() 
+function getSDcards()
 {
   echo "<form action=index.php?command=mount method=post>";
   echo "<select name=\"partitions\">";
@@ -154,7 +154,7 @@ function getSDcards()
   echo "</form>";
 }
 
-function mountSD($device) 
+function mountSD($device)
 {
   $mountoutput = exec("mount $device");
 }
@@ -168,11 +168,11 @@ function listPartitions()
 function isSDcard($device)
 {
   $output = exec ("udevadm info -a --name=$device | grep SD");
-  if ($output != NULL && $output != "") 
+  if ($output != NULL && $output != "")
   {
     return true;
   }
-  else 
+  else
   {
     return false;
   }
