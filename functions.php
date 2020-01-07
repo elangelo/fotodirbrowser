@@ -1,17 +1,17 @@
 <?php
 
-function resizeThumb($thumb, $old_width, $old_height, $new_width, $new_height)
-{
-    $thumbnail = imagecreatefromstring($thumb);
-    return resizeImage($thumbnail, $old_width, $old_height, $new_width, $new_height);
-}
+// function resizeThumb($thumb, $old_width, $old_height, $new_width, $new_height)
+// {
+//     $thumbnail = imagecreatefromstring($thumb);
+//     return resizeImage($thumbnail, $old_width, $old_height, $new_width, $new_height);
+// }
 
-function resizeImage($image, $old_width, $old_height, $new_width, $new_height)
-{
-    $newThumb = imagecreatetruecolor($new_width, $new_height);
-    imagecopyresampled($newThumb, $image, 0, 0, 0, 0, $new_width, $new_height, $old_width, $old_height);
-    return imagejpeg($newThumb);
-}
+// function resizeImage($image, $old_width, $old_height, $new_width, $new_height)
+// {
+//     $newThumb = imagecreatetruecolor($new_width, $new_height);
+//     imagecopyresampled($newThumb, $image, 0, 0, 0, 0, $new_width, $new_height, $old_width, $old_height);
+//     return imagejpeg($newThumb);
+// }
 
 function trace($message)
 {
