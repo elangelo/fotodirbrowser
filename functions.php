@@ -22,6 +22,21 @@ function trace($message)
     }
 }
 
+function getSize($imagePath)
+{
+    include "includes.inc";
+    $fileLocation = $imagePath;
+    trace("fileLocation: " . $fileLocation);
+    $picBaseDir = $baseDir;
+    $fullImagePath = $picBaseDir . '/' . $fileLocation;
+    $imageinfo = getimagesize($fullImagePath);
+
+    return [
+        'x' => $imageinfo[0],
+        'y' => $imageinfo[1],
+    ];
+}
+
 function resizeImageFromPath($imagePath, $maxDimension)
 {
     include "includes.inc";
