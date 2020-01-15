@@ -2,7 +2,7 @@
 
 install dependencies
 ```bash
-pacman -S lighttpd php debug php-cgi php-gd
+pacman -S lighttpd php xdebug php-cgi php-gd
 ```
 
 start lighttpd server in the root directory of this project:
