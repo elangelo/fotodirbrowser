@@ -1,9 +1,11 @@
 <html>
 <head>
-  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
   <script type="text/javascript" src="js/slimbox2.js"></script>
   <link rel="stylesheet" href="style.css" type="text/css" media="screen"/>
-  <link rel="stylesheet" href="css/slimbox2.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="css/slimbox2.css" type="text/css" media="screen" /> -->
+  <link rel="stylesheet" href="grid.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="modal.css" type="text/css" media="screen" />
 </head>
 
   <body>
@@ -95,8 +97,7 @@ if ($handle = opendir($parentDir)) {
 ?>
   </div>
 
-  <div id="center" class="center">
-  <br/><br/>
+  <ul>
   <?php
 include "includes.inc";
 $saveDirName = "/";
@@ -135,7 +136,7 @@ if ($handle = opendir($baseDir . $dir)) {
         }
         for ($i = 0; $i < sizeof($dirs); $i++) {
             $saveDirName = str_replace("&", "_*_", $dirs[$i]);
-            echo "<div class=\"thumb\">";
+            echo "<li>";
             echo "<a class=\"baseNavigation\" href=\"DirHandler.php?fileLocation=$saveDirName\">";
             echo "<div class=\"tagcloud\">";
             foreach (explode(';', $dirtags[$dirs[$i]]) as $dirTag) {
@@ -152,7 +153,7 @@ if ($handle = opendir($baseDir . $dir)) {
             echo end($tmp) . "<br />";
             echo "</div>";
             echo "</a>";
-            echo "</div>";
+            echo "</li>";
         }
     }
     if (!empty($files)) {
@@ -163,19 +164,80 @@ if ($handle = opendir($baseDir . $dir)) {
         for ($i = 0; $i < sizeof($files); $i++) {
             $saveFileName = str_replace("&", "_*_", $files[$i]);
             $tmp = explode('/', $saveFileName);
-            $realFileName = end($tmp);
-            echo "<div class=\"thumb\">";
-            echo "<a class=\"baseNavigation\" href=\"ImageHandler.php?fileLocation=" . $saveFileName . "&size=" . $slideSize . "\" rel=\"lightbox-pics\" title=\"$realFileName&nbsp;:&nbsp;&lt;a href=&quot;ImageHandler.php?fileLocation=" . $saveFileName . "&quot;&gt;original&lt;/a&gt;&nbsp;&nbsp;&lt;a href=&quot;ImageHandler.php?fileLocation=" . $saveFileName . "&size=" . $slideSize . "&quot;&gt;small&lt;/a&gt;\">";
-            echo "<div class=\"thumbimg\">";
-            echo "<img src=\"ImageHandler.php?fileLocation=" . $saveFileName . "&size=" . $thumbSize . "\" />";
-            echo "</div>";
-            echo "</a>";
-            echo "</div>";
+            echo "<li>";
+            echo "<img class=\"grid\" src=\"ImageHandler.php?fileLocation=" . $saveFileName . "&size=800\"  onclick=\"openModal();currentSlide(" . $i .")\" />";
+            echo "</li>";
         }
     }
 }
 ?>
-  </div>
+  <li></li>
+  </ul>
+
+<!-- The Modal/Lightbox -->
+<div id="myModal" class="modal">
+    <span class="close cursor" onclick="closeModal()">&times;</span>
+    <div class="modal-content">
+        <?php
+        for ($i = 0; $i < sizeof($files); $i++) {
+                  $saveFileName = str_replace("&", "_*_", $files[$i]);
+                  $tmp = explode('/', $saveFileName);
+                  echo "<div class=\"mySlides\">";
+                  echo "<img class=\"mySlideImage\" src=\"ImageHandler.php?fileLocation=" . $saveFileName . "&size=800\" style=\"height:80%\" />";
+                  echo "</div>";
+              }
+        ?>  
+    </div>
+
+    <!-- Next/previous controls -->
+    <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+    <a class="next" onclick="plusSlides(1)">&#10095;</a>
+
+</div>
+<script>
+// Open the Modal
+function openModal() {
+  document.getElementById("myModal").style.display = "block";
+}
+
+// Close the Modal
+function closeModal() {
+  document.getElementById("myModal").style.display = "none";
+}
+
+var slideIndex = 1;
+showSlides(slideIndex);
+
+// Next/previous controls
+function plusSlides(n) {
+  showSlides(slideIndex += n);
+}
+
+// Thumbnail image controls
+function currentSlide(n) {
+  showSlides(slideIndex = n);
+}
+
+function showSlides(n) {
+  var i;
+  var slides = document.getElementsByClassName("mySlides");
+  var dots = document.getElementsByClassName("demo");
+  var captionText = document.getElementById("caption");
+  if (n > slides.length) {slideIndex = 1}
+  if (n < 1) {slideIndex = slides.length}
+  for (i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";
+  }
+  for (i = 0; i < dots.length; i++) {
+    dots[i].className = dots[i].className.replace(" active", "");
+  }
+  slides[slideIndex-1].style.display = "block";
+  dots[slideIndex-1].className += " active";
+  captionText.innerHTML = dots[slideIndex-1].alt;
+}
+</script>
+
+
 
   <div class="tags">
   <?php
