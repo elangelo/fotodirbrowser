@@ -1,6 +1,6 @@
 <?php
 //$baseDir = "/mnt/raid/pictures/";
-$baseDir = "/home/samuel/sources/fotodirbrowser/docs/example";
-$thumbBaseDir = "/home/samuel/sources/fotodirbrowser/.pictures";
+$baseDir = "/home/samuel/source/fotodirbrowser/docs/example";
+$thumbBaseDir = "/home/samuel/source/fotodirbrowser/.pictures";
 $thumbSize = "250";
 $slideSize = "800";
