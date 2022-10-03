@@ -165,7 +165,7 @@ if ($handle = opendir($baseDir . $dir)) {
             $saveFileName = str_replace("&", "_*_", $files[$i]);
             $tmp = explode('/', $saveFileName);
             echo "<li>";
-            echo "<img class=\"grid\" src=\"ImageHandler.php?fileLocation=" . $saveFileName . "&size=800\"  onclick=\"openModal();currentSlide(" . $i .")\" />";
+            echo "<img class=\"grid\" src=\"ImageHandler.php?fileLocation=" . $saveFileName . "&size=800\"  onclick=\"openModal();currentSlide(" . $i + 1 .")\" />";
             echo "</li>";
         }
     }
@@ -179,13 +179,28 @@ if ($handle = opendir($baseDir . $dir)) {
     <span class="close cursor" onclick="closeModal()">&times;</span>
     <div class="modal-content">
         <?php
+        include "includes.inc";
+        include "functions.php";
+        $maxsize = 960;
         for ($i = 0; $i < sizeof($files); $i++) {
-                  $saveFileName = str_replace("&", "_*_", $files[$i]);
-                  $tmp = explode('/', $saveFileName);
-                  echo "<div class=\"mySlides\">";
-                  echo "<img class=\"mySlideImage\" src=\"ImageHandler.php?fileLocation=" . $saveFileName . "&size=800\" style=\"height:80%\" />";
-                  echo "</div>";
-              }
+            $fullfilename = $baseDir . '/' . $files[$i];
+            $image = imagecreatefromjpeg($fullfilename);
+            $oWidth = imagesx($image);
+            $oHeight = imagesy($image);
+            if ($oWidth > $oHeight) {
+                $width = $maxsize;
+                $height = $oHeight * $maxsize / $oWidth;
+            } else {
+                $height = $maxsize;
+                $width = $oWidth * $maxsize / $oHeight; 
+            }
+
+            $saveFileName = str_replace("&", "_*_", $files[$i]);
+            $tmp = explode('/', $saveFileName);
+            echo "<div class=\"mySlides\" style=\"width:".$width."px;\">";
+            echo "<img src=\"ImageHandler.php?fileLocation=" . $saveFileName . "&size=".$maxsize."\" width=\"" . $width . "\" height=\"" . $height . "\"/>";
+            echo "</div>";
+            }
         ?>  
     </div>
 
