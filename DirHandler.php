@@ -165,7 +165,7 @@
                     echo "<li>";
                     switch ($file->type) {
                         case 'image':
-                            
+
                             echo "<img class=\"grid\" src=\"ImageHandler.php?fileLocation=" . $file->saveFilename . "&size=800\"  onclick=\"openModal();currentSlide(" . $i + 1 . ")\" />";
                             break;
                         case 'video':
@@ -196,24 +196,27 @@
             include "includes.inc";
             include "functions.php";
             $maxsize = 960;
-            for ($i = 0; $i < sizeof($files); $i++) {
-                $fullfilename = $baseDir . '/' . $files[$i];
-                $image = imagecreatefromjpeg($fullfilename);
-                $oWidth = imagesx($image);
-                $oHeight = imagesy($image);
-                if ($oWidth > $oHeight) {
-                    $width = $maxsize;
-                    $height = $oHeight * $maxsize / $oWidth;
-                } else {
-                    $height = $maxsize;
-                    $width = $oWidth * $maxsize / $oHeight;
-                }
+            foreach ($files as $file) {
+                $fullfilename = $baseDir . '/' . $file->fullFilename;
+                switch ($file->type) {
+                    case 'image': {
+                            $image = imagecreatefromjpeg($fullfilename);
+                            $oWidth = imagesx($image);
+                            $oHeight = imagesy($image);
+                            if ($oWidth > $oHeight) {
+                                $width = $maxsize;
+                                $height = $oHeight * $maxsize / $oWidth;
+                            } else {
+                                $height = $maxsize;
+                                $width = $oWidth * $maxsize / $oHeight;
+                            }
 
-                $saveFileName = str_replace("&", "_*_", $files[$i]);
-                $tmp = explode('/', $saveFileName);
-                echo "<div class=\"mySlides\" style=\"width:" . $width . "px;\">";
-                echo "<img src=\"ImageHandler.php?fileLocation=" . $saveFileName . "&size=" . $maxsize . "\" width=\"" . $width . "\" height=\"" . $height . "\"/>";
-                echo "</div>";
+                            echo "<div class=\"mySlides\" style=\"width:" . $width . "px;\">";
+                            echo "<img src=\"ImageHandler.php?fileLocation=" . $file->saveFilename . "&size=" . $maxsize . "\" width=\"" . $width . "\" height=\"" . $height . "\"/>";
+                            echo "</div>";
+                            break;
+                        }
+                }
             }
             ?>
         </div>
