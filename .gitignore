@@ -1,2 +1,5 @@
 .pictures
 *.jpg
+*.mp4
+
+/vendor/
