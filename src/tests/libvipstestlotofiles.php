@@ -3,10 +3,10 @@
 <?php
 //https://github.com/libvips/php-vips
 
-require __DIR__ . '/../vendor/autoload.php';
+require __DIR__ . '/../../vendor/autoload.php';
 use Jcupitt\Vips;
 
-$dir = __DIR__ . '/../docs/example/2020/2020-09-17';
+$dir = __DIR__ . '/../../docs/example/2020/2020-09-17';
 if ($handle = opendir ($dir)) {
     while (false !== ($file = readdir($handle))){
         if ($file != "." && $file != "..") {
@@ -15,10 +15,14 @@ if ($handle = opendir ($dir)) {
 
             } else {
                 $tmp = explode ('.', $file);
-                $extension = end($tmp);
-                if ($extension == "JPG" || $extension == "jpg") {
+                $extension = strtoupper(end($tmp));
+                if ($extension == "JPG") {
                     $image = Vips\Image::thumbnail( $fullfile, 200);
                     $image->writeToFile('tiny'.$file);
+
+                    $image = Vips\Image::newFromFile($fullfile);
+
+                    echo $fullfile . '  width: ' . $image->width . '  height: ' . $image->height . "\torientation: ". $image->get('orientation') ."\n";
                 }
             }
         }
