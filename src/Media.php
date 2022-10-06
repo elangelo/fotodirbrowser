@@ -2,7 +2,6 @@
 require __DIR__ . '/../vendor/autoload.php';
 
 include 'Dimension.php';
-include __DIR__ . '/../includes.inc';
 
 use Jcupitt\Vips;
 
@@ -85,10 +84,7 @@ class Media
                 //     $width = $oWidth * $maxsize / $oHeight;
                 // }
 
-                echo "<div class=\"mySlides\" style=\"width:" . $width . "px;\">";
-                echo "<img src=\"ImageHandler.php?fileLocation=" . $this->saveFilename . "&size=" . self::$maxImgSize . "\" width=\"" . $width . "\" height=\"" . $height . "\"/>";
-                echo "</div>";
-                break;
+                return "<div class=\"mySlides\" style=\"width:" . $width . "px;\"><img src=\"ImageHandler.php?fileLocation=" . $this->saveFilename . "&size=" . self::$maxImgSize . "\" width=\"" . $width . "\" height=\"" . $height . "\"/></div>";
             case 'video':
                 return "video";
                 break;
@@ -97,6 +93,7 @@ class Media
 
     private function getDimension()
     {
+        include __DIR__ . '/../includes.inc';
         $im = Vips\Image::newFromFile( $baseDir . '/' . $this->fullFilename);
         $orientation = 'HORIZONTAL';
         $width = $im->width;

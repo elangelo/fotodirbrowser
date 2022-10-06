@@ -177,13 +177,8 @@
         <span class="close cursor" onclick="closeModal()">&times;</span>
         <div class="modal-content">
             <?php
-            include "includes.inc";
-            include "functions.php";
-            $maxsize = 960;
             foreach ($files as $file) {
-                echo "<div class=\"mySlides\">";// style=\"width:" . $width . "px;\">";
                 echo $file->getImgUrl();
-                echo "</div>";
             }
             ?>
         </div>
@@ -196,11 +191,13 @@
     <script>
         // Open the Modal
         function openModal() {
+            document.body.style.overflow = "hidden";
             document.getElementById("myModal").style.display = "block";
         }
 
         // Close the Modal
         function closeModal() {
+            document.body.style.overflow = "auto";
             document.getElementById("myModal").style.display = "none";
         }
 
