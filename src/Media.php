@@ -3,6 +3,7 @@ require __DIR__ . '/../vendor/autoload.php';
 
 include 'Dimension.php';
 
+use FFMpeg\FFProbe;
 use Jcupitt\Vips;
 
 class Media
@@ -52,16 +53,16 @@ class Media
                 return "<img class=\"grid\" src=\"ImageHandler.php?fileLocation=" . $this->saveFilename . "&size=300\"  onclick=\"openModal();currentSlide(" . $counter + 1 . ")\" />";
                 break;
             case 'video':
-                return "video";
+                return "<img class=\"grid\" src=\"VideoHandler.php?fileLocation=" . $this->saveFilename . "&size=300\"  onclick=\"openModal();currentSlide(" . $counter + 1 . ")\" />";
                 break;
         }
     }
 
-    public function getImgUrl()
+    public function getPreviewUrl()
     {
         switch ($this->type) {
             case 'image':
-                $dimension = $this->getDimension();
+                $dimension = $this->getImageDimension();
                 switch ($dimension->orientation) {
                     case 'HORIZONTAL':
                         $width = self::$maxImgSize;
@@ -86,15 +87,26 @@ class Media
 
                 return "<div class=\"mySlides\" style=\"width:" . $width . "px;\"><img src=\"ImageHandler.php?fileLocation=" . $this->saveFilename . "&size=" . self::$maxImgSize . "\" width=\"" . $width . "\" height=\"" . $height . "\"/></div>";
             case 'video':
-                return "video";
+                $dimension = $this->getVideoDimension();
+                switch ($dimension->orientation) {
+                    case 'HORIZONTAL':
+                        $width = self::$maxImgSize;
+                        $height = $dimension->height * self::$maxImgSize / $dimension->width;
+                        break;
+                    case 'VERTICAL':
+                        $height = self::$maxImgSize;
+                        $width = $dimension->width * self::$maxImgSize / $dimension->height;
+                        break;
+                }
+                return "<div class=\"mySlides\"><video width=\"" . $width . "\" height=\"" . $height . "\" controls><source src=\"VideoHandler.php?fileLocation=" . $this->saveFilename . "\" /></video></div>";
                 break;
         }
     }
 
-    private function getDimension()
+    private function getImageDimension()
     {
         include __DIR__ . '/../includes.inc';
-        $im = Vips\Image::newFromFile( $baseDir . '/' . $this->fullFilename);
+        $im = Vips\Image::newFromFile($baseDir . '/' . $this->fullFilename);
         $orientation = 'HORIZONTAL';
         $width = $im->width;
         $height = $im->height;
@@ -116,6 +128,31 @@ class Media
                     break;
             }
         }
+
+        return new Dimension($width, $height, $orientation);
+    }
+
+    private function getVideoDimension()
+    {
+        include __DIR__ . '/../includes.inc';
+
+        $ffprobe = FFMpeg\FFProbe::create();
+        $videostream = $ffprobe
+            ->streams($baseDir . '/' . $this->fullFilename)
+            ->videos()
+            ->first();
+
+        $ratio = $videostream->get('display_aspect_ratio');
+        $tmp = explode(':', $ratio);
+
+        if ($tmp[0] / $tmp[1] > 1) {
+            $orientation = 'HORIZONTAL';
+        } else {
+            $orientation = 'VERTICAL';
+        }
+
+        $width = $videostream->get('width');
+        $height = $videostream->get('height');
 
         return new Dimension($width, $height, $orientation);
     }

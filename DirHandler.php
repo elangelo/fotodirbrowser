@@ -161,9 +161,10 @@
                     usort($files, [Media::class, "cmp_obj"]);
                 }
 
+                $counter = 0;
                 foreach ($files as $file) {
                     echo "<li>";
-                    echo $file->getThumbUrl($i + 1);
+                    echo $file->getThumbUrl($counter++);
                     echo "</li>";
                 }
             }
@@ -178,7 +179,7 @@
         <div class="modal-content">
             <?php
             foreach ($files as $file) {
-                echo $file->getImgUrl();
+                echo $file->getPreviewUrl();
             }
             ?>
         </div>
@@ -236,8 +237,6 @@
             captionText.innerHTML = dots[slideIndex - 1].alt;
         }
     </script>
-
-
 
     <div class="tags">
         <?php

@@ -1,6 +1,6 @@
 <?php
 include "includes.inc";
-include "functions.php";
+include "src/ImageEngine.php";
 
 if (array_key_exists('fileLocation', $_GET)) {
     $fileLocation = htmlspecialchars($_GET['fileLocation']);
