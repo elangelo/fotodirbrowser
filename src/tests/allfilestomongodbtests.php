@@ -26,19 +26,42 @@ if ($existsalready == 0) {
                     $tmp = explode('.', $file);
                     $extension = strtoupper(end($tmp));
                     if ($extension == "JPG") {
-                        $image = Vips\Image::newFromFile($fullfile);
-                        $image->
+                        $cursor = $filecollection->find(['path' => $fullfile]);
+                        if (!$cursor->isDead()) {
+                            // var_dump($cursor);
+                            $record = $cursor->toArray()[0];
+                            var_dump($record);
+                        } else {
+                            $exif_properties = ["FileDateTime", "MimeType", "FileSize", "Make", "ImageWidth", "ImageLength", "Model", "Orientation", "ExposureTime", "ISOSpeedRatings", "ShutterSpeedValue", "ApertureValue", "LightSource", "Flash", "FocalLengthIn35mmFilm"];
+                            $exif = exif_read_data($fullfile);
+                            $metadata = array();
+                            foreach ($exif_properties as $key) {
+                                $metadata[$key] = $exif[$key];
+                            }
+                            $record = [
+                                'filename' => $file,
+                                'path' => $fullfile,
+                                'md5sum' => '',
+                                'metadata' => $metadata,
+                                'size' => $metadata["FileSize"],
+                                'date' => $metadata["FileDateTime"],
+                                'deleted' => false
+                            ];
 
-                        echo $fullfile . '  width: ' . $image->width . '  height: ' . $image->height . "\torientation: " . $image->get('orientation') . "\n";
+                            var_dump($record);
+
+                            $filecollection->insertOne($record);
+                        }
                     }
                 }
             }
         }
+        closedir($handle);
     }
 
     $dircollection->insertOne(['dirname' => $dir]);
 }
-closedir($handle);
+
 
 
 

@@ -34,11 +34,20 @@ $exif_exif = exif_read_data($filename, 'EXIF', 0);
 // echo "EXIF_IFD0\n";
 // var_dump($exif_ifd0);
 
-foreach ($exif_exif as $key => $value) {
-    if (!is_array($value)) {
-        echo $key . ":" . $value . "\n";
-    }
+$exif_properties = ["FileDateTime", "MimeType", "FileSize", "Make", "ImageWidth", "ImageLength", "Model", "Orientation", "ExposureTime", "ISOSpeedRatings", "ShutterSpeedValue", "ApertureValue", "LightSource", "Flash", "FocalLengthIn35mmFilm"];
+
+foreach($exif_properties as $key) {
+    echo "${key} : ${exif[$key]}\n";
 }
+var_dump($exif);
+
+
+
+// foreach ($exif_exif as $key => $value) {
+//     if (!is_array($value)) {
+//         echo $key . ":" . $value . "\n";
+//     }
+// }
 
 // var_dump($exif);
 // // foreach ($exif as $key => $section) {
