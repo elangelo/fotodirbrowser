@@ -35,3 +35,47 @@ function getStillFromVideo($fileLocation, $size)
 
     return $fullThumbPath;
 }
+
+function getMetaData($fileName, $fullFilePath)
+{
+    $ffprobe = FFProbe::create();
+    $videoinfo = $ffprobe->format($fullFilePath);
+    // var_dump($videoinfo);
+    $duration =  (float)$videoinfo->get('duration');
+    $tags = $videoinfo->get('tags');
+    $datetime = $tags['creation_time'];
+    $unixtime = strtotime($datetime);
+    $streams = $ffprobe->streams($fullFilePath);
+    $videostream = $streams->videos()->first();
+    $audiostream = $streams->audios()->first();
+    $videoprops = ["codec_name", "width", "height", "display_aspect_ratio", "avg_frame_rate", "duration"];
+    $videometadata = array();
+    foreach ($videoprops as $prop) {
+        $videometadata[$prop] = $videostream->get($prop);
+    }
+
+    $audioprops = ["codec_name", "sample_rate", "channels", "duration", "bit_rate"];
+    $audiometadata = array();
+    foreach ($audioprops as $prop) {
+        $audiometadata[$prop] = $audiostream->get($prop);
+    }
+
+    $metadata = ([
+        'duration' => $duration,
+        'video' => $videometadata,
+        'audio' => $audiometadata
+    ]);
+
+    $record = ([
+        'filename' => $fileName,
+        'path' => $fullFilePath,
+        'type' => 'file',
+        'md5sum' => md5_file($fullFilePath),
+        'metadata' => $metadata,
+        'size' => filesize($fullFilePath),
+        'date' => $unixtime,
+        'deleted' => false
+    ]);
+
+    return $record;
+}
