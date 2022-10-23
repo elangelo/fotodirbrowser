@@ -2,18 +2,22 @@
 require __DIR__ . '/../vendor/autoload.php';
 
 include 'Dimension.php';
+include 'VideoEngine.php';
+include 'ImageEngine.php';
 
 use FFMpeg\FFProbe;
 use Jcupitt\Vips;
 
 class Media
 {
-    public readonly string $directory;
-    public readonly string $fullFilename;
-    public readonly string $fileName;
-    public readonly string $extension;
-    public readonly string $type;
-    public readonly string $saveFilename;
+    private readonly string $directory;
+    private readonly string $fullFilename;
+    private readonly string $fileName;
+    private readonly string $extension;
+    private readonly string $type;
+    private readonly string $saveFilename;
+
+    private readonly array $record;
 
     public static int $maxImgSize = 960;
 
@@ -31,9 +35,11 @@ class Media
         switch ($this->extension) {
             case "mp4":
                 $this->type = 'video';
+                $this->record = VideoEngine::getMetaData($this->fileName, $this->fullFilename);
                 break;
             case "jpg":
                 $this->type = 'image';
+                $this->record = ImageEngine::getMetaData($this->fileName, $this->fullFilename);
                 break;
             default:
                 break;
@@ -73,18 +79,6 @@ class Media
                         $width = $dimension->width * self::$maxImgSize / $dimension->height;
                         break;
                 }
-
-                // $image = imagecreatefromjpeg($this->fullfilename);
-                // $oWidth = imagesx($image);
-                // $oHeight = imagesy($image);
-                // if ($oWidth > $oHeight) {
-                //     $width = $maxsize;
-                //     $height = $oHeight * $maxsize / $oWidth;
-                // } else {
-                //     $height = $maxsize;
-                //     $width = $oWidth * $maxsize / $oHeight;
-                // }
-
                 return "<div class=\"mySlides\" style=\"width:" . $width . "px;\"><img src=\"ImageHandler.php?fileLocation=" . $this->saveFilename . "&size=" . self::$maxImgSize . "\" width=\"" . $width . "\" height=\"" . $height . "\"/></div>";
             case 'video':
                 $dimension = $this->getVideoDimension();
@@ -105,29 +99,9 @@ class Media
 
     private function getImageDimension()
     {
-        include __DIR__ . '/../includes.inc';
-        $im = Vips\Image::newFromFile($baseDir . '/' . $this->fullFilename);
-        $orientation = 'HORIZONTAL';
-        $width = $im->width;
-        $height = $im->height;
-        if ($im->getType('orientation') != 0) {
-            $or = $im->get('orientation');
-            switch ($or) {
-                case 1:
-                case 2:
-                case 4:
-                    break;
-                case 3:
-                case 5:
-                case 6:
-                case 7:
-                case 8:
-                    $orientation = 'VERTICAL';
-                    $width = $im->height;
-                    $height = $im->width;
-                    break;
-            }
-        }
+        $width = $this->record['metadata']['ImageWidth'];
+        $height = $this->record['metadata']['ImageLength'];
+        $orientation = $this->record['orientation'];
 
         return new Dimension($width, $height, $orientation);
     }
@@ -136,23 +110,9 @@ class Media
     {
         include __DIR__ . '/../includes.inc';
 
-        $ffprobe = FFMpeg\FFProbe::create();
-        $videostream = $ffprobe
-            ->streams($baseDir . '/' . $this->fullFilename)
-            ->videos()
-            ->first();
-
-        $ratio = $videostream->get('display_aspect_ratio');
-        $tmp = explode(':', $ratio);
-
-        if ($tmp[0] / $tmp[1] > 1) {
-            $orientation = 'HORIZONTAL';
-        } else {
-            $orientation = 'VERTICAL';
-        }
-
-        $width = $videostream->get('width');
-        $height = $videostream->get('height');
+        $orientation = $this->record['orientation'];
+        $width = $this->record['metadata']['video']['width'];
+        $height = $this->record['metadata']['video']['height'];
 
         return new Dimension($width, $height, $orientation);
     }
