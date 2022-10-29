@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="css/slimbox2.css" type="text/css" media="screen" /> -->
     <link rel="stylesheet" href="grid.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="modal.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="modal.css" type="text/css" media="screen" />
 </head>
 
 <body>
@@ -133,7 +134,7 @@
                             }
                             $dirtags[$saveDirName . '/' . $file] = $tags;
                         } else {
-                            $files[] = new Media($dir, $file);
+                            $files[] = Media::withDirAndFilename("$baseDir/$dir", $file);
                         }
                     }
                 }

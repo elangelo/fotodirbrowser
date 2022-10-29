@@ -7,8 +7,7 @@ if (array_key_exists('fileLocation', $_GET)) {
     $fileLocation = str_replace("_*_", "&", $fileLocation);
     $size = (int) $_GET['size'];
 
-    $resizedImage = resizeImageFromPath($fileLocation, $size);
-    trace("resimg: " . $resizedImage);
+    $resizedImage = ImageEngine::resizeImageFromPath($fileLocation, $size);
 
     $headers = apache_request_headers();
     // Checking if the client is validating his cache and if it is current.

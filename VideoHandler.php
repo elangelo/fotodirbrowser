@@ -8,7 +8,7 @@ if (array_key_exists('fileLocation', $_GET)) {
     if (array_key_exists('size', $_GET)) {
         $size = (int) $_GET['size'];
 
-        $resizedImage = getStillFromVideo($fileLocation, $size);
+        $resizedImage = VideoEngine::getStillFromVideo($fileLocation, $size);
         // trace("resimg: " . $resizedImage);
 
         $headers = apache_request_headers();
@@ -33,7 +33,7 @@ if (array_key_exists('fileLocation', $_GET)) {
         flush();
         readfile($resizedImage);
     } else {
-        $fullPath = $baseDir . '/' . $fileLocation;
+        $fullPath = $fileLocation;
         readfile($fullPath);
     }
 }

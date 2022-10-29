@@ -5,25 +5,18 @@ use Jcupitt\Vips;
 
 class ImageEngine
 {
-    static function trace($message)
-    {
-        $debug = false;
-        if ($debug) {
-            print $message . "<br/>";
-        }
-    }
-
     static function resizeImageFromPath($fileLocation, $size)
     {
         include __DIR__ . '/../includes.inc';
-        trace("fileLocation: " . $fileLocation);
-        trace("maxDimension: " . $size);
-        $fullImagePath = $baseDir . '/' . $fileLocation;
+        $splFileInfo = new SplFileInfo($fileLocation);
+        $fileName = $splFileInfo->getFilename();
+
+        // $fullImagePath = $baseDir . '/' . $fileLocation;
         if ($size == 0) {
-            return $fullImagePath;
+            return $fileLocation;
         } else {
             $thumbBaseDir = $thumbBaseDir . '/' . $size . '/';
-            $fullThumbPath = $thumbBaseDir . $fileLocation;
+            $fullThumbPath = $thumbBaseDir . $fileName;
 
             $splfileInfo = new SplFileInfo($fullThumbPath);
             $thumbfolder = $splfileInfo->getPath();
@@ -33,20 +26,21 @@ class ImageEngine
             }
 
             if (!file_exists($fullThumbPath)) {
-                $im = Vips\Image::thumbnail($fullImagePath, $size);
+                $im = Vips\Image::thumbnail($fileLocation, $size);
                 $im->writeToFile($fullThumbPath);
             }
             return $fullThumbPath;
         }
     }
 
-    static function getMetaData($fileName, $fullFilePath)
+    static function getMetaData($directoryName, $fileName)
     {
+        $fullpath = "$directoryName/$fileName";
         $exif_properties = ["FileDateTime", "MimeType", "FileSize", "Make", "ImageWidth", "ImageLength", "Model", "Orientation", "ExposureTime", "ISOSpeedRatings", "ShutterSpeedValue", "ApertureValue", "LightSource", "Flash", "FocalLengthIn35mmFilm"];
-        $exif = exif_read_data($fullFilePath);
+        $exif = exif_read_data($fullpath);
         $metadata = array();
         foreach ($exif_properties as $key) {
-            $metadata[$key] = $exif[$key];
+            $metadata[$key] = $exif[$key] ?? NULL;
         }
 
         $orientation = self::getOrientation($metadata['Orientation']);
@@ -58,19 +52,8 @@ class ImageEngine
             $metadata['ImageHeight'] = $height;
         }
 
-        $record = ([
-            'filename' => $fileName,
-            'path' => $fullFilePath,
-            'type' => 'file',
-            'md5sum' => md5_file($fullFilePath),
-            'metadata' => $metadata,
-            'size' => $metadata["FileSize"],
-            'orientation' => $orientation,
-            'date' => $metadata["FileDateTime"],
-            'deleted' => false
-        ]);
-
-        return $record;
+        $metadata['orientation'] = $orientation;
+        return $metadata;
     }
 
     static function getOrientation($orientation)

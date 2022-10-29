@@ -14,7 +14,7 @@ class Dal
     {
         $user = $this->user;
         $pwd = $this->pwd;
-        $this->client = new MongoDB\Client("mongodb://${$user}:${$pwd}@localhost:27017");
+        $this->client = new MongoDB\Client("mongodb://${user}:${pwd}@localhost:27017");
         $this->dircollection = $this->client->fotodir->dirs;
         $this->filecollection = $this->client->fotodir->files;
     }
@@ -33,4 +33,5 @@ class Dal
     {
         $this->filecollection->insertMany($records);
     }
+
 }

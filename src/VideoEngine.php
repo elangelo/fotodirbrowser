@@ -1,25 +1,18 @@
 <?php
 
 require __DIR__ . '/../vendor/autoload.php';
+
+use FFMpeg\FFProbe;
+
 class VideoEngine
 {
-    use FFMpeg\FFProbe;
-
-    function trace($message)
-    {
-        $debug = false;
-        if ($debug) {
-            print $message . "<br/>";
-        }
-    }
-
     static function getStillFromVideo($fileLocation, $size)
     {
-        trace('fileLocationFromUrl : ' . $fileLocation);
         include __DIR__ . '/../includes.inc';
-        $fullPath = $baseDir . '/' . $fileLocation;
-        trace('fullPath' . $fullPath);
-        $fullThumbPath = $thumbBaseDir . '/' . $size . '/' . $fileLocation . '.jpg';
+        $splFileInfo = new SplFileInfo($fileLocation);
+        $fileName = $splFileInfo->getFilename();
+
+        $fullThumbPath = $thumbBaseDir . '/' . $size . '/' . $fileName . '.jpg';
         $splfileInfo = new SplFileInfo($fullThumbPath);
         $thumbfolder = $splfileInfo->getPath();
         if (!file_exists($thumbfolder)) {
@@ -27,9 +20,8 @@ class VideoEngine
         }
 
         if (!file_exists($fullThumbPath)) {
-            trace('fullThumbPath' . $fullThumbPath);
             $ffmpeg = FFMpeg\FFMpeg::create();
-            $video = $ffmpeg->open($fullPath);
+            $video = $ffmpeg->open($fileLocation);
             $frame = $video->frame(FFMpeg\Coordinate\TimeCode::fromSeconds(2));
             $frame->save($fullThumbPath);
         }
@@ -37,16 +29,17 @@ class VideoEngine
         return $fullThumbPath;
     }
 
-    static function getMetaData($fileName, $fullFilePath)
+    static function getMetaData($directoryName, $fileName)
     {
+        $fullPath = "$directoryName/$fileName";
+
         $ffprobe = FFProbe::create();
-        $videoinfo = $ffprobe->format($fullFilePath);
-        // var_dump($videoinfo);
+        $videoinfo = $ffprobe->format($fullPath);
         $duration =  (float)$videoinfo->get('duration');
         $tags = $videoinfo->get('tags');
-        $datetime = $tags['creation_time'];
+        $datetime = $tags['creation_time'] ?? filemtime($directoryName);
         $unixtime = strtotime($datetime);
-        $streams = $ffprobe->streams($fullFilePath);
+        $streams = $ffprobe->streams($fullPath);
         $videostream = $streams->videos()->first();
         $audiostream = $streams->audios()->first();
         $videoprops = ["codec_name", "width", "height", "display_aspect_ratio", "avg_frame_rate", "duration"];
@@ -72,33 +65,24 @@ class VideoEngine
         }
 
         $metadata = ([
+            'creationTime' => $unixtime,
             'duration' => $duration,
+            'orientation' => $orientation,
             'video' => $videometadata,
             'audio' => $audiometadata
         ]);
 
-        $record = ([
-            'filename' => $fileName,
-            'path' => $fullFilePath,
-            'type' => 'file',
-            'md5sum' => md5_file($fullFilePath),
-            'metadata' => $metadata,
-            'size' => filesize($fullFilePath),
-            'orientation' => $orientation,
-            'date' => $unixtime,
-            'deleted' => false
-        ]);
-
-        return $record;
+        return $metadata;
     }
 
-    static function getOrientation($ratio){
+    static function getOrientation($ratio)
+    {
         $tmp = explode(':', $ratio);
 
-        if ($tmp[0] / $tmp[1] > 1) {
-            $orientation = 'LANDSCAPE';
+        if ((int)$tmp[0] / (int)$tmp[1] > 1) {
+            return 'LANDSCAPE';
         } else {
-            $orientation = 'PORTRAIT';
+            return 'PORTRAIT';
         }
     }
 }

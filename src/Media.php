@@ -1,119 +1,103 @@
+<!-- need this: https://www.mongodb.com/docs/php-library/current/tutorial/custom-types/
+https://www.php.net/manual/en/function.mongodb.bson-tophp.php -->
+
+
 <?php
 require __DIR__ . '/../vendor/autoload.php';
 
-include 'Dimension.php';
 include 'VideoEngine.php';
 include 'ImageEngine.php';
+include 'Image.php';
+include 'Video.php';
+// include 'Directory.php';
 
-use FFMpeg\FFProbe;
-use Jcupitt\Vips;
+// use FFMpeg\FFProbe; 
+// use FFMpeg\Media\Video;
+// use Jcupitt\Vips;
 
 class Media
 {
-    private readonly string $directory;
-    private readonly string $fullFilename;
-    private readonly string $fileName;
-    private readonly string $extension;
-    private readonly string $type;
-    private readonly string $saveFilename;
+    public readonly string $fileName;
+    public readonly string $directoryName;
+    public readonly string $fullPath;
 
-    private readonly array $record;
+    public readonly string $extension;
+    public readonly string $type;
+    public readonly string $saveFilename;
+
+    public readonly string $md5sum;
+    public readonly int $size;
+
+    public readonly int $creationTime;
+    public readonly string $creationDate;
+
+    public readonly bool $deleted;
+
+    // public readonly array $record;
 
     public static int $maxImgSize = 960;
 
-    public function __construct(string $directory, string $fileName)
+    public static function withDirAndFilename(string $directoryName, string $fileName)
     {
-        $this->directory = $directory;
-        $this->fileName = $fileName;
+        $fullPath = "$directoryName/$fileName";
+        $instance = new self();
+        if (is_dir($fullPath)) {
+            $type = 'directory';
+            $extension = '';
+            $instance = Directory::withDirAndFilename($directoryName, $fileName);
+            $md5sum = '';
+            $size = 0;
+            $creationTime = filectime($fullPath);
+            $creationDate = date('Y-m-d', $creationTime);
+        } else {
+            $type = 'file';
+            $md5sum = md5_file($fullPath);
+            $size = filesize($fullPath);
+            $tmp = explode('.', $fileName);
+            $extension = strtolower(end($tmp));
+            switch ($extension) {
+                case 'mp4':
+                    $instance = Video::withDirAndFilename($directoryName, $fileName);
+                    $creationTime = $instance->metadata['creationTime'];
+                    $creationDate = date('Y-m-d', $creationTime);
+                    break;
 
-        $this->fullFilename = $directory . '/' . $fileName;
-        $tmp = explode('.', $this->fileName);
-        $this->extension = strtolower(end($tmp));
-
-        $this->saveFilename = str_replace("&", "_*_", $this->fullFilename);
-
-        switch ($this->extension) {
-            case "mp4":
-                $this->type = 'video';
-                $this->record = VideoEngine::getMetaData($this->fileName, $this->fullFilename);
-                break;
-            case "jpg":
-                $this->type = 'image';
-                $this->record = ImageEngine::getMetaData($this->fileName, $this->fullFilename);
-                break;
-            default:
-                break;
+                case 'jpg':
+                    $instance = Image::withDirAndFilename($directoryName, $fileName);
+                    $creationTime = $instance->metadata['FileDateTime'];
+                    $creationDate = date('Y-m-d', $creationTime);
+                    break;
+            }
         }
+        $instance->fileName = $fileName;
+        $instance->directoryName = $directoryName;
+        $instance->fullPath = $fullPath;
+        $instance->extension = $extension;
+        $instance->type = $type;
+
+        $instance->saveFilename = str_replace("&", "_*_", $instance->fullPath);
+
+        $instance->md5sum = $md5sum;
+        $instance->size = $size;
+
+        $instance->creationDate = $creationDate;
+        $instance->creationTime = $creationTime;
+
+        $instance->deleted = false;
+
+        return $instance;
+    }
+
+    public static function withBSONDoc(array $array)
+    {
+        $instance = new self();
+        $instance->record = $array;
+        return $instance;
     }
 
     /* This is the static comparing function: */
     static function cmp_obj($a, $b)
     {
         return strtolower($a->fileName) <=> strtolower($b->fileName);
-    }
-
-    public function getThumbUrl(int $counter)
-    {
-        switch ($this->type) {
-            case 'image':
-                return "<img class=\"grid\" src=\"ImageHandler.php?fileLocation=" . $this->saveFilename . "&size=300\"  onclick=\"openModal();currentSlide(" . $counter + 1 . ")\" />";
-                break;
-            case 'video':
-                return "<img class=\"grid\" src=\"VideoHandler.php?fileLocation=" . $this->saveFilename . "&size=300\"  onclick=\"openModal();currentSlide(" . $counter + 1 . ")\" />";
-                break;
-        }
-    }
-
-    public function getPreviewUrl()
-    {
-        switch ($this->type) {
-            case 'image':
-                $dimension = $this->getImageDimension();
-                switch ($dimension->orientation) {
-                    case 'HORIZONTAL':
-                        $width = self::$maxImgSize;
-                        $height = $dimension->height * self::$maxImgSize / $dimension->width;
-                        break;
-                    case 'VERTICAL':
-                        $height = self::$maxImgSize;
-                        $width = $dimension->width * self::$maxImgSize / $dimension->height;
-                        break;
-                }
-                return "<div class=\"mySlides\" style=\"width:" . $width . "px;\"><img src=\"ImageHandler.php?fileLocation=" . $this->saveFilename . "&size=" . self::$maxImgSize . "\" width=\"" . $width . "\" height=\"" . $height . "\"/></div>";
-            case 'video':
-                $dimension = $this->getVideoDimension();
-                switch ($dimension->orientation) {
-                    case 'HORIZONTAL':
-                        $width = self::$maxImgSize;
-                        $height = $dimension->height * self::$maxImgSize / $dimension->width;
-                        break;
-                    case 'VERTICAL':
-                        $height = self::$maxImgSize;
-                        $width = $dimension->width * self::$maxImgSize / $dimension->height;
-                        break;
-                }
-                return "<div class=\"mySlides\"><video width=\"" . $width . "\" height=\"" . $height . "\" controls><source src=\"VideoHandler.php?fileLocation=" . $this->saveFilename . "\" /></video></div>";
-                break;
-        }
-    }
-
-    private function getImageDimension()
-    {
-        $width = $this->record['metadata']['ImageWidth'];
-        $height = $this->record['metadata']['ImageLength'];
-        $orientation = $this->record['orientation'];
-
-        return new Dimension($width, $height, $orientation);
-    }
-
-    private function getVideoDimension()
-    {
-        include __DIR__ . '/../includes.inc';
-
-        $orientation = $this->record['orientation'];
-        $width = $this->record['metadata']['video']['width'];
-        $height = $this->record['metadata']['video']['height'];
-
-        return new Dimension($width, $height, $orientation);
     }
 }
