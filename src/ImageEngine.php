@@ -49,7 +49,7 @@ class ImageEngine
             $height = $metadata['ImageWidth'];
             $width = $metadata['ImageLength'];
             $metadata['ImageWidth'] = $width;
-            $metadata['ImageHeight'] = $height;
+            $metadata['ImageLength'] = $height;
         }
 
         $metadata['orientation'] = $orientation;

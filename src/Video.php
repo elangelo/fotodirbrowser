@@ -1,5 +1,7 @@
 <?php
-class Video extends Media
+require_once('functions.php');
+
+class Video extends Media implements MongoDB\BSON\Persistable
 {
     public readonly string $orientation;
     public readonly array $metadata;
@@ -7,10 +9,11 @@ class Video extends Media
     public readonly int $height;
 
 
-    public static function withDirAndFilename($directoryName, $fileName)
+    public static function withRelativeDirAndFilename($directoryName, $fileName)
     {
+        $mediaDir = self::getMediaDir();
         $instance = new self();
-        $metadata = VideoEngine::getMetaData($directoryName, $fileName);
+        $metadata = VideoEngine::getMetaData(path_join($mediaDir, $directoryName), $fileName);
         $instance->metadata = $metadata;
         $instance->orientation = $metadata['orientation'] ?? 'LANDSCAPE';
         $instance->width = $metadata['video']['width'] ?? 1920;
@@ -37,5 +40,35 @@ class Video extends Media
     public function getThumbUrl(int $counter)
     {
         return "<img class=\"grid\" src=\"VideoHandler.php?fileLocation=" . $this->saveFilename . "&size=300\"  onclick=\"openModal();currentSlide(" . $counter + 1 . ")\" />";
+    }
+
+    public function bsonSerialize()
+    {
+        $media = parent::bsonSerialize();
+        $media['orientation'] = $this->orientation;
+        $media['metadata'] = $this->metadata;
+        $media['width'] = $this->width;
+        $media['height'] = $this->height;
+        return $media;
+    }
+
+    public function bsonUnserialize(array $data)
+    {
+        $this->fileName = $data['fileName'];
+        $this->directoryName = $data['directoryName'];
+        $this->fullPath = $data['fullPath'];
+        $this->relativePath = $data['relativePath'];
+        $this->extension = $data['extension'];
+        $this->type = $data['type'];
+        $this->saveFilename = $data['saveFilename'];
+        $this->md5sum = $data['md5sum'];
+        $this->size = $data['size'];
+        $this->creationTime = $data['creationTime'];
+        $this->creationDate = $data['creationDate'];
+        $this->delete = $data['deleted'];
+        $this->orientation = $data['orientation'];
+        $this->metadata=(array)$data['metadata'];
+        $this->width = $data['width'];
+        $this->height = $data['height'];
     }
 }

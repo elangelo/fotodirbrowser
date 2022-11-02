@@ -36,6 +36,7 @@
         }
         ?>
     </div>
+    //
     <!-- previous/next -->
     <?php
     include "includes.inc";
@@ -57,50 +58,52 @@
         $saveParentDir = $saveParentDir . "/" . $dirNames[$i];
     }
     $dal = new Dal();
-
-    if ($dal->dirScanned($saveParentDir)) {
-    } else {
-        if ($handle = opendir($parentDir)) {
-            while (false !== ($file = readdir($handle))) {
-                if ($file != "." && $file != ".." && is_dir($parentDir . "/" . $file)) {
-                    $kdirs[] = str_replace("&", "_*_", $saveParentDir . "/" . $file);
-                }
+    //
+    //    if ($dal->dirScanned($saveParentDir)) {
+    //        $files = $dal->getMediaForDirectory(($saveParentDir));
+    //        var_dump($files);
+    //    } else {
+    if ($handle = opendir($parentDir)) {
+        while (false !== ($file = readdir($handle))) {
+            if ($file != "." && $file != ".." && is_dir($parentDir . "/" . $file)) {
+                $kdirs[] = str_replace("&", "_*_", $saveParentDir . "/" . $file);
             }
-            closedir($handle);
-            if (!empty($kdirs)) {
-                if (sizeof($kdirs) > 0) {
-                    sort($kdirs);
-                    $idx = array_search($dir, $kdirs);
+        }
+        closedir($handle);
+        if (!empty($kdirs)) {
+            if (sizeof($kdirs) > 0) {
+                sort($kdirs);
+                $idx = array_search($dir, $kdirs);
 
-                    if ($idx == 0) {
-                        $previousDir = "";
-                        if (sizeof($kdirs) > 1) {
-                            $nextDir = $kdirs[$idx + 1];
-                        } else {
-                            $nextDir = "";
-                        }
-                    } else if ($idx == sizeof($kdirs)) {
-                        $previousDir = $kdirs[$idx - 1];
-                        $nextDir = "";
-                    } else {
-                        $previousDir = $kdirs[$idx - 1];
+                if ($idx == 0) {
+                    $previousDir = "";
+                    if (sizeof($kdirs) > 1) {
                         $nextDir = $kdirs[$idx + 1];
+                    } else {
+                        $nextDir = "";
                     }
-
-                    echo "<div class=\"metanavprev\">";
-                    echo "<div class=\"navButton\">";
-                    echo "<a class=\"baseNavigation\" href=\"DirHandler.php?fileLocation=" . $previousDir . "\">previous</a>";
-                    echo "</div>";
-                    echo "</div>";
-                    echo "<div class=\"metanavnext\">";
-                    echo "<div class=\"navButton\">";
-                    echo "<a class=\"baseNavigation\" href=\"DirHandler.php?fileLocation=" . $nextDir . "\">next</a>";
-                    echo "</div>";
-                    echo "</div>";
+                } else if ($idx == sizeof($kdirs)) {
+                    $previousDir = $kdirs[$idx - 1];
+                    $nextDir = "";
+                } else {
+                    $previousDir = $kdirs[$idx - 1];
+                    $nextDir = $kdirs[$idx + 1];
                 }
+
+                echo "<div class=\"metanavprev\">";
+                echo "<div class=\"navButton\">";
+                echo "<a class=\"baseNavigation\" href=\"DirHandler.php?fileLocation=" . $previousDir . "\">previous</a>";
+                echo "</div>";
+                echo "</div>";
+                echo "<div class=\"metanavnext\">";
+                echo "<div class=\"navButton\">";
+                echo "<a class=\"baseNavigation\" href=\"DirHandler.php?fileLocation=" . $nextDir . "\">next</a>";
+                echo "</div>";
+                echo "</div>";
             }
         }
     }
+    //    }
     ?>
     </div>
 
@@ -108,76 +111,47 @@
         <!--gallery-->
         <?php
         include "includes.inc";
+        include "src/functions.php";
         include "src/Media.php";
 
-        $saveDirName = "/";
+        // $saveDirName = "/";
+        // if (array_key_exists("fileLocation", $_GET)) {
+        // $saveDirName = htmlspecialchars($_GET['fileLocation']);
+        // }
+        $dir = "";
         if (array_key_exists("fileLocation", $_GET)) {
-            $saveDirName = htmlspecialchars($_GET['fileLocation']);
+            $dir = htmlspecialchars($_GET['fileLocation']);
         }
-        $dir = str_replace("_*_", "&", $dir);
-        $saveDirName = str_replace("&", "_*_", $dir);
-        $currentDirectory = $baseDir . $dir;
-        if ($dal->dirScanned(($currentDirectory))) {
-            
+        // $dir = str_replace("_*_", "&", $dir);
+        // $saveDirName = str_replace("&", "_*_", $dir);
+        $currentDirectory = path_join($baseDir, $dir);
+        if ($dal->dirScanned($dir)) {
+            $files = $dal->getMediaForDirectory($dir);
+            var_dump($files);
         } else {
-            if ($handle = opendir($baseDir . $dir)) {
+            if ($handle = opendir($currentDirectory)) {
                 while (false !== ($file = readdir($handle))) {
-                    $saveFileName = str_replace("&", "_*_", $file);
+                    // $saveFileName = str_replace("&", "_*_", $file);
                     if ($file != "." && $file != "..") {
-                        if (is_dir($baseDir . $dir . '/' . $file)) {
-                            $dirs[] = $saveDirName . '/' . $file;
-                            $tagFilename = $baseDir . $dir . '/' . $file . '/tags';
-                            if (is_file($tagFilename)) {
-                                $tags = file_get_contents($tagFilename);
-                            } else {
-                                $tags = "";
-                            }
-                            $dirtags[$saveDirName . '/' . $file] = $tags;
-                        } else {
-                            $files[] = Media::withDirAndFilename("$baseDir/$dir", $file);
-                        }
+                        $files[] = Media::withRelativeDirAndFilename($dir, $file);
                     }
                 }
                 closedir($handle);
 
-                if (!empty($dirs)) {
-                    if (sizeof($dirs) > 0) {
-                        sort($dirs);
-                    }
-                    for ($i = 0; $i < sizeof($dirs); $i++) {
-                        $saveDirName = str_replace("&", "_*_", $dirs[$i]);
-                        echo "<li>";
-                        echo "<a class=\"baseNavigation\" href=\"DirHandler.php?fileLocation=$saveDirName\">";
-                        echo "<div class=\"tagcloud\">";
-                        foreach (explode(';', $dirtags[$dirs[$i]]) as $dirTag) {
-                            if (!empty($dirTag)) {
-                                echo "<div class=\"thumbtag\">" . $dirTag . '</div>';
-                            }
-                        }
-                        echo "</div>";
-                        echo "<div class=\"thumbimg\">";
-                        echo "<img height=" . $thumbSize . " src=\"folder_200.png\">";
-                        echo "</div>";
-                        echo "<div class=\"thumblabel\">";
-                        $tmp = explode('/', $dirs[$i]);
-                        echo end($tmp) . "<br />";
-                        echo "</div>";
-                        echo "</a>";
-                        echo "</li>";
-                    }
-                }
-                if (!empty($files)) {
-                    if (sizeof($files) > 0) {
-                        usort($files, [Media::class, "cmp_obj"]);
-                    }
+                $dal->insertRecords($files);
 
-                    $counter = 0;
-                    foreach ($files as $file) {
-                        echo "<li>";
-                        echo $file->getThumbUrl($counter++);
-                        echo "</li>";
-                    }
-                }
+                $dal->setScanned($dir);
+            }
+        }
+        if (!empty($files)) {
+            if (sizeof($files) > 0) {
+                usort($files, [Media::class, "cmp_obj"]);
+            }
+            $counter = 0;
+            foreach ($files as $file) {
+                echo "<li>";
+                echo $file->getThumbUrl($counter++);
+                echo "</li>";
             }
         }
         ?>

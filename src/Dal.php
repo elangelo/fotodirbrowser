@@ -1,37 +1,49 @@
 <?php
 require __DIR__ . '/../vendor/autoload.php';
 
+
+//documentation: https://www.mongodb.com/docs/php-library/current/reference/method/MongoDBCollection-deleteMany/
+
 class Dal
 {
-    private $user = "root";
-    private $pwd = "example";
-
     public readonly MongoDB\Client $client;
-    private readonly MongoDB\Collection $dircollection;
-    private readonly MongoDB\Collection $filecollection;
+    private readonly MongoDB\Collection $mediacollection;
 
     public function __construct()
     {
-        $user = $this->user;
-        $pwd = $this->pwd;
-        $this->client = new MongoDB\Client("mongodb://${user}:${pwd}@localhost:27017");
-        $this->dircollection = $this->client->fotodir->dirs;
-        $this->filecollection = $this->client->fotodir->files;
+        $user = $_ENV['MONGO_USER'];
+        $pwd = $_ENV['MONGO_PASSWORD'];
+        $host = $_ENV['MONGO_HOST'];
+        $db = $_ENV['MONGO_DB'];
+        $this->client = new MongoDB\Client("mongodb://${user}:${pwd}@$host:27017");
+        $this->mediacollection = $this->client->{$db}->media;
+
+        // $this->mediacollection = $this->client->fotodir->media;
     }
-    public function dirScanned($dirpath)
+    public function dirScanned($directoryName)
     {
-        $existsalready = $this->dircollection->countDocuments(['dirname' => $dirpath]);
+        $existsalready = $this->mediacollection->countDocuments(['relativePath' => $directoryName]);
         return $existsalready > 0;
     }
 
-    public function getRecord($filepath)
+    public function getMediaForDirectory($directoryName)
     {
-        return $this->filecollection->findOne(['path' => $filepath]);
+        return $this->mediacollection->find(['directoryName' => $directoryName])->toArray();
     }
 
-    public function insertRecords($records)
+    public function insertRecords($media)
     {
-        $this->filecollection->insertMany($records);
+        // $this->mediacollection->insertMany($media);
+        $this->mediacollection->updateMany($media, $media, ['upsert' => true]);
     }
 
+    public function setScanned($directoryName)
+    {
+        $this->mediacollection->updateOne(['relativePath' => $directoryName], ['$set' => ['scanned' => 'true']]);
+    }
+
+    public function delete($filter)
+    {
+        $this->mediacollection->deleteMany($filter);
+    }
 }

@@ -5,11 +5,12 @@ https://www.php.net/manual/en/function.mongodb.bson-tophp.php -->
 <?php
 require __DIR__ . '/../vendor/autoload.php';
 
-include 'VideoEngine.php';
-include 'ImageEngine.php';
-include 'Image.php';
-include 'Video.php';
-// include 'Directory.php';
+require_once('VideoEngine.php');
+require_once('ImageEngine.php');
+require_once('Image.php');
+require_once('Video.php');
+require_once('Folder.php');
+require_once('functions.php');
 
 // use FFMpeg\FFProbe; 
 // use FFMpeg\Media\Video;
@@ -17,34 +18,60 @@ include 'Video.php';
 
 class Media
 {
-    public readonly string $fileName;
-    public readonly string $directoryName;
-    public readonly string $fullPath;
+    public string $fileName;
+    //relative directory vs media directory
+    public string $directoryName;
 
-    public readonly string $extension;
-    public readonly string $type;
-    public readonly string $saveFilename;
+    //full path to file
+    public string $fullPath;
 
-    public readonly string $md5sum;
-    public readonly int $size;
+    //relative path to file vs media directory
+    public string $relativePath;
 
-    public readonly int $creationTime;
-    public readonly string $creationDate;
+    public string $extension;
+    public string $type;
+    public string $saveFilename;
 
-    public readonly bool $deleted;
+    public string $md5sum;
+    public int $size;
+
+    public int $creationTime;
+    public string $creationDate;
+
+    public bool $deleted;
 
     // public readonly array $record;
 
     public static int $maxImgSize = 960;
 
-    public static function withDirAndFilename(string $directoryName, string $fileName)
+    public static function getMediaDir()
     {
-        $fullPath = "$directoryName/$fileName";
+        return $_ENV['MEDIADIR'];
+    }
+
+    public static function withRelativeDirAndFilename(string $directoryName, string $fileName)
+    {
+        $mediadir = self::getMediaDir();
+        $fullPath = path_join(path_join($mediadir, $directoryName), $fileName);
         $instance = new self();
         if (is_dir($fullPath)) {
-            $type = 'directory';
+
+            // if (is_dir($baseDir . $dir . '/' . $file)) {
+            //     $dirs[] = $saveDirName . '/' . $file;
+            //     $tagFilename = $baseDir . $dir . '/' . $file . '/tags';
+            //     if (is_file($tagFilename)) {
+            //         $tags = file_get_contents($tagFilename);
+            //     } else {
+            //         $tags = "";
+            //     }
+            //     $dirtags[$saveDirName . '/' . $file] = $tags;
+            // } else {
+            //     $files[] = Media::withDirAndFilename("$baseDir/$dir", $file);
+            // }
+
+            $type = 'folder';
             $extension = '';
-            $instance = Directory::withDirAndFilename($directoryName, $fileName);
+            $instance = Folder::withRelativeDirAndFilename($directoryName, $fileName);
             $md5sum = '';
             $size = 0;
             $creationTime = filectime($fullPath);
@@ -57,13 +84,13 @@ class Media
             $extension = strtolower(end($tmp));
             switch ($extension) {
                 case 'mp4':
-                    $instance = Video::withDirAndFilename($directoryName, $fileName);
+                    $instance = Video::withRelativeDirAndFilename($directoryName, $fileName);
                     $creationTime = $instance->metadata['creationTime'];
                     $creationDate = date('Y-m-d', $creationTime);
                     break;
 
                 case 'jpg':
-                    $instance = Image::withDirAndFilename($directoryName, $fileName);
+                    $instance = Image::withRelativeDirAndFilename($directoryName, $fileName);
                     $creationTime = $instance->metadata['FileDateTime'];
                     $creationDate = date('Y-m-d', $creationTime);
                     break;
@@ -74,6 +101,7 @@ class Media
         $instance->fullPath = $fullPath;
         $instance->extension = $extension;
         $instance->type = $type;
+        $instance->relativePath = path_join($directoryName, $fileName);
 
         $instance->saveFilename = str_replace("&", "_*_", $instance->fullPath);
 
@@ -93,6 +121,39 @@ class Media
         $instance = new self();
         $instance->record = $array;
         return $instance;
+    }
+
+    public function bsonSerialize()
+    {
+        return [
+            'fileName' => $this->fileName,
+            'directoryName' => $this->directoryName,
+            'fullPath' => $this->fullPath,
+            'relativePath' => $this->relativePath,
+            'extension' => $this->extension,
+            'type' => $this->type,
+            'saveFilename' => $this->saveFilename,
+            'md5sum' => $this->md5sum,
+            'size' => $this->size,
+            'creationTime' => $this->creationTime,
+            'creationDate' => $this->creationDate,
+            'deleted' => $this->deleted
+        ];
+    }
+    public function bsonUnserialize(array $data)
+    {
+        $this->fileName = $data['fileName'];
+        $this->directoryName = $data['directoryName'];
+        $this->fullPath = $data['fullPath'];
+        $this->relativePath = $data['relativePath'];
+        $this->extension = $data['extension'];
+        $this->type = $data['type'];
+        $this->saveFilename = $data['saveFilename'];
+        $this->md5sum = $data['md5sum'];
+        $this->size = $data['size'];
+        $this->creationTime = $data['creationTime'];
+        $this->creationDate = $data['creationDate'];
+        $this->delete = $data['deleted'];
     }
 
     /* This is the static comparing function: */
