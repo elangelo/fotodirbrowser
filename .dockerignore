@@ -1,0 +1,13 @@
+*
+!src
+!*.php
+!*.png
+!includes.inc
+!*.css
+!js
+!deploy/fotodirbrowser/lighttpd.conf
+!deploy/fotodirbrowser/php.ini
+!vendor
+!composer.json
+!composer.lock
+!src

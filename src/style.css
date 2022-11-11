@@ -1,0 +1,157 @@
+body
+{
+  background-color:#000000;
+  margin:10px;
+  color:#aaaaaa;
+}
+
+div.tags
+{
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  width: 10%;
+  height: 10px;
+}
+
+div.thumbtag
+{
+  display:inline-block;
+  margin:1px;
+  padding: 1px;
+  float:right;
+  clear:both;
+  font-size: 75%;
+  border: 1px solid #aaaaaa;
+}
+
+div.tagcloud
+{
+  position:absolute;
+  margin: 5px;
+  width:240px;
+  height:240px;
+  z-index:10;
+}
+
+div.nav
+{
+  position: fixed;
+  top: 10px;
+  left: 10px;
+}
+
+div.metanavprev
+{
+   position:fixed;
+   bottom: 10px;
+   left: 10px;
+}
+
+div.metanavnext
+{
+   position:fixed;
+   bottom: 10px;
+   right: 10px;
+}
+
+div.center
+{
+  width: 80%;
+  margin-left:auto;
+  margin-right:auto;
+  clear:both;
+/*  height: 700px;*/
+  overflow-y: auto;
+}
+
+div.thumb
+{
+  position:relative;
+  margin: 0px;
+  padding: 0px;
+  float: left;
+  height: 250px;
+  width: 250px;
+  border:1px solid #aaaaaa;
+  background-color:#111111;
+  overflow:hidden;
+}
+
+div.thumb:hover
+{
+  background-color:#212121;
+}
+    
+div.thumbimg
+{
+  height: 250px; /*can be anything*/
+  width: 250px; /*can be anything*/
+  display: inline-block;
+  /* vertical-align: top; /*not required*/
+  /*border: 1px solid black; not required */
+  position: relative;
+  position: absolute;
+  /* height:250px;
+  width:250px;
+  left:0px;
+  margin:0px;
+  padding:0px;
+  text-align: center;
+  /*margin-left:auto;
+  margin-right:auto;
+  vertical-align: middle;*/ */
+}
+div.thumblabel
+{
+  position:absolute;
+  width:100%;
+  bottom:20px;
+  right:10px;
+  height:15px;
+  text-align:center;
+  z-index:10;
+}
+
+div.navButton
+{
+  float:left;
+  border: 1px solid #aaaaaa;
+  margin-left: 2px;
+  margin-right: 2px;
+  background-color:#111111;
+}
+
+div.navSplitter
+{
+  float:left;
+  border-width: 0px;
+  margin-left:2px;
+  margin-right:2px;
+}
+
+img
+{ 
+  /* border-width: 0px; */
+  max-height: 100%;
+  max-width: 100%;
+  width: auto;
+  height: auto;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+a
+{
+  color:black;
+  text-decoration:none;
+}
+
+a.baseNavigation
+{
+  color:white;
+}
