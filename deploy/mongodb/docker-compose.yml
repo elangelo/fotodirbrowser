@@ -11,6 +11,9 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - ./db:/data/db:rw
+      - ./configdb:/data/configdb:rw
 
   mongo-express:
     image: mongo-express

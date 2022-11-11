@@ -4,3 +4,7 @@
 
 /vendor/
 example/
+
+.env
+src/vendor
+deploy/mongodb/db
