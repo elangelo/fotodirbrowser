@@ -83,13 +83,13 @@ class Media
             }
         }
         $instance->fileName = $fileName;
-        $parentPath = self::relativePath($mediadir, $directoryName);
+        $parentPath = "/" . self::relativePath($mediadir, $directoryName);
         $instance->directoryName = $parentPath;
         $instance->fullPath = $fullPath;
         $instance->extension = $extension;
         $instance->type = $type;
 
-        $relativePath = self::relativePath($mediadir, $fullPath);
+        $relativePath = "/" . self::relativePath($mediadir, $fullPath);
 
         $instance->relativePath = $relativePath; // path_join($directoryName, $fileName);
 

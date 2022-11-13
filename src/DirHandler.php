@@ -120,7 +120,7 @@
         // if (array_key_exists("fileLocation", $_GET)) {
         // $saveDirName = htmlspecialchars($_GET['fileLocation']);
         // }
-        $dir = "";
+        $dir = "/";
         if (array_key_exists("fileLocation", $_GET)) {
             $dir = htmlspecialchars($_GET['fileLocation']);
         }

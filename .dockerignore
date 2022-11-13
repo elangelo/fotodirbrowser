@@ -7,7 +7,7 @@
 !js
 !deploy/fotodirbrowser/lighttpd.conf
 !deploy/fotodirbrowser/php.ini
-!vendor
 !composer.json
 !composer.lock
 !src
+src/vendor

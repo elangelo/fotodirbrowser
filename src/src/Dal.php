@@ -8,17 +8,52 @@ class Dal
 {
     public readonly MongoDB\Client $client;
     private readonly MongoDB\Collection $mediacollection;
+    private readonly string $dbname;
 
     public function __construct()
     {
         $mongourl = getenv('MONGO_URL');
-        printf($mongourl);
-        $db = getenv('MONGO_DB');
+        $this->dbname = getenv('MONGO_DB');
         $this->client = new MongoDB\Client($mongourl);
-        $this->mediacollection = $this->client->{$db}->media;
+        $this->mediacollection = $this->client->{$this->dbname}->media;
     }
+
+    public static function waitUntilOnline($mongourl)
+    {
+        printf("wating until mongo is online\r\n");
+        $i = 0;
+        while ($i < 100) {
+            $i++;
+            printf($i . "\r\n");
+            try {
+                $client = new MongoDB\Client($mongourl);
+                $dbs = iterator_to_array($client->listDatabases());
+                printf("connection established after " . $i . " tries\r\n");
+                break;
+            } catch (Exception $ex) {
+                sleep(5);
+            }
+        }
+    }
+
+    public function mediaCollectionExists()
+    {
+        $dbs = $this->client->listDatabases();
+        $dbnames = iterator_to_array($dbs);
+        var_dump($dbnames);
+        foreach ($dbnames as $db) {
+            if ($db['name'] == $this->dbname) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public function dirScanned($directoryName)
     {
+        if ($directoryName == "/") {
+            return true;
+        }
         $existsalready = $this->mediacollection->countDocuments(['relativePath' => $directoryName]);
         return $existsalready > 0;
     }

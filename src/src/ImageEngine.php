@@ -20,7 +20,6 @@ class ImageEngine
 
             $splfileInfo = new SplFileInfo($fullThumbPath);
             $thumbfolder = $splfileInfo->getPath();
-
             if (!file_exists($thumbfolder)) {
                 mkdir($thumbfolder, 0770, true);
             }
