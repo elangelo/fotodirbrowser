@@ -3,6 +3,7 @@
 require __DIR__ . '/../vendor/autoload.php';
 
 use FFMpeg\FFProbe;
+use Jcupitt\Vips;
 
 class VideoEngine
 {
@@ -12,6 +13,7 @@ class VideoEngine
         $splFileInfo = new SplFileInfo($fileLocation);
         $fileName = $splFileInfo->getFilename();
 
+        $tmpfullThumbPath = $thumbBaseDir . '/' . $size . '/tmp' . $fileName . '.jpg';
         $fullThumbPath = $thumbBaseDir . '/' . $size . '/' . $fileName . '.jpg';
         $splfileInfo = new SplFileInfo($fullThumbPath);
         $thumbfolder = $splfileInfo->getPath();
@@ -23,7 +25,14 @@ class VideoEngine
             $ffmpeg = FFMpeg\FFMpeg::create();
             $video = $ffmpeg->open($fileLocation);
             $frame = $video->frame(FFMpeg\Coordinate\TimeCode::fromSeconds(2));
-            $frame->save($fullThumbPath);
+            $frame->save($tmpfullThumbPath);
+            $im = Vips\Image::thumbnail($tmpfullThumbPath, $size);
+            $play = Vips\Image::newFromFile('play.png');
+    
+            $out = $im->composite($play, "over");
+            $out->writeToFile($fullThumbPath);
+
+            unlink($tmpfullThumbPath);
         }
 
         return $fullThumbPath;

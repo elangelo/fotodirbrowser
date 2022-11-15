@@ -34,10 +34,6 @@ class ImageEngine
 
     static function getMetaData($directoryName, $fileName)
     {
-var_dump($directoryName);
-var_dump($fileName);
-echo "***\r\n";
-
         $fullpath = "$directoryName/$fileName";
         $exif_properties = ["FileDateTime", "MimeType", "FileSize", "Make", "ImageWidth", "ImageLength", "Model", "Orientation", "ExposureTime", "ISOSpeedRatings", "ShutterSpeedValue", "ApertureValue", "LightSource", "Flash", "FocalLengthIn35mmFilm"];
         $exif = exif_read_data($fullpath);

@@ -53,7 +53,8 @@ ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/do
 RUN chmod +x /usr/local/bin/install-php-extensions && \
      install-php-extensions ffi mongodb vips exif && \
      echo "ffi.enable=true" >> /usr/local/etc/php/conf.d/docker-php-ext-ffi.ini && \
-     echo "ffi.enable=true" >> /usr/local/etc/php/php.ini-production
+     echo "ffi.enable=true" >> /usr/local/etc/php/php.ini-production && \
+     echo "memory_limit=1024M" >> /usr/local/etc/php/php.ini-production 
      
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
@@ -61,11 +62,6 @@ RUN apt update && \
     apt install -y \
        #ffmpeg
        ffmpeg && \
-       ##vips
-       ##libvips42 \  
-       ### libvips-dev ?? \
-       ###ffi
-       ##libffi-dev \
        ###adds ssl support to mongodb
        ##libcurl4-openssl-dev pkg-config libssl-dev && \ 
        apt purge -y --auto-remove

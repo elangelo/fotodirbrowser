@@ -7,109 +7,60 @@
   <link rel="stylesheet" href="css/slimbox2.css" type="text/css" media="screen" /> -->
     <link rel="stylesheet" href="grid.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="modal.css" type="text/css" media="screen" />
-    <link rel="stylesheet" href="modal.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="css/breadcrumb.css" type="text/css" media="screen" />
 </head>
 
 <body>
-    <!-- //Navigation bread crumbs -->
-    <div class="nav">
-        <?php
-        $saveDirName = "/";
-        if (array_key_exists('fileLocation', $_GET)) {
-            $saveDirName = htmlspecialchars($_GET['fileLocation']);
-        }
-        $dir = str_replace("_*_", "&", $saveDirName);
-        $dirNames = explode('/', $dir);
+    <!-- Breadcrumb navigation 2.0 -->
+    <div class="navigation">
+        <div>
+            <ul class="breadcrumb">
+                <li><a href="DirHandler.php?fileLocation=/">Home</a></li>
+                <?php
+                // file_put_contents('php://stdout', 'Hello world!!!');
+                $dir = "/";
+                if (array_key_exists('fileLocation', $_GET)) {
+                    $dir = htmlspecialchars($_GET['fileLocation']);
+                    if (empty($dir)) {
+                        $dir = "/";
+                    } else {
+                        $dir = rtrim($dir, "/");
+                    }
+                }
+                $dirNames = explode('/', $dir);
+                $dirName = "";
+                for ($i = 1; $i < sizeof($dirNames); $i++) {
+                    $dirName = $dirName . "/" . $dirNames[$i];
+                    echo "<li><a class=\"baseNavigation\" href=\"DirHandler.php?fileLocation=" . $dirName . "\">" . $dirNames[$i] . "</a></li>";
+                }
+                ?>
+            </ul>
+        </div>
+        <div class="split">
+            <!-- previous/next -->
+            <?php
+            include "includes.inc";
+            include "src/Dal.php";
+            $dal = new Dal();
 
-        echo "<div class=\"navButton\">";
-        echo "<a class=\"baseNavigation\" href=\"DirHandler.php?fileLocation=\">root</a>";
-        echo "</div>";
-
-        $dirName = "";
-        for ($i = 1; $i < sizeof($dirNames); $i++) {
-            $dirName = $dirName . "/" . $dirNames[$i];
-
-            echo "<div class=\"navSplitter\">/</div>";
-            echo "<div class=\"navButton\">";
-            echo "<a class=\"baseNavigation\" href=\"DirHandler.php?fileLocation=" . $dirName . "\">" . $dirNames[$i] . "</a>";
-            echo "</div>";
-        }
-        ?>
+            $prevAndNext = $dal->getPreviousAndNextDirectory($dir);
+            // var_dump($prevAndNext);
+            if (!empty($prevAndNext[0])) {
+                echo "<a href=\"DirHandler.php?fileLocation=" . $prevAndNext[0] . "\">&lt;</a>";
+            }
+            else{
+                echo "<span class=\"inactivenavigation\">&lt;</span>";
+            }
+            if (!empty($prevAndNext[1])) {
+                echo "<a href=\"DirHandler.php?fileLocation=" . $prevAndNext[1] . "\">&gt;</a>";
+            } else {
+                echo "<span class=\"inactivenavigation\">&gt;</span>";
+            }
+            ?>
+        </div>
     </div>
-
-    <!-- previous/next -->
-    <?php
-    include "includes.inc";
-    include "src/Dal.php";
-
-
-
-    //// $saveDirName = "/";
-    //// if (array_key_exists("fileLocation", $_GET)) {
-    ////     $saveDirName = htmlspecialchars($_GET['fileLocation']);
-    //// }
-    ////
-    //// $dir = str_replace("_*_", "&", $saveDirName);
-    //// $dirNames = explode('/', $dir);
-    //// $parentDir = $baseDir;
-    //// for ($i = 1; $i < (sizeof($dirNames) - 1); $i++) {
-    ////     $parentDir = $parentDir . "/" . $dirNames[$i];
-    //// }
-    ////
-    //// $saveParentDir = "";
-    //// for ($i = 1; $i < (sizeof($dirNames) - 1); $i++) {
-    ////     $saveParentDir = $saveParentDir . "/" . $dirNames[$i];
-    //// }
-    //// //
-    //// //    if ($dal->dirScanned($saveParentDir)) {
-    //// //        $files = $dal->getMediaForDirectory(($saveParentDir));
-    //// //        var_dump($files);
-    //// //    } else {
-    //// if ($handle = opendir($parentDir)) {
-    ////     while (false !== ($file = readdir($handle))) {
-    ////         if ($file != "." && $file != ".." && is_dir($parentDir . "/" . $file)) {
-    ////             $kdirs[] = str_replace("&", "_*_", $saveParentDir . "/" . $file);
-    ////         }
-    ////     }
-    ////     closedir($handle);
-    ////     if (!empty($kdirs)) {
-    ////         if (sizeof($kdirs) > 0) {
-    ////             sort($kdirs);
-    ////             $idx = array_search($dir, $kdirs);
-    ////
-    ////             if ($idx == 0) {
-    ////                 $previousDir = "";
-    ////                 if (sizeof($kdirs) > 1) {
-    ////                     $nextDir = $kdirs[$idx + 1];
-    ////                 } else {
-    ////                     $nextDir = "";
-    ////                 }
-    ////             } else if ($idx == sizeof($kdirs)) {
-    ////                 $previousDir = $kdirs[$idx - 1];
-    ////                 $nextDir = "";
-    ////             } else {
-    ////                 $previousDir = $kdirs[$idx - 1];
-    ////                 $nextDir = $kdirs[$idx + 1];
-    ////             }
-    ////
-    ////             echo "<div class=\"metanavprev\">";
-    ////             echo "<div class=\"navButton\">";
-    ////             echo "<a class=\"baseNavigation\" href=\"DirHandler.php?fileLocation=" . $previousDir . "\">previous</a>";
-    ////             echo "</div>";
-    ////             echo "</div>";
-    ////             echo "<div class=\"metanavnext\">";
-    ////             echo "<div class=\"navButton\">";
-    ////             echo "<a class=\"baseNavigation\" href=\"DirHandler.php?fileLocation=" . $nextDir . "\">next</a>";
-    ////             echo "</div>";
-    ////             echo "</div>";
-    ////         }
-    ////     }
-    //// }
-    //// //    }
-    ?>
-    </div>
-
-    <ul>
+    <div style="clear:both"></div>
+    <ul class="gallery">
         <!--gallery-->
         <?php
         include "includes.inc";
@@ -120,11 +71,11 @@
         // if (array_key_exists("fileLocation", $_GET)) {
         // $saveDirName = htmlspecialchars($_GET['fileLocation']);
         // }
+
         $dir = "/";
         if (array_key_exists("fileLocation", $_GET)) {
             $dir = htmlspecialchars($_GET['fileLocation']);
         }
-        $dal = new Dal();
         if ($dal->dirScanned($dir)) {
             $files = $dal->getMediaForDirectory($dir);
         }

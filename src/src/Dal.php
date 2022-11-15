@@ -40,7 +40,7 @@ class Dal
     {
         $dbs = $this->client->listDatabases();
         $dbnames = iterator_to_array($dbs);
-        var_dump($dbnames);
+        // var_dump($dbnames);
         foreach ($dbnames as $db) {
             if ($db['name'] == $this->dbname) {
                 return true;
@@ -56,6 +56,40 @@ class Dal
         }
         $existsalready = $this->mediacollection->countDocuments(['relativePath' => $directoryName]);
         return $existsalready > 0;
+    }
+
+    public function getPreviousAndNextDirectory($directoryName)
+    {
+        $currentDirectory = $this->mediacollection->findOne(['relativePath' => $directoryName]);
+        $parentDirectory = $currentDirectory->directoryName;
+        $currentDirectory = $currentDirectory->fileName;
+
+        $filter = ['directoryName' => $parentDirectory, 'type' => 'folder'];
+
+        $options = ['sort' => ['fileName' => 1], 'projection' => ['fileName' => true, 'relativePath' => true, '_id' => false]];
+
+        $siblings = $this->mediacollection->find($filter, $options)->toArray();
+        $indexOfCurrentDir = $this->getIndexInSortedArray($siblings, 'fileName', $currentDirectory);
+        // var_dump($indexOfCurrentDir);
+        $previousDir = "";
+        $nextDir = "";
+        if ($indexOfCurrentDir > 0) {
+            $previousDir = ($siblings[$indexOfCurrentDir - 1])->relativePath;
+        }
+        if ($indexOfCurrentDir < sizeof($siblings)) {
+            $nextDir = ($siblings[$indexOfCurrentDir + 1])->relativePath;
+        }
+        return [$previousDir, $nextDir];
+    }
+
+    private function getIndexInSortedArray($array, $prop, $searchedValue)
+    {
+        for ($i = 0; $i < sizeof($array); $i++) {
+            $currentItem = $array[$i];
+            if ($currentItem[$prop] == $searchedValue) {
+                return $i;
+            }
+        }
     }
 
     public function getMediaForDirectory($directoryName)

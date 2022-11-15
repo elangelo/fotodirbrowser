@@ -33,7 +33,7 @@ class Video extends Media implements MongoDB\BSON\Persistable
                 $width = $this->width * self::$maxImgSize / $this->height;
                 break;
         }
-        return "<div class=\"mySlides\"><video width=\"" . $width . "\" height=\"" . $height . "\" controls><source src=\"VideoHandler.php?fileLocation=" . $this->saveFilename . "\" /></video></div>";
+        return "<div class=\"mySlides\"><video preload=\"none\" width=\"" . $width . "\" height=\"" . $height . "\" controls><source src=\"VideoHandler.php?fileLocation=" . $this->saveFilename . "\" /></video></div>";
     }
 
     public function getThumbUrl(int $counter)

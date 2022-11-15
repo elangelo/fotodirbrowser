@@ -1,15 +1,15 @@
-ul {
+ul.gallery {
     display: flex;
     flex-wrap: wrap;
     list-style-type: none;
 }
 
-li {
+ul.gallery li {
     height: 25vh;
     flex-grow: 1;
 }
 
-li:last-child {
+ul.gallery li:last-child {
     flex-grow: 50;
 }
 
