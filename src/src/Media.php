@@ -55,60 +55,64 @@ class Media
         $fullPath = path_join($directoryName, $fileName);
         $instance = new self();
         $index = false;
-        if (is_dir($fullPath)) {
-            $type = 'folder';
-            $extension = '';
-            $instance = Folder::withRelativeDirAndFilename($directoryName, $fileName);
-            $md5sum = '';
-            $size = 0;
-            $creationTime = filectime($fullPath);
-            $creationDate = date('Y-m-d', $creationTime);
-            $index = true;
-        } else {
-            $type = 'file';
-            $md5sum = md5_file($fullPath);
-            $size = filesize($fullPath);
-            $tmp = explode('.', $fileName);
-            $extension = strtolower(end($tmp));
-            switch ($extension) {
-                case 'mp4':
-                    $instance = Video::withRelativeDirAndFilename($directoryName, $fileName);
-                    $creationTime = $instance->metadata['creationTime'];
-                    $creationDate = date('Y-m-d', $creationTime);
-                    $index = true;
-                    break;
+        try {
+            if (is_dir($fullPath)) {
+                $type = 'folder';
+                $extension = '';
+                $instance = Folder::withRelativeDirAndFilename($directoryName, $fileName);
+                $md5sum = '';
+                $size = 0;
+                $creationTime = filectime($fullPath);
+                $creationDate = date('Y-m-d', $creationTime);
+                $index = true;
+            } else {
+                $type = 'file';
+                $md5sum = md5_file($fullPath);
+                $size = filesize($fullPath);
+                $tmp = explode('.', $fileName);
+                $extension = strtolower(end($tmp));
+                switch ($extension) {
+                    case 'mp4':
+                        $instance = Video::withRelativeDirAndFilename($directoryName, $fileName);
+                        $creationTime = $instance->metadata['creationTime'];
+                        $creationDate = date('Y-m-d', $creationTime);
+                        $index = true;
+                        break;
 
-                case 'jpg':
-                    $instance = Image::withRelativeDirAndFilename($directoryName, $fileName);
-                    $creationTime = $instance->metadata['FileDateTime'];
-                    $creationDate = date('Y-m-d', $creationTime);
-                    $index = true;
-                    break;
+                    case 'jpg':
+                        $instance = Image::withRelativeDirAndFilename($directoryName, $fileName);
+                        $creationTime = $instance->metadata['FileDateTime'];
+                        $creationDate = date('Y-m-d', $creationTime);
+                        $index = true;
+                        break;
+                }
             }
-        }
-        if ($index && $creationTime != null) {
-            $instance->fileName = $fileName;
-            $parentPath = "/" . self::relativePath($mediadir, $directoryName);
-            $instance->directoryName = $parentPath;
-            $instance->fullPath = $fullPath;
-            $instance->extension = $extension;
-            $instance->type = $type;
+            if ($index && $creationTime != null) {
+                $instance->fileName = $fileName;
+                $parentPath = "/" . self::relativePath($mediadir, $directoryName);
+                $instance->directoryName = $parentPath;
+                $instance->fullPath = $fullPath;
+                $instance->extension = $extension;
+                $instance->type = $type;
 
-            $relativePath = "/" . self::relativePath($mediadir, $fullPath);
+                $relativePath = "/" . self::relativePath($mediadir, $fullPath);
 
-            $instance->relativePath = $relativePath; // path_join($directoryName, $fileName);
+                $instance->relativePath = $relativePath; // path_join($directoryName, $fileName);
 
-            $instance->saveFilename = str_replace("&", "_*_", $instance->fullPath);
+                $instance->saveFilename = str_replace("&", "_*_", $instance->fullPath);
 
-            $instance->md5sum = $md5sum;
-            $instance->size = $size;
+                $instance->md5sum = $md5sum;
+                $instance->size = $size;
 
-            $instance->creationDate = $creationDate;
-            $instance->creationTime = $creationTime;
+                $instance->creationDate = $creationDate;
+                $instance->creationTime = $creationTime;
 
-            $instance->deleted = false;
+                $instance->deleted = false;
 
-            return $instance;
+                return $instance;
+            }
+        } catch (Exception $ex) {
+            echo "scanning ${directoryName}/${fileName} failed, exception occurred:\r\n$ex";
         }
         return null;
     }
