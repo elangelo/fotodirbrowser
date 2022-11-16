@@ -16,15 +16,17 @@ class ImageEngine
             return $fileLocation;
         } else {
             $thumbBaseDir = $thumbBaseDir . '/' . $size . '/';
-            $fullThumbPath = $thumbBaseDir . $fileName;
+            $basePath = $splFileInfo->getPath();
 
+            $fullThumbPath = $thumbBaseDir . $basePath . '/' . $fileName;
             $splfileInfo = new SplFileInfo($fullThumbPath);
-            $thumbfolder = $splfileInfo->getPath();
-            if (!file_exists($thumbfolder)) {
-                mkdir($thumbfolder, 0770, true);
-            }
 
             if (!file_exists($fullThumbPath)) {
+                $thumbfolder = $splfileInfo->getPath();
+                if (!file_exists($thumbfolder)) {
+                    mkdir($thumbfolder, 0770, true);
+                }
+
                 $im = Vips\Image::thumbnail($fileLocation, $size);
                 $im->writeToFile($fullThumbPath);
             }
