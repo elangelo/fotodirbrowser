@@ -17,7 +17,8 @@ echo "yes\n";
 // $image->writeToFile('tiny.jpg');
 
 // load an image, get fields, process, save
-$filename = __DIR__ . '/../../docs/example/2020/2020-09-17/IMG_20200917_141104.jpg';
+// $filename = __DIR__ . '/../../../docs/example/2010/2010-11-01/IMGP9389.JPG';
+$filename = __DIR__ . '/../../../docs/example/2020/2020-09-17/IMG_20200917_141104.jpg';
 $image = Vips\Image::newFromFile($filename);
 echo "width = $image->width\n";
 $image = $image->invert();
