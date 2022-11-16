@@ -86,7 +86,7 @@ class Media
                     break;
             }
         }
-        if ($index) {
+        if ($index && $creationTime != null) {
             $instance->fileName = $fileName;
             $parentPath = "/" . self::relativePath($mediadir, $directoryName);
             $instance->directoryName = $parentPath;

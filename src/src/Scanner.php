@@ -42,6 +42,7 @@ closedir($handle);
 
 function getChildren($dir, $dal)
 {
+  echo "scanning directory: ${dir}\r\n";
     if ($handle = opendir($dir)) {
         while (false !== ($file = readdir($handle))) {
             if ($file != "." && $file != "..") {
@@ -53,7 +54,7 @@ function getChildren($dir, $dal)
         }
     }
     closedir($handle);
-    if (is_array($files)) {
+    if ($files != null && is_array($files)) {
         $dal->insertRecords($files);
 
         foreach ($files as $child) {
