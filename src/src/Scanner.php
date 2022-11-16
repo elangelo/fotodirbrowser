@@ -19,7 +19,7 @@ Dal::waitUntilOnline(getenv('MONGO_URL'));
 
 $dal = new Dal();
 // $dal->waitUntilOnline();
-if ($dal->mediaCollectionExists()){
+if ($dal->mediaCollectionExists()) {
     printf("Db exists already don't know how to update....");
     exit();
 }
@@ -45,7 +45,10 @@ function getChildren($dir, $dal)
     if ($handle = opendir($dir)) {
         while (false !== ($file = readdir($handle))) {
             if ($file != "." && $file != "..") {
-                $files[] = Media::withAbsoluteDirAndFilename($dir, $file);
+                $media = Media::withAbsoluteDirAndFilename($dir, $file);
+                if ($media != null) {
+                    $files[] = $media;
+                }
             }
         }
     }

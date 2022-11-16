@@ -54,6 +54,7 @@ class Media
         $mediadir = self::getMediaDir();
         $fullPath = path_join($directoryName, $fileName);
         $instance = new self();
+        $index = false;
         if (is_dir($fullPath)) {
             $type = 'folder';
             $extension = '';
@@ -62,6 +63,7 @@ class Media
             $size = 0;
             $creationTime = filectime($fullPath);
             $creationDate = date('Y-m-d', $creationTime);
+            $index = true;
         } else {
             $type = 'file';
             $md5sum = md5_file($fullPath);
@@ -73,37 +75,42 @@ class Media
                     $instance = Video::withRelativeDirAndFilename($directoryName, $fileName);
                     $creationTime = $instance->metadata['creationTime'];
                     $creationDate = date('Y-m-d', $creationTime);
+                    $index = true;
                     break;
 
                 case 'jpg':
                     $instance = Image::withRelativeDirAndFilename($directoryName, $fileName);
                     $creationTime = $instance->metadata['FileDateTime'];
                     $creationDate = date('Y-m-d', $creationTime);
+                    $index = true;
                     break;
             }
         }
-        $instance->fileName = $fileName;
-        $parentPath = "/" . self::relativePath($mediadir, $directoryName);
-        $instance->directoryName = $parentPath;
-        $instance->fullPath = $fullPath;
-        $instance->extension = $extension;
-        $instance->type = $type;
+        if ($index) {
+            $instance->fileName = $fileName;
+            $parentPath = "/" . self::relativePath($mediadir, $directoryName);
+            $instance->directoryName = $parentPath;
+            $instance->fullPath = $fullPath;
+            $instance->extension = $extension;
+            $instance->type = $type;
 
-        $relativePath = "/" . self::relativePath($mediadir, $fullPath);
+            $relativePath = "/" . self::relativePath($mediadir, $fullPath);
 
-        $instance->relativePath = $relativePath; // path_join($directoryName, $fileName);
+            $instance->relativePath = $relativePath; // path_join($directoryName, $fileName);
 
-        $instance->saveFilename = str_replace("&", "_*_", $instance->fullPath);
+            $instance->saveFilename = str_replace("&", "_*_", $instance->fullPath);
 
-        $instance->md5sum = $md5sum;
-        $instance->size = $size;
+            $instance->md5sum = $md5sum;
+            $instance->size = $size;
 
-        $instance->creationDate = $creationDate;
-        $instance->creationTime = $creationTime;
+            $instance->creationDate = $creationDate;
+            $instance->creationTime = $creationTime;
 
-        $instance->deleted = false;
+            $instance->deleted = false;
 
-        return $instance;
+            return $instance;
+        }
+        return null;
     }
 
     public static function relativePath($from, $to, $ps = DIRECTORY_SEPARATOR)
