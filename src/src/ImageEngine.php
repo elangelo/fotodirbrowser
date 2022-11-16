@@ -45,10 +45,10 @@ class ImageEngine
         $orientation = self::getOrientation($metadata['Orientation']);
         //if vertical, swap orientation!
         if ($orientation == 'PORTRAIT') {
-            $height = $metadata['ImageWidth'];
-            $width = $metadata['ImageLength'];
-            $metadata['ImageWidth'] = $width;
-            $metadata['ImageLength'] = $height;
+            $height = $metadata['ExifImageWidth'];
+            $width = $metadata['ExifImageLength'];
+            $metadata['ExifImageWidth'] = $width;
+            $metadata['ExifImageLength'] = $height;
         }
 
         $metadata['orientation'] = $orientation;

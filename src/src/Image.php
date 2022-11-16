@@ -14,8 +14,8 @@ class Image extends Media implements MongoDB\BSON\Persistable
         $metadata = ImageEngine::getMetaData($directoryName, $fileName);
         $instance->metadata = $metadata;
         $instance->orientation = $metadata['orientation'] ?? 'LANDSCAPE';
-        $instance->width = $metadata['ImageWidth'] ?? 1000;
-        $instance->height = $metadata['ImageLength'] ?? 1000;
+        $instance->width = $metadata['ExifImageWidth'] ?? 1000;
+        $instance->height = $metadata['ExifImageLength'] ?? 1000;
 
         return $instance;
     }
