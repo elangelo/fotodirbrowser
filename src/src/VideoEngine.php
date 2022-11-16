@@ -28,7 +28,7 @@ class VideoEngine
             $frame->save($tmpfullThumbPath);
             $im = Vips\Image::thumbnail($tmpfullThumbPath, $size);
             $play = Vips\Image::newFromFile('play.png');
-    
+
             $out = $im->composite($play, "over");
             $out->writeToFile($fullThumbPath);
 
@@ -88,6 +88,11 @@ class VideoEngine
     {
         $tmp = explode(':', $ratio);
 
+        //avoid dividing by zero...
+        if ((int)$tmp[1] == 0) {
+            return 'LANDSCAPE';
+        }
+        
         if ((int)$tmp[0] / (int)$tmp[1] > 1) {
             return 'LANDSCAPE';
         } else {
