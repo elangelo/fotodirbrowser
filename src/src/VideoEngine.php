@@ -69,8 +69,10 @@ class VideoEngine
 
         $audioprops = ["codec_name", "sample_rate", "channels", "duration", "bit_rate"];
         $audiometadata = array();
-        foreach ($audioprops as $prop) {
-            $audiometadata[$prop] = $audiostream->get($prop);
+        if ($audiostream != null) {
+            foreach ($audioprops as $prop) {
+                $audiometadata[$prop] = $audiostream->get($prop);
+            }
         }
 
         $metadata = ([
@@ -92,7 +94,7 @@ class VideoEngine
         if ((int)$tmp[1] == 0) {
             return 'LANDSCAPE';
         }
-        
+
         if ((int)$tmp[0] / (int)$tmp[1] > 1) {
             return 'LANDSCAPE';
         } else {
