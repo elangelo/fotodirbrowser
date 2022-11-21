@@ -216,7 +216,7 @@
     </div>
 
 </body>
-<script type="text/javascript">
+<!-- <script type="text/javascript">
     var availableHeight = window.innerHeight - 20;
     document.getElementById("center").style.height = availableHeight;
 
@@ -226,6 +226,6 @@
         var availableHeight = window.innerHeight - 20;
         document.getElementById("center").style.height = availableHeight;
     }
-</script>
+</script> -->
 
 </html>

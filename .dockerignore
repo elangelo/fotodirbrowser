@@ -11,3 +11,6 @@
 !composer.lock
 !src
 src/vendor
+src/copySD
+src/debug
+src/src/tests
