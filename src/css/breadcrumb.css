@@ -3,6 +3,8 @@ div.navigation {
     background-color: #eee;
     font-size: 18px;
     color: #0275d8;
+    top: 0;
+    position: sticky;
 }
 
 div.navigation div {
