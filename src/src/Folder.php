@@ -40,19 +40,18 @@ class Folder extends Media implements MongoDB\BSON\Persistable
             }
         }
 
-        $html = "<li>
+        $html = "
          <a class=\"baseNavigation\" href=\"DirHandler.php?fileLocation=$this->relativePath\">
          <div class=\"tagcloud\">
         $tagstring
         </div>
         <div class=\"thumbimg\">
-        <img height=" . $this->thumbSize . " src=\"folder_200.png\">
+        <img height=\"" . $this->thumbSize . "\" width=\"" . $this->thumbSize . "\" src=\"assets/folder_200.png\">
         </div>
         <div class=\"thumblabel\">
         $this->fileName<br />
         </div>
-        </a>
-        </li>";
+        </a>";
         return $html;
     }
 

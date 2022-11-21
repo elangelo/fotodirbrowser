@@ -1,0 +1,107 @@
+<head>
+    <style>
+        @import url("https://fonts.googleapis.com/css?family=Concert+One|Open+Sans&display=swap");
+
+        body {
+            background: #333;
+            color: #ffcc00;
+            font-family: "Open Sans", sans-serif;
+        }
+
+        h1,
+        h2 {
+            font-family: "Concert One", cursive;
+            margin: 0 0 1rem;
+        }
+
+        .wrapper {
+            margin: 0 auto;
+            max-width: 80rem;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .wrapper p {
+            color: #eaf2ef;
+        }
+
+        .wrapper .gallery-container {
+            background: #ffcc00;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin: 2rem 0;
+        }
+
+        .wrapper .gallery-container h2 {
+            color: #333;
+        }
+
+        .wrapper .gallery-container ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .wrapper .gallery-container ul li img {
+            display: block;
+            height: auto;
+            max-width: 100%;
+        }
+
+        .gallery-container ul.masonry-gallery {
+            columns: 12rem;
+            column-gap: 1rem;
+            list-style: none;
+        }
+
+        .gallery-container ul.masonry-gallery li {
+            break-inside: avoid;
+            margin: 0 0 1rem;
+        }
+
+        .gallery-container ul.mosaic-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -0.5rem;
+        }
+
+        .gallery-container ul.mosaic-gallery li {
+            background-position: center center;
+            background-size: cover;
+            flex: auto;
+            height: 15vw;
+            margin: 0 0.5rem 1rem;
+            max-height: 10rem;
+        }
+
+        .gallery-container ul.mosaic-gallery li img {
+            height: 100%;
+            opacity: 0;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="gallery-container">
+            <h2>Mosaic Gallery</h2>
+            <ul class="mosaic-gallery">
+                <li style="background-image:url('https://picsum.photos/id/1015/700/600')"><img
+                        src="https://picsum.photos/id/1015/700/600" /></li>
+                <li style="background-image:url('https://picsum.photos/id/1018/500/300')"><img
+                        src="https://picsum.photos/id/1018/500/300" /></li>
+                <li style="background-image:url('https://picsum.photos/id/1036/400/400')"><img
+                        src="https://picsum.photos/id/1036/400/400" /></li>
+                <li style="background-image:url('https://picsum.photos/id/1039/500/300')"><img
+                        src="https://picsum.photos/id/1039/500/300" /></li>
+                <li style="background-image:url('https://picsum.photos/id/1043/500/300')"><img
+                        src="https://picsum.photos/id/1043/500/300" /></li>
+                <li style="background-image:url('https://picsum.photos/id/1045/600/300')"><img
+                        src="https://picsum.photos/id/1045/600/300" /></li>
+                <li style="background-image:url('https://picsum.photos/id/1056/500/300')"><img
+                        src="https://picsum.photos/id/1056/500/300" /></li>
+            </ul>
+        </div>
+    </div>
+</body>

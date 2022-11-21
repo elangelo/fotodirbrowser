@@ -27,7 +27,7 @@ class VideoEngine
             $frame = $video->frame(FFMpeg\Coordinate\TimeCode::fromSeconds(2));
             $frame->save($tmpfullThumbPath);
             $im = Vips\Image::thumbnail($tmpfullThumbPath, $size);
-            $play = Vips\Image::newFromFile('play.png');
+            $play = Vips\Image::newFromFile('assets/play.png');
 
             $out = $im->composite($play, "over");
             $out->writeToFile($fullThumbPath);
@@ -57,7 +57,21 @@ class VideoEngine
         foreach ($videoprops as $prop) {
             $videometadata[$prop] = $videostream->get($prop);
         }
-        $orientation = self::getOrientation($videometadata['display_aspect_ratio']);
+
+        $orientation = 'none';
+        if ($videostream->has('tags')) {
+            $tags = $videostream->get('tags');
+            if (isset($tags['rotate'])) {
+                if ($tags['rotate'] == 0 || $tags['rotate'] == 180) {
+                    $orientation = 'LANDSCAPE';
+                } else {
+                    $orientation = 'PORTRAIT';
+                }
+            }
+        }
+        if ($orientation == 'none') {
+            $orientation = self::getOrientation($videometadata['display_aspect_ratio']);
+        }
 
         //if vertical, swap orientation!
         if ($orientation == 'PORTRAIT') {

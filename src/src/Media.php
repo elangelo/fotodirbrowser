@@ -42,7 +42,8 @@ class Media
 
     // public readonly array $record;
 
-    public static int $maxImgSize = 960;
+    public static int $maxPreviewSize = 960;
+    public static int $maxThumbSize = 300;
 
     public static function getMediaDir()
     {
@@ -133,6 +134,22 @@ class Media
         $instance = new self();
         $instance->record = $array;
         return $instance;
+    }
+
+    public function getResizedDimension($maxDimension)
+    {
+        switch ($this->orientation) {
+            case 'LANDSCAPE':
+                $width = $maxDimension;
+                $height = $this->height * $maxDimension / $this->width;
+                break;
+            case 'PORTRAIT':
+                $height = $maxDimension;
+                $width = $this->width * $maxDimension / $this->height;
+                break;
+        }
+
+        return [$width, $height];
     }
 
     public function bsonSerialize()

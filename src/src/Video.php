@@ -23,22 +23,14 @@ class Video extends Media implements MongoDB\BSON\Persistable
 
     public function getPreviewUrl()
     {
-        switch ($this->orientation) {
-            case 'LANDSCAPE':
-                $width = self::$maxImgSize;
-                $height = $this->height * self::$maxImgSize / $this->width;
-                break;
-            case 'PORTRAIT':
-                $height = self::$maxImgSize;
-                $width = $this->width * self::$maxImgSize / $this->height;
-                break;
-        }
-        return "<div class=\"mySlides\"><video preload=\"none\" width=\"" . $width . "\" height=\"" . $height . "\" controls><source src=\"VideoHandler.php?fileLocation=" . $this->saveFilename . "\" /></video></div>";
+        $newDimensions = $this->getResizedDimension(self::$maxPreviewSize);
+        return "<div class=\"mySlides\"><video preload=\"none\" width=\"" . $newDimensions[0] . "\" height=\"" . $newDimensions[1] . "\" controls><source src=\"VideoHandler.php?fileLocation=" . $this->saveFilename . "\" /></video></div>";
     }
 
     public function getThumbUrl(int $counter)
     {
-        return "<img class=\"grid\" src=\"VideoHandler.php?fileLocation=" . $this->saveFilename . "&size=300\"  onclick=\"openModal();currentSlide(" . $counter + 1 . ")\" />";
+        $newDimensions = $this->getResizedDimension(self::$maxThumbSize);
+        return "<!--" . $this->orientation . " --><img class=\"grid\" src=\"VideoHandler.php?fileLocation=" . $this->saveFilename . "&size=300\" width=\"" . $newDimensions[0] . "\" height=\"" . $newDimensions[1] . "\"  onclick=\"openModal();currentSlide(" . $counter + 1 . ")\" />";
     }
 
     public function bsonSerialize()
@@ -66,7 +58,7 @@ class Video extends Media implements MongoDB\BSON\Persistable
         $this->creationDate = $data['creationDate'];
         $this->delete = $data['deleted'];
         $this->orientation = $data['orientation'];
-        $this->metadata=(array)$data['metadata'];
+        $this->metadata = (array)$data['metadata'];
         $this->width = $data['width'];
         $this->height = $data['height'];
     }

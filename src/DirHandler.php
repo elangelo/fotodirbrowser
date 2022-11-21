@@ -5,9 +5,12 @@
   <script type="text/javascript" src="js/slimbox2.js"></script>
   <link rel="stylesheet" href="style.css" type="text/css" media="screen"/>
   <link rel="stylesheet" href="css/slimbox2.css" type="text/css" media="screen" /> -->
-    <link rel="stylesheet" href="grid.css" type="text/css" media="screen" />
-    <link rel="stylesheet" href="modal.css" type="text/css" media="screen" />
+    <!-- <link rel="stylesheet" href="grid.css" type="text/css" media="screen" /> -->
+    <link rel="stylesheet" href="css/modal.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="css/breadcrumb.css" type="text/css" media="screen" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mosaic.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/jquery.mosaic.min.css" />
 </head>
 
 <body>
@@ -47,8 +50,7 @@
             // var_dump($prevAndNext);
             if (!empty($prevAndNext[0])) {
                 echo "<a href=\"DirHandler.php?fileLocation=" . $prevAndNext[0] . "\">&lt;</a>";
-            }
-            else{
+            } else {
                 echo "<span class=\"inactivenavigation\">&lt;</span>";
             }
             if (!empty($prevAndNext[1])) {
@@ -60,7 +62,7 @@
         </div>
     </div>
     <div style="clear:both"></div>
-    <ul class="gallery">
+    <div id="gallery">
         <!--gallery-->
         <?php
         include "includes.inc";
@@ -85,14 +87,20 @@
             }
             $counter = 0;
             foreach ($files as $file) {
-                echo "<li>";
                 echo $file->getThumbUrl($counter++);
-                echo "</li>";
             }
         }
         ?>
-        <li></li>
-    </ul>
+    </div>
+
+    <script>
+        $('#gallery').Mosaic({
+            maxRowHeight: 300,
+            maxRowHeightPolicy: 'tail',
+            innerGap: 1,
+            showTailWhenNotEnoughItemsForEvenOneRow: true
+        });
+    </script>
 
     <!-- The Modal/Lightbox -->
     <div id="myModal" class="modal">
