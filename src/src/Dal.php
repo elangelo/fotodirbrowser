@@ -94,7 +94,7 @@ class Dal
 
     public function getMediaForDirectory($directoryName)
     {
-        return $this->mediacollection->find(['directoryName' => $directoryName])->toArray();
+        return $this->mediacollection->find(['directoryName' => $directoryName, 'deleted' => false])->toArray();
     }
 
     public function insertRecords($media)
@@ -107,9 +107,12 @@ class Dal
         $this->mediacollection->updateOne(['relativePath' => $directoryName], ['$set' => ['scanned' => 'true']]);
     }
 
-    public function delete($filter)
+    public function delete($fileLocation)
     {
-        $this->mediacollection->deleteMany($filter);
+        $this->mediacollection->updateOne(
+            ['fullPath' => $fileLocation],
+            ['$set' => ['deleted' => true]]
+        );
     }
 
     public function drop()

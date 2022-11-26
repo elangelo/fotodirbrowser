@@ -86,6 +86,7 @@
                 usort($files, [Media::class, "cmp_obj"]);
             }
             $counter = 0;
+            // print_r($files);
             foreach ($files as $file) {
                 echo $file->getThumbUrl($counter++);
             }
@@ -117,7 +118,7 @@
         <span class="menubutton" onclick="openNav();">&#9776;</span>
         <div id="mySideNav" class="sidepanel">
             <a href="javascript:void(0)" class="closebtn" onclick="closeNav();">&times;</a>
-            <a href="#">About</a>
+            <a href="javascript:void(0)" onclick="deleteItem();">delete</a>
             <a href="#">Services</a>
             <a href="#">Clients</a>
             <a href="#">Contact</a>
@@ -125,7 +126,6 @@
 
         <!--close button-->
         <span class="close cursor" onclick="closeModal();">&times;</span>
-
 
         <!-- Next/previous controls -->
         <div class="prev" onclick="plusSlides(-1);">&#10094;</div>
@@ -174,6 +174,14 @@
         function closeNav() {
             document.getElementById("mySideNav").style.width = "0";
             document.getElementsByClassName("modal-content")[0].style.marginLeft = "0";
+        }
+
+        function deleteItem() {
+            var dots = document.getElementsByClassName("demo");
+            activeitem = dots[slideIndex - 1]
+            return fetch(activeitem.src, {
+                method: 'DELETE'
+            })
         }
 
         function showSlides(n) {
