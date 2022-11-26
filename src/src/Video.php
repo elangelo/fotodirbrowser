@@ -24,7 +24,7 @@ class Video extends Media implements MongoDB\BSON\Persistable
     public function getPreviewUrl()
     {
         $newDimensions = $this->getResizedDimension(self::$maxPreviewSize);
-        return "<div class=\"mySlides\"><video preload=\"none\" width=\"" . $newDimensions[0] . "\" height=\"" . $newDimensions[1] . "\" controls><source src=\"VideoHandler.php?fileLocation=" . $this->saveFilename . "\" /></video></div>";
+        return "<div class=\"mySlides\"><video class=\"demo\" preload=\"none\" width=\"" . $newDimensions[0] . "\" height=\"" . $newDimensions[1] . "\" controls><source src=\"VideoHandler.php?fileLocation=" . $this->saveFilename . "\" /></video></div>";
     }
 
     public function getThumbUrl(int $counter)

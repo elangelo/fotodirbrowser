@@ -24,7 +24,8 @@ class Image extends Media implements MongoDB\BSON\Persistable
     {
         $newDimensions = $this->getResizedDimension(self::$maxPreviewSize);
 
-        return "<div class=\"mySlides\" style=\"width:" . $newDimensions[0] . "px;\"><img loading=\"lazy\" src=\"ImageHandler.php?fileLocation=" . $this->saveFilename . "&size=" . self::$maxPreviewSize . "\" width=\"" . $newDimensions[0] . "\" height=\"" . $newDimensions[1] . "\"/></div>";
+        // return "<div class=\"mySlides\" style=\"width:" . $newDimensions[0] . "px;\"><img class=\"demo\" loading=\"lazy\" src=\"ImageHandler.php?fileLocation=" . $this->saveFilename . "&size=" . self::$maxPreviewSize . "\" alt=\"" . $this->fileName . "\" width=\"" . $newDimensions[0] . "\" height=\"" . $newDimensions[1] . "\"/></div>";
+        return "<img class=\"demo\" loading=\"lazy\" src=\"ImageHandler.php?fileLocation=" . $this->saveFilename . "&size=" . self::$maxPreviewSize . "\" alt=\"" . $this->fileName . "\"/>";
     }
 
     public function getThumbUrl(int $counter)
@@ -32,8 +33,6 @@ class Image extends Media implements MongoDB\BSON\Persistable
         $newDimensions = $this->getResizedDimension(self::$maxThumbSize);
         return "<img class=\"grid\" src=\"ImageHandler.php?fileLocation=" . $this->saveFilename . "&size=" . self::$maxThumbSize . "\" width=\"" . $newDimensions[0] . "\" height=\"" . $newDimensions[1] . "\"   onclick=\"openModal();currentSlide(" . $counter + 1 . ")\" />";
     }
-
-
 
     public function bsonSerialize()
     {

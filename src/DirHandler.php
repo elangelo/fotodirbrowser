@@ -104,7 +104,7 @@
 
     <!-- The Modal/Lightbox -->
     <div id="myModal" class="modal">
-        <span class="close cursor" onclick="closeModal()">&times;</span>
+
         <div class="modal-content">
             <?php
             foreach ($files as $file) {
@@ -113,16 +113,36 @@
             ?>
         </div>
 
-        <!-- Next/previous controls -->
-        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-        <a class="next" onclick="plusSlides(1)">&#10095;</a>
+        <!-- menu-->
+        <span class="menubutton" onclick="openNav();">&#9776;</span>
+        <div id="mySideNav" class="sidepanel">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav();">&times;</a>
+            <a href="#">About</a>
+            <a href="#">Services</a>
+            <a href="#">Clients</a>
+            <a href="#">Contact</a>
+        </div>
 
+        <!--close button-->
+        <span class="close cursor" onclick="closeModal();">&times;</span>
+
+
+        <!-- Next/previous controls -->
+        <div class="prev" onclick="plusSlides(-1);">&#10094;</div>
+        <div class="next" onclick="plusSlides(1);">&#10095;</div>
+        <!-- Caption text -->
+        <div class="caption-container">
+            <p id="caption"></p>
+        </div>
     </div>
+
+    <!-- </div> -->
+
     <script>
         // Open the Modal
         function openModal() {
             document.body.style.overflow = "hidden";
-            document.getElementById("myModal").style.display = "block";
+            document.getElementById("myModal").style.display = "flex";
         }
 
         // Close the Modal
@@ -144,24 +164,37 @@
             showSlides(slideIndex = n);
         }
 
+        /* Set the width of the side navigation to 250px and the left margin of the page content to 250px */
+        function openNav() {
+            document.getElementById("mySideNav").style.width = "250px";
+            document.getElementsByClassName("modal-content")[0].style.marginLeft = "250px";
+        }
+
+        /* Set the width of the side navigation to 0 and the left margin of the page content to 0 */
+        function closeNav() {
+            document.getElementById("mySideNav").style.width = "0";
+            document.getElementsByClassName("modal-content")[0].style.marginLeft = "0";
+        }
+
         function showSlides(n) {
             var i;
-            var slides = document.getElementsByClassName("mySlides");
+            // var slides = document.getElementsByClassName("mySlides");
             var dots = document.getElementsByClassName("demo");
             var captionText = document.getElementById("caption");
-            if (n > slides.length) {
+            if (n > dots.length) {
                 slideIndex = 1
             }
             if (n < 1) {
-                slideIndex = slides.length
+                slideIndex = dots.length
             }
-            for (i = 0; i < slides.length; i++) {
-                slides[i].style.display = "none";
+            for (i = 0; i < dots.length; i++) {
+                dots[i].style.display = "none";
             }
             for (i = 0; i < dots.length; i++) {
                 dots[i].className = dots[i].className.replace(" active", "");
             }
-            slides[slideIndex - 1].style.display = "block";
+            // slides[slideIndex - 1].style.display = "block";
+            dots[slideIndex - 1].style.display = "flex";
             dots[slideIndex - 1].className += " active";
             captionText.innerHTML = dots[slideIndex - 1].alt;
         }
