@@ -23,14 +23,13 @@ class Video extends Media implements MongoDB\BSON\Persistable
 
     public function getPreviewUrl()
     {
-        $newDimensions = $this->getResizedDimension(self::$maxPreviewSize);
-        return "<div class=\"mySlides\"><video class=\"demo\" preload=\"none\" width=\"" . $newDimensions[0] . "\" height=\"" . $newDimensions[1] . "\" controls><source src=\"VideoHandler.php?fileLocation=" . $this->saveFilename . "\" /></video></div>";
+        return "<video class=\"demo\" preload=\"none\" alt=\"" . $this->fileName . "\" controls><source src=\"VideoHandler.php?fileLocation=" . $this->saveFilename . "\" /></video>";
     }
 
     public function getThumbUrl(int $counter)
     {
         $newDimensions = $this->getResizedDimension(self::$maxThumbSize);
-        return "<!--" . $this->orientation . " --><img class=\"grid\" src=\"VideoHandler.php?fileLocation=" . $this->saveFilename . "&size=300\" width=\"" . $newDimensions[0] . "\" height=\"" . $newDimensions[1] . "\"  onclick=\"openModal();currentSlide(" . $counter + 1 . ")\" />";
+        return "<img class=\"grid\" src=\"VideoHandler.php?fileLocation=" . $this->saveFilename . "&size=300\" width=\"" . $newDimensions[0] . "\" height=\"" . $newDimensions[1] . "\"  onclick=\"openModal();currentSlide(" . $counter + 1 . ")\" />";
     }
 
     public function bsonSerialize()
