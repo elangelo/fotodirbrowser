@@ -27,7 +27,7 @@ class VideoEngine
             $frame = $video->frame(FFMpeg\Coordinate\TimeCode::fromSeconds(2));
             $frame->save($tmpfullThumbPath);
             $im = Vips\Image::thumbnail($tmpfullThumbPath, $size);
-            $play = Vips\Image::newFromFile('assets/play.png');
+            $play = Vips\Image::newFromFile('assets/video.svg');
 
             $out = $im->composite($play, "over");
             $out->writeToFile($fullThumbPath);

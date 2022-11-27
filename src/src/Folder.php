@@ -46,7 +46,7 @@ class Folder extends Media implements MongoDB\BSON\Persistable
         $tagstring
         </div>
         <div class=\"thumbimg\">
-        <img height=\"" . $this->thumbSize . "\" width=\"" . $this->thumbSize . "\" src=\"assets/folder_200.png\">
+        <img height=\"" . $this->thumbSize . "\" width=\"" . $this->thumbSize . "\" src=\"assets/folder.svg\">
         </div>
         <div class=\"thumblabel\">
         $this->fileName<br />

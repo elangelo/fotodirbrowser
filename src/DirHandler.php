@@ -69,11 +69,6 @@
         include "src/functions.php";
         include "src/Media.php";
 
-        // $saveDirName = "/";
-        // if (array_key_exists("fileLocation", $_GET)) {
-        // $saveDirName = htmlspecialchars($_GET['fileLocation']);
-        // }
-
         $dir = "/";
         if (array_key_exists("fileLocation", $_GET)) {
             $dir = htmlspecialchars($_GET['fileLocation']);
@@ -86,7 +81,6 @@
                 usort($files, [Media::class, "cmp_obj"]);
             }
             $counter = 0;
-            // print_r($files);
             foreach ($files as $file) {
                 echo $file->getThumbUrl($counter++);
             }
@@ -117,11 +111,10 @@
         <!-- menu-->
         <span class="menubutton" onclick="openNav();">&#9776;</span>
         <div id="mySideNav" class="sidepanel">
-            <a href="javascript:void(0)" class="closebtn" onclick="closeNav();">&times;</a>
-            <a href="javascript:void(0)" onclick="deleteItem();">delete</a>
-            <a href="#">Services</a>
-            <a href="#">Clients</a>
-            <a href="#">Contact</a>
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav();" style="margin-bottom: 30px;"><img width="36px" src="assets/close.svg"/></a>
+            <a href="javascript:void(0)" onclick="deleteItem();"><img width="36px" src="assets/delete.svg"/></a>
+            <a href="javascript:void(0)" onclick="downloadItem();"><img width="36px" src="assets/download.svg"/></a>
+            <a href="javascript:void(0)" onclick="getInfo();"><img width="36px" src="assets/info.svg"/></a>
         </div>
 
         <!--close button-->
@@ -164,16 +157,18 @@
             showSlides(slideIndex = n);
         }
 
-        /* Set the width of the side navigation to 250px and the left margin of the page content to 250px */
+        /* Set the width of the side navigation to 50px and the left margin of the page content to 50px */
         function openNav() {
-            document.getElementById("mySideNav").style.width = "250px";
-            document.getElementsByClassName("modal-content")[0].style.marginLeft = "250px";
+            document.getElementById("mySideNav").style.width = "100px";
+            document.getElementsByClassName("modal-content")[0].style.marginLeft = "100px";
+            document.getElementsByClassName("prev")[0].style.marginLeft="100px";
         }
 
         /* Set the width of the side navigation to 0 and the left margin of the page content to 0 */
         function closeNav() {
-            document.getElementById("mySideNav").style.width = "0";
-            document.getElementsByClassName("modal-content")[0].style.marginLeft = "0";
+            document.getElementById("mySideNav").style.width = "0px";
+            document.getElementsByClassName("modal-content")[0].style.marginLeft = "0px";
+            document.getElementsByClassName("prev")[0].style.marginLeft="0px";
         }
 
         function deleteItem() {
@@ -183,6 +178,10 @@
                 method: 'DELETE'
             })
         }
+
+        function downloadItem(){}
+
+        function getInfo(){}
 
         function showSlides(n) {
             var i;
