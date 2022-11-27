@@ -179,7 +179,13 @@
             })
         }
 
-        function downloadItem(){}
+        function downloadItem(){
+            var dots = document.getElementsByClassName("demo");
+            activeitem = dots[slideIndex - 1]
+            return fetch(activeitem.src, {
+                method: 'GET'
+            })
+        }
 
         function getInfo(){}
 
