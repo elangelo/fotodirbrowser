@@ -22,16 +22,13 @@ class Image extends Media implements MongoDB\BSON\Persistable
 
     public function getPreviewUrl()
     {
-        $newDimensions = $this->getResizedDimension(self::$maxPreviewSize);
-
-        // return "<div class=\"mySlides\" style=\"width:" . $newDimensions[0] . "px;\"><img class=\"demo\" loading=\"lazy\" src=\"ImageHandler.php?fileLocation=" . $this->saveFilename . "&size=" . self::$maxPreviewSize . "\" alt=\"" . $this->fileName . "\" width=\"" . $newDimensions[0] . "\" height=\"" . $newDimensions[1] . "\"/></div>";
-        return "<img class=\"demo\" loading=\"lazy\" src=\"ImageHandler.php?fileLocation=" . $this->saveFilename . "&size=" . self::$maxPreviewSize . "\" alt=\"" . $this->fileName . "\"/>";
+        return "<img class=\"demo\" id=\"preview_" . $this->id . "\" loading=\"lazy\" src=\"ImageHandler.php?fileLocation=" . $this->saveFilename . "&size=" . self::$maxPreviewSize . "\" alt=\"" . $this->fileName . "\"/>";
     }
 
     public function getThumbUrl(int $counter)
     {
         $newDimensions = $this->getResizedDimension(self::$maxThumbSize);
-        return "<img class=\"grid\" src=\"ImageHandler.php?fileLocation=" . $this->saveFilename . "&size=" . self::$maxThumbSize . "\" width=\"" . $newDimensions[0] . "\" height=\"" . $newDimensions[1] . "\"   onclick=\"openModal();currentSlide(" . $counter + 1 . ")\" />";
+        return "<img class=\"grid\" id=\"thumb_" . $this->id . "\" src=\"ImageHandler.php?fileLocation=" . $this->saveFilename . "&size=" . self::$maxThumbSize . "\" width=\"" . $newDimensions[0] . "\" height=\"" . $newDimensions[1] . "\"   onclick=\"openModal();currentSlide(" . $counter + 1 . ")\" />";
     }
 
     public function bsonSerialize()
@@ -46,6 +43,7 @@ class Image extends Media implements MongoDB\BSON\Persistable
 
     public function bsonUnserialize(array $data)
     {
+        $this->id = $data["_id"];
         $this->fileName = $data['fileName'];
         $this->directoryName = $data['directoryName'];
         $this->fullPath = $data['fullPath'];

@@ -1,5 +1,6 @@
 <?php
 require __DIR__ . '/../vendor/autoload.php';
+require_once('functions.php');
 
 class Folder extends Media implements MongoDB\BSON\Persistable
 {
@@ -8,7 +9,7 @@ class Folder extends Media implements MongoDB\BSON\Persistable
 
     public static function withRelativeDirAndFilename($directoryName, $fileName)
     {
-        $mediaDir = self::getMediaDir();
+        $mediaDir = getMediaDir();
 
         $instance = new self();
         $instance->scanned = false;
@@ -69,6 +70,7 @@ class Folder extends Media implements MongoDB\BSON\Persistable
 
     public function bsonUnserialize(array $data)
     {
+        $this->id = $data["_id"];
         $this->fileName = $data['fileName'];
         $this->directoryName = $data['directoryName'];
         $this->fullPath = $data['fullPath'];

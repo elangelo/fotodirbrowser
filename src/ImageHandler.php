@@ -42,7 +42,6 @@ if (isset($_SERVER['REQUEST_METHOD'])) {
 
                 $dal = new Dal();
                 $dal->delete($fileLocation);
-
             }
             echo 'deleted..... ' . $fileLocation;
             break;

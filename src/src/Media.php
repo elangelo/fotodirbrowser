@@ -18,6 +18,7 @@ require_once('functions.php');
 
 class Media
 {
+    public string $id;
     public string $fileName;
     //relative directory vs media directory
     public string $directoryName;
@@ -45,14 +46,9 @@ class Media
     public static int $maxPreviewSize = 960;
     public static int $maxThumbSize = 300;
 
-    public static function getMediaDir()
-    {
-        return getenv('BASEDIR');
-    }
-
     public static function withAbsoluteDirAndFilename(string $directoryName, string $fileName)
     {
-        $mediadir = self::getMediaDir();
+        $mediadir = getMediaDir();
         $fullPath = path_join($directoryName, $fileName);
         $instance = new self();
         $index = false;
@@ -90,13 +86,13 @@ class Media
             }
             if ($index && $creationTime != null) {
                 $instance->fileName = $fileName;
-                $parentPath = "/" . self::relativePath($mediadir, $directoryName);
+                $parentPath = "/" . relativePath($mediadir, $directoryName);
                 $instance->directoryName = $parentPath;
                 $instance->fullPath = $fullPath;
                 $instance->extension = $extension;
                 $instance->type = $type;
 
-                $relativePath = "/" . self::relativePath($mediadir, $fullPath);
+                $relativePath = "/" . relativePath($mediadir, $fullPath);
 
                 $instance->relativePath = $relativePath; // path_join($directoryName, $fileName);
 
@@ -116,17 +112,6 @@ class Media
             echo "scanning ${directoryName}/${fileName} failed, exception occurred:\r\n$ex";
         }
         return null;
-    }
-
-    public static function relativePath($from, $to, $ps = DIRECTORY_SEPARATOR)
-    {
-        $arFrom = explode($ps, rtrim($from, $ps));
-        $arTo = explode($ps, rtrim($to, $ps));
-        while (count($arFrom) && count($arTo) && ($arFrom[0] == $arTo[0])) {
-            array_shift($arFrom);
-            array_shift($arTo);
-        }
-        return str_pad("", count($arFrom) * 3, '..' . $ps) . implode($ps, $arTo);
     }
 
     public static function withBSONDoc(array $array)
@@ -171,6 +156,7 @@ class Media
     }
     public function bsonUnserialize(array $data)
     {
+        $this->id = $data["_id"];
         $this->fileName = $data['fileName'];
         $this->directoryName = $data['directoryName'];
         $this->fullPath = $data['fullPath'];

@@ -23,13 +23,13 @@ class Video extends Media implements MongoDB\BSON\Persistable
 
     public function getPreviewUrl()
     {
-        return "<video class=\"demo\" preload=\"none\" alt=\"" . $this->fileName . "\" controls><source src=\"VideoHandler.php?fileLocation=" . $this->saveFilename . "\" /></video>";
+        return "<video id=\"preview_" . $this->id . "\" class=\"demo\" preload=\"none\" alt=\"" . $this->fileName . "\" controls><source src=\"VideoHandler.php?fileLocation=" . $this->saveFilename . "\" /></video>";
     }
 
     public function getThumbUrl(int $counter)
     {
         $newDimensions = $this->getResizedDimension(self::$maxThumbSize);
-        return "<img class=\"grid\" src=\"VideoHandler.php?fileLocation=" . $this->saveFilename . "&size=300\" width=\"" . $newDimensions[0] . "\" height=\"" . $newDimensions[1] . "\"  onclick=\"openModal();currentSlide(" . $counter + 1 . ")\" />";
+        return "<img class=\"grid\" id=\"thumb_" . $this->id . "\" src=\"VideoHandler.php?fileLocation=" . $this->saveFilename . "&size=300\" width=\"" . $newDimensions[0] . "\" height=\"" . $newDimensions[1] . "\"  onclick=\"openModal();currentSlide(" . $counter + 1 . ")\" />";
     }
 
     public function bsonSerialize()
@@ -44,6 +44,7 @@ class Video extends Media implements MongoDB\BSON\Persistable
 
     public function bsonUnserialize(array $data)
     {
+        $this->id = $data["_id"];
         $this->fileName = $data['fileName'];
         $this->directoryName = $data['directoryName'];
         $this->fullPath = $data['fullPath'];

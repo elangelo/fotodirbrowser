@@ -1,6 +1,9 @@
 <?php
-require __DIR__ . '/../vendor/autoload.php';
 
+use MongoDB\Operation\Count;
+
+require __DIR__ . '/../vendor/autoload.php';
+require_once('functions.php');
 
 //documentation: https://www.mongodb.com/docs/php-library/current/reference/method/MongoDBCollection-deleteMany/
 
@@ -8,6 +11,7 @@ class Dal
 {
     public readonly MongoDB\Client $client;
     private readonly MongoDB\Collection $mediacollection;
+    private readonly MongoDB\Collection $logscollection;
     private readonly string $dbname;
 
     public function __construct()
@@ -16,6 +20,7 @@ class Dal
         $this->dbname = getenv('MONGO_DB');
         $this->client = new MongoDB\Client($mongourl);
         $this->mediacollection = $this->client->{$this->dbname}->media;
+        $this->logscollection = $this->client->{$this->dbname}->logs;
     }
 
     public static function waitUntilOnline($mongourl)
@@ -54,7 +59,7 @@ class Dal
         if ($directoryName == "/") {
             return true;
         }
-        $existsalready = $this->mediacollection->countDocuments(['relativePath' => $directoryName]);
+        $existsalready = $this->mediacollection->countDocuments(['relativePath' => $directoryName, 'deleted' => false]);
         return $existsalready > 0;
     }
 
@@ -76,7 +81,7 @@ class Dal
         if ($indexOfCurrentDir > 0) {
             $previousDir = ($siblings[$indexOfCurrentDir - 1])->relativePath;
         }
-        if ($indexOfCurrentDir < sizeof($siblings)) {
+        if ($indexOfCurrentDir + 1 < sizeof($siblings)) {
             $nextDir = ($siblings[$indexOfCurrentDir + 1])->relativePath;
         }
         return [$previousDir, $nextDir];
@@ -97,6 +102,11 @@ class Dal
         return $this->mediacollection->find(['directoryName' => $directoryName, 'deleted' => false])->toArray();
     }
 
+    public function getMedia($fileName)
+    {
+        return $this->mediacollection->findOne(['fullPath' => $fileName], ['showRecordId' => true]);
+    }
+
     public function insertRecords($media)
     {
         $this->mediacollection->insertMany($media);
@@ -109,10 +119,35 @@ class Dal
 
     public function delete($fileLocation)
     {
-        $this->mediacollection->updateOne(
-            ['fullPath' => $fileLocation],
-            ['$set' => ['deleted' => true]]
-        );
+        file_put_contents('php://stdout', "deleting $fileLocation\n");
+        //protection against eternal loop...
+        $media = $this->getMedia($fileLocation);
+        if ($media != null) {
+            $this->mediacollection->updateOne(
+                ['fullPath' => $fileLocation],
+                ['$set' => ['deleted' => true]]
+            );
+
+            $spltInfo = new SplFileInfo($fileLocation);
+            $folder = $spltInfo->getPath();
+            $relativeFolder = "/" . relativePath(getMediaDir(), $folder);
+            file_put_contents('php://stdout', "get item count for folder $relativeFolder\n");
+            $itemsInFolder = $this->getMediaForDirectory($relativeFolder);
+            $count = count($itemsInFolder);
+            file_put_contents('php://stdout', "get item count for folder $relativeFolder: $count\n");
+            if ($count == 0) {
+                file_put_contents('php://stdout', "deleting folder $folder\n");
+                $this->delete($folder);
+            }
+
+            $this->logscollection->insertOne(
+                [
+                    'date' => time(),
+                    'path' => $fileLocation,
+                    'operation' => 'DELETE'
+                ]
+            );
+        }
     }
 
     public function drop()

@@ -43,7 +43,7 @@
             <!-- previous/next -->
             <?php
             include "includes.inc";
-            include "src/Dal.php";
+            require_once("src/Dal.php");
             $dal = new Dal();
 
             $prevAndNext = $dal->getPreviousAndNextDirectory($dir);
@@ -66,8 +66,8 @@
         <!--gallery-->
         <?php
         include "includes.inc";
-        include "src/functions.php";
-        include "src/Media.php";
+        require_once("src/functions.php");
+        require_once( "src/Media.php");
 
         $dir = "/";
         if (array_key_exists("fileLocation", $_GET)) {
@@ -173,10 +173,23 @@
 
         function deleteItem() {
             var dots = document.getElementsByClassName("demo");
-            activeitem = dots[slideIndex - 1]
+            activeitem = dots[slideIndex - 1];
+            id = activeitem.id.replace('preview_', '');
             return fetch(activeitem.src, {
                 method: 'DELETE'
-            })
+            }).then(() => {
+                //remove the preview
+                activeitem.remove();
+                //remove the thumb
+                document.getElementById(`thumb_${id}`).remove();
+                showSlides(slideIndex);
+                $('#gallery').Mosaic({
+                    maxRowHeight: 300,
+                    maxRowHeightPolicy: 'tail',
+                    innerGap: 1,
+                    showTailWhenNotEnoughItemsForEvenOneRow: true
+                });
+            });
         }
 
         function downloadItem() {
@@ -214,23 +227,27 @@
             var i;
             // var slides = document.getElementsByClassName("mySlides");
             var dots = document.getElementsByClassName("demo");
-            var captionText = document.getElementById("caption");
-            if (n > dots.length) {
-                slideIndex = 1
+            if (dots.length > 0) {
+                var captionText = document.getElementById("caption");
+                if (n > dots.length) {
+                    slideIndex = 1
+                }
+                if (n < 1) {
+                    slideIndex = dots.length
+                }
+                for (i = 0; i < dots.length; i++) {
+                    dots[i].style.display = "none";
+                }
+                for (i = 0; i < dots.length; i++) {
+                    dots[i].className = dots[i].className.replace(" active", "");
+                }
+                // slides[slideIndex - 1].style.display = "block";
+                dots[slideIndex - 1].style.display = "flex";
+                dots[slideIndex - 1].className += " active";
+                captionText.innerHTML = dots[slideIndex - 1].alt;
+            } else {
+                closeModal();
             }
-            if (n < 1) {
-                slideIndex = dots.length
-            }
-            for (i = 0; i < dots.length; i++) {
-                dots[i].style.display = "none";
-            }
-            for (i = 0; i < dots.length; i++) {
-                dots[i].className = dots[i].className.replace(" active", "");
-            }
-            // slides[slideIndex - 1].style.display = "block";
-            dots[slideIndex - 1].style.display = "flex";
-            dots[slideIndex - 1].className += " active";
-            captionText.innerHTML = dots[slideIndex - 1].alt;
         }
     </script>
 
