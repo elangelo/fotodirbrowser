@@ -70,6 +70,7 @@ class Media
                 $extension = strtolower(end($tmp));
                 switch ($extension) {
                     case 'mp4':
+                    case 'm4v':
                         $instance = Video::withRelativeDirAndFilename($directoryName, $fileName);
                         $creationTime = $instance->metadata['creationTime'];
                         $creationDate = date('Y-m-d', $creationTime);
