@@ -69,7 +69,7 @@ class Dal
         $parentDirectory = $currentDirectory->directoryName;
         $currentDirectory = $currentDirectory->fileName;
 
-        $filter = ['directoryName' => $parentDirectory, 'type' => 'folder'];
+        $filter = ['directoryName' => $parentDirectory, 'type' => 'folder', 'deleted' => false];
 
         $options = ['sort' => ['fileName' => 1], 'projection' => ['fileName' => true, 'relativePath' => true, '_id' => false]];
 
