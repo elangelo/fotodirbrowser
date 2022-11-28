@@ -111,10 +111,10 @@
         <!-- menu-->
         <span class="menubutton" onclick="openNav();">&#9776;</span>
         <div id="mySideNav" class="sidepanel">
-            <a href="javascript:void(0)" class="closebtn" onclick="closeNav();" style="margin-bottom: 30px;"><img width="36px" src="assets/close.svg"/></a>
-            <a href="javascript:void(0)" onclick="deleteItem();"><img width="36px" src="assets/delete.svg"/></a>
-            <a href="javascript:void(0)" onclick="downloadItem();"><img width="36px" src="assets/download.svg"/></a>
-            <a href="javascript:void(0)" onclick="getInfo();"><img width="36px" src="assets/info.svg"/></a>
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav();" style="margin-bottom: 30px;"><img width="36px" src="assets/close.svg" /></a>
+            <a href="javascript:void(0)" onclick="deleteItem();"><img width="36px" src="assets/delete.svg" /></a>
+            <a href="javascript:void(0)" onclick="downloadItem();"><img width="36px" src="assets/download.svg" /></a>
+            <a href="javascript:void(0)" onclick="getInfo();"><img width="36px" src="assets/info.svg" /></a>
         </div>
 
         <!--close button-->
@@ -161,14 +161,14 @@
         function openNav() {
             document.getElementById("mySideNav").style.width = "100px";
             document.getElementsByClassName("modal-content")[0].style.marginLeft = "100px";
-            document.getElementsByClassName("prev")[0].style.marginLeft="100px";
+            document.getElementsByClassName("prev")[0].style.marginLeft = "100px";
         }
 
         /* Set the width of the side navigation to 0 and the left margin of the page content to 0 */
         function closeNav() {
             document.getElementById("mySideNav").style.width = "0px";
             document.getElementsByClassName("modal-content")[0].style.marginLeft = "0px";
-            document.getElementsByClassName("prev")[0].style.marginLeft="0px";
+            document.getElementsByClassName("prev")[0].style.marginLeft = "0px";
         }
 
         function deleteItem() {
@@ -179,15 +179,36 @@
             })
         }
 
-        function downloadItem(){
+        function downloadItem() {
             var dots = document.getElementsByClassName("demo");
-            activeitem = dots[slideIndex - 1]
-            return fetch(activeitem.src, {
-                method: 'GET'
-            })
+            activeitem = dots[slideIndex - 1];
+            sourceUrl = activeitem.src.split('&')[0];
+            doFetchDownload(sourceUrl);
         }
 
-        function getInfo(){}
+        //so fugly
+        function doFetchDownload(url) {
+            fetch(url)
+                .then(result => {
+                    const header = result.headers.get('Content-Disposition');
+                    const parts = header.split(';');
+                    filename = parts[1].split('=')[1].replaceAll("\"", "");
+                    return result.blob();
+                })
+                .then(blob => {
+                    const windowUrl = window.URL.createObjectURL(blob);
+                    const a = document.createElement("a");
+                    a.style.display = "none";
+                    a.href = windowUrl;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(windowUrl);
+                })
+        }
+
+
+        function getInfo() {}
 
         function showSlides(n) {
             var i;
