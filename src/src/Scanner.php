@@ -18,7 +18,6 @@ require_once('Media.php');
 Dal::waitUntilOnline(getenv('MONGO_URL'));
 
 $dal = new Dal();
-// $dal->waitUntilOnline();
 if ($dal->mediaCollectionExists()) {
     printf("Db exists already don't know how to update....");
     exit();
@@ -33,8 +32,6 @@ $baseDir = getenv('BASEDIR');
 $thumbDir = getenv('THUMBDIR');
 
 if ($handle = opendir($baseDir)) {
-    // $root[] = Media::withAbsoluteDirAndFilename($baseDir, '/');
-    // $dal->insertRecords($root);
     getChildren($baseDir, $dal);
 }
 
