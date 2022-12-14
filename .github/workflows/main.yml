@@ -17,12 +17,19 @@ jobs:
       #   shell: bash
       #   run: |
       #     ls
+      -
+        name: login to github container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - 
         name: build on docker
         uses: docker/build-push-action@v3
         with:
           context: .
-          push: true
+          # push: true
           tags: ghcr.io/elangelo/fotodirbrowser:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
