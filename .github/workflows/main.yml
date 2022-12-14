@@ -23,6 +23,6 @@ jobs:
         with:
           context: .
           push: true
-          tags: elangelo/fotodirbrowser:latest
+          tags: ghcr.io/elangelo/fotodirbrowser:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
