@@ -9,7 +9,4 @@ jobs:
       - name: build on docker
         uses: docker/build-push-action@v3
         with:
-          context: "{{defaultContext}}"
           push: false
-    
-    
