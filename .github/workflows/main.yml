@@ -9,11 +9,11 @@ jobs:
       -
         name: Checkout
         uses: actions/checkout@v3
-      -
-        name: check files
-        shell: bash
-        run: |
-          ls
+      # -
+      #   name: check files
+      #   shell: bash
+      #   run: |
+      #     ls
       - 
         name: build on docker
         uses: docker/build-push-action@v3
