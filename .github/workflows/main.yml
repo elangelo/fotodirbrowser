@@ -6,7 +6,11 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
-      - name: build on docker
+      -
+        name: Checkout
+        uses: actions/checkout@v3
+      - 
+        name: build on docker
         uses: docker/build-push-action@v3
         with:
           push: false
