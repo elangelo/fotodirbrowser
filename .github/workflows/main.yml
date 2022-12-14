@@ -1,0 +1,15 @@
+on:
+  push:
+    branches:
+    - main
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: build on docker
+        uses: docker/build-push-action@v3
+        with:
+          context: "{{defaultContext}}"
+          push: false
+    
+    
