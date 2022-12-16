@@ -36,7 +36,8 @@ if ($handle = opendir($baseDir)) {
 }
 
 closedir($handle);
-echo "DONE\r\n";
+
+
 
 function getChildren($dir, $dal)
 {
