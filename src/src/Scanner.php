@@ -28,10 +28,10 @@ if (array_key_exists("dropdb", $options)  && !$options["dropdb"]) {
     $dal->drop();
 }
 
-if (!$dal->mediaCollectionExists()) {
-    $baseDir = getenv('BASEDIR');
-    $thumbDir = getenv('THUMBDIR');
+$baseDir = getenv('BASEDIR');
+$thumbDir = getenv('THUMBDIR');
 
+if (!$dal->mediaCollectionExists()) {
     if ($handle = opendir($baseDir)) {
         getChildren($baseDir, $dal);
     }
@@ -64,15 +64,12 @@ function getChildren($dir, $dal)
     }
 }
 
-function addFileToMongodb($event, $fullpath)
+function addFileToMongodb($event, $dir, $filename)
 {
     require_once('Dal.php');
     $dal = new Dal();
-    $pathinfo = pathinfo($fullpath);
-    $pathinfo = pathinfo($fullpath);
-    $dir = $pathinfo['dirname'];
-    $file = $pathinfo['filename'];
-    $media = Media::withAbsoluteDirAndFilename($dir, $file);
+    echo "adding new media: " . $dir . DIRECTORY_SEPARATOR . $filename . "\n";
+    $media = Media::withAbsoluteDirAndFilename($dir, $filename);
     if ($media != null) {
         $files[] = $media;
         $dal->insertRecords($files);

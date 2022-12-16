@@ -47,15 +47,17 @@ class DirWatcher
                     } else {
                         $fullpath = $this->dirs[$event['wd']];
                     }
+                    $dirname = $this->dirs[$event['wd']];
+                    $filename = $event['name'];
 
                     if ($event['mask'] & IN_CREATE) {
                         if (is_dir($fullpath)) {
                             echo "adding new created directory " . $fullpath . " to watch\n";
                             $this->add($fullpath);
-                            $function($event['mask'], $fullpath);
+                            $function($event['mask'], $dirname, $filename);
                         }
                     } else if ($event['mask'] & IN_CLOSE_WRITE || $event['mask'] & IN_MOVED_TO) {
-                        $function($event['mask'], $fullpath);
+                        $function($event['mask'], $dirname, $filename);
                     }
                 }
             }
