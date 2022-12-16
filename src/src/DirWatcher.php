@@ -1,4 +1,4 @@
-<?
+<?php
 class DirWatcher
 {
     private $fd;
@@ -52,6 +52,7 @@ class DirWatcher
                         if (is_dir($fullpath)) {
                             echo "adding new created directory " . $fullpath . " to watch\n";
                             $this->add($fullpath);
+                            $function($event['mask'], $fullpath);
                         }
                     } else if ($event['mask'] & IN_CLOSE_WRITE || $event['mask'] & IN_MOVED_TO) {
                         $function($event['mask'], $fullpath);

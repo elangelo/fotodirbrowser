@@ -14,7 +14,7 @@ WORKDIR /app
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
 RUN chmod +x /usr/local/bin/install-php-extensions && \
-     install-php-extensions ffi mongodb vips exif && \
+     install-php-extensions ffi mongodb vips exif inotify && \
      echo "ffi.enable=true" >> /usr/local/etc/php/conf.d/docker-php-ext-ffi.ini && \
      echo "ffi.enable=true" >> /usr/local/etc/php/php.ini-production && \
      echo "memory_limit=1024M" >> /usr/local/etc/php/php.ini-production 
