@@ -1,0 +1,68 @@
+# Use root/example as user/password credentials
+version: '3.7'
+
+services:
+  mongo:
+    image: mongo:4.4
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+    volumes:
+      - ${MONGO_DATAPATH}/db:/data/db:rw
+      - ${MONGO_DATAPATH}/configdb:/data/configdb:rw
+
+  mongo-express:
+    depends_on:
+      - mongo
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_USER}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_PASSWORD}
+      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_USER}:${MONGO_PASSWORD}@mongo:27017/
+
+#nginx and fpm:http://geekyplatypus.com/dockerise-your-php-application-with-nginx-and-php7-fpm/
+
+  web:
+    image: nginx:latest
+    ports:
+      - "9080:80"
+    links:
+      - fotodirbrowser
+    volumes:
+      - ${NGINX_DATAPATH}/site.conf:/etc/nginx/conf.d/site.conf
+      - ./src:/app
+
+  fotodirbrowser:
+    depends_on:
+      - mongo
+    build: ./
+    image: fotodirbrowser
+    environment:
+      - BASEDIR=/data
+      - THUMBDIR=/thumbs
+      - MONGO_URL=mongodb://${MONGO_USER}:${MONGO_PASSWORD}@mongo:27017/
+      - MONGO_DB=fotodirbrowser
+    volumes:
+      - ${FOTO_DATAPATH}:/data:ro
+      - ${THUMB_DATAPATH}:/thumbs
+
+  fotodirbrowser-scanner:
+    depends_on:
+      - mongo
+    image: fotodirbrowser
+    restart: on-failure
+    environment:
+      - BASEDIR=/data
+      - THUMBDIR=/thumbs
+      - MONGO_URL=mongodb://${MONGO_USER}:${MONGO_PASSWORD}@mongo:27017/
+      - MONGO_DB=fotodirbrowser
+    command: ["php", "/app/src/Scanner.php"]
+    volumes:
+      - ${FOTO_DATAPATH}:/data:ro
+      - ${THUMB_DATAPATH}:/thumbs

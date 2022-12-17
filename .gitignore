@@ -1,1 +1,10 @@
 .pictures
+*.jpg
+*.mp4
+
+/vendor/
+example/
+
+.env
+src/vendor
+deploy/mongodb/db

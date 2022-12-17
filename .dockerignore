@@ -1,0 +1,16 @@
+*
+!src
+!*.php
+!*.png
+!includes.inc
+!*.css
+!js
+!deploy/fotodirbrowser/lighttpd.conf
+!deploy/fotodirbrowser/php.ini
+!composer.json
+!composer.lock
+!src
+src/vendor
+src/copySD
+src/debug
+src/src/tests

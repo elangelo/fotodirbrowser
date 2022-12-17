@@ -1,0 +1,459 @@
+<html>
+
+<head>
+    <!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script type="text/javascript" src="js/slimbox2.js"></script>
+  <link rel="stylesheet" href="style.css" type="text/css" media="screen"/>
+  <link rel="stylesheet" href="css/slimbox2.css" type="text/css" media="screen" /> -->
+    <!-- <link rel="stylesheet" href="grid.css" type="text/css" media="screen"> -->
+    <link rel="stylesheet" href="http://fotodirbrowser.local:9080/modal.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="http://fotodirbrowser.local:9080/css/breadcrumb.css" type="text/css" media="screen">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script type="text/javascript" src="http://fotodirbrowser.local:9080/js/jquery.mosaic.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://fotodirbrowser.local:9080/css/jquery.mosaic.min.css" />
+</head>
+
+<body style="overflow: auto;">
+    <!-- Breadcrumb navigation 2.0 -->
+    <div class="navigation">
+        <div>
+            <ul class="breadcrumb">
+                <li><a href="DirHandler.php?fileLocation=/">Home</a></li>
+                <li><a class="baseNavigation" href="DirHandler.php?fileLocation=/2020">2020</a></li>
+                <li><a class="baseNavigation" href="DirHandler.php?fileLocation=/2020/2020-09-17">2020-09-17</a></li>
+            </ul>
+        </div>
+        <div class="split">
+            <!-- previous/next -->
+            <a href="DirHandler.php?fileLocation=/2020/2020-01-01">&lt;</a><a
+                href="DirHandler.php?fileLocation=/2020/2020-09-18">&gt;</a>
+        </div>
+    </div>
+    <div style="clear:both"></div>
+    <div id="myMosaic">
+        <!--gallery-->
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_141104.jpg&amp;size=300"
+            onclick="openModal();currentSlide(1)" width="225" height="300">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_145416.jpg&amp;size=300"
+            onclick="openModal();currentSlide(2)" width="300" height="225">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_145422.jpg&amp;size=300"
+            onclick="openModal();currentSlide(3)" width="300" height="225">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_145450.jpg&amp;size=300"
+            onclick="openModal();currentSlide(4)" width="300" height="225">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_145453.jpg&amp;size=300"
+            onclick="openModal();currentSlide(5)" width="300" height="225">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_145455.jpg&amp;size=300"
+            onclick="openModal();currentSlide(6)" width="300" height="225">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_145508.jpg&amp;size=300"
+            onclick="openModal();currentSlide(7)" width="225" height="300">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_145510.jpg&amp;size=300"
+            onclick="openModal();currentSlide(8)" width="225" height="300">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_150123.jpg&amp;size=300"
+            onclick="openModal();currentSlide(9)" width="225" height="300">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_150134.jpg&amp;size=300"
+            onclick="openModal();currentSlide(10)" width="300" height="225">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_150137.jpg&amp;size=300"
+            onclick="openModal();currentSlide(11)" width="300" height="225">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_150139.jpg&amp;size=300"
+            onclick="openModal();currentSlide(12)" width="300" height="225">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_150654.jpg&amp;size=300"
+            onclick="openModal();currentSlide(13)" width="300" height="225">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_150656.jpg&amp;size=300"
+            onclick="openModal();currentSlide(14)" width="300" height="225">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_150807.jpg&amp;size=300"
+            onclick="openModal();currentSlide(15)" width="300" height="225">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_151419.jpg&amp;size=300"
+            onclick="openModal();currentSlide(16)" width="300" height="225">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_151702.jpg&amp;size=300"
+            onclick="openModal();currentSlide(17)" width="300" height="225">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_152416.jpg&amp;size=300"
+            onclick="openModal();currentSlide(18)" width="225" height="300">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_152750.jpg&amp;size=300"
+            onclick="openModal();currentSlide(19)" width="225" height="300">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_153839.jpg&amp;size=300"
+            onclick="openModal();currentSlide(20)" width="300" height="225">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_153847.jpg&amp;size=300"
+            onclick="openModal();currentSlide(21)" width="225" height="300">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_154613.jpg&amp;size=300"
+            onclick="openModal();currentSlide(22)" width="225" height="300">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_154754.jpg&amp;size=300"
+            onclick="openModal();currentSlide(23)" width="225" height="300">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_154922.jpg&amp;size=300"
+            onclick="openModal();currentSlide(24)" width="225" height="300">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_155118.jpg&amp;size=300"
+            onclick="openModal();currentSlide(25)" width="300" height="225">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_155137.jpg&amp;size=300"
+            onclick="openModal();currentSlide(26)" width="225" height="300">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_155430.jpg&amp;size=300"
+            onclick="openModal();currentSlide(27)" width="225" height="300">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_155435.jpg&amp;size=300"
+            onclick="openModal();currentSlide(28)" width="225" height="300">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_155452.jpg&amp;size=300"
+            onclick="openModal();currentSlide(29)" width="225" height="300">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_155846.jpg&amp;size=300"
+            onclick="openModal();currentSlide(30)" width="300" height="225">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_155851.jpg&amp;size=300"
+            onclick="openModal();currentSlide(31)" width="300" height="225">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_155904.jpg&amp;size=300"
+            onclick="openModal();currentSlide(32)" width="300" height="225">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_155938.jpg&amp;size=300"
+            onclick="openModal();currentSlide(33)" width="300" height="225">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_155939.jpg&amp;size=300"
+            onclick="openModal();currentSlide(34)" width="300" height="225">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_155945_Bokeh.jpg&amp;size=300"
+            onclick="openModal();currentSlide(35)" width="300" height="225">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_163127.jpg&amp;size=300"
+            onclick="openModal();currentSlide(36)" width="225" height="300">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_163130.jpg&amp;size=300"
+            onclick="openModal();currentSlide(37)" width="225" height="300">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_163245.jpg&amp;size=300"
+            onclick="openModal();currentSlide(38)" width="300" height="225">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_163248.jpg&amp;size=300"
+            onclick="openModal();currentSlide(39)" width="300" height="225">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_163717.jpg&amp;size=300"
+            onclick="openModal();currentSlide(40)" width="300" height="225">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_163727.jpg&amp;size=300"
+            onclick="openModal();currentSlide(41)" width="300" height="225">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_163856.jpg&amp;size=300"
+            onclick="openModal();currentSlide(42)" width="225" height="300">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_164051.jpg&amp;size=300"
+            onclick="openModal();currentSlide(43)" width="225" height="300">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_164113.jpg&amp;size=300"
+            onclick="openModal();currentSlide(44)" width="225" height="300">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_164116.jpg&amp;size=300"
+            onclick="openModal();currentSlide(45)" width="225" height="300">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_164145.jpg&amp;size=300"
+            onclick="openModal();currentSlide(46)" width="225" height="300">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_164150.jpg&amp;size=300"
+            onclick="openModal();currentSlide(47)" width="225" height="300">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_164156.jpg&amp;size=300"
+            onclick="openModal();currentSlide(48)" width="225" height="300">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_165350.jpg&amp;size=300"
+            onclick="openModal();currentSlide(49)" width="225" height="300">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_165357.jpg&amp;size=300"
+            onclick="openModal();currentSlide(50)" width="225" height="300">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_165940.jpg&amp;size=300"
+            onclick="openModal();currentSlide(51)" width="225" height="300">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_165958.jpg&amp;size=300"
+            onclick="openModal();currentSlide(52)" width="300" height="225">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_170002.jpg&amp;size=300"
+            onclick="openModal();currentSlide(53)" width="300" height="225">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_171728.jpg&amp;size=300"
+            onclick="openModal();currentSlide(54)" width="225" height="300">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_175412.jpg&amp;size=300"
+            onclick="openModal();currentSlide(55)" width="225" height="300">
+        <img src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_175432.jpg&amp;size=300"
+            onclick="openModal();currentSlide(56)" width="225" height="300">
+        <img src="http://fotodirbrowser.local:9080/VideoHandler.php?fileLocation=/data/2020/2020-09-17/VID_20200917_150147.mp4&amp;size=300"
+            onclick="openModal();currentSlide(57)" width="300" height="168.75"></li>
+        <img src="http://fotodirbrowser.local:9080/VideoHandler.php?fileLocation=/data/2020/2020-09-17/VID_20200917_152727.mp4&amp;size=300"
+            onclick="openModal();currentSlide(58)" width="300" height="168.75"></li>
+        <img src="http://fotodirbrowser.local:9080/VideoHandler.php?fileLocation=/data/2020/2020-09-17/VID_20200917_154524.mp4&amp;size=300"
+            onclick="openModal();currentSlide(59)" width="300" height="168.75"></li>
+        <img src="http://fotodirbrowser.local:9080/VideoHandler.php?fileLocation=/data/2020/2020-09-17/VID_20200917_154600.mp4&amp;size=300"
+            onclick="openModal();currentSlide(60)" width="300" height="168.75"></li>
+        <img src="http://fotodirbrowser.local:9080/VideoHandler.php?fileLocation=/data/2020/2020-09-17/VID_20200917_154738.mp4&amp;size=300"
+            onclick="openModal();currentSlide(61)" width="300" height="168.75"></li>
+        <img src="http://fotodirbrowser.local:9080/VideoHandler.php?fileLocation=/data/2020/2020-09-17/VID_20200917_155155.mp4&amp;size=300"
+            onclick="openModal();currentSlide(62)" width="300" height="168.75"></li>
+        <img src="http://fotodirbrowser.local:9080/VideoHandler.php?fileLocation=/data/2020/2020-09-17/VID_20200917_155207.mp4&amp;size=300"
+            onclick="openModal();currentSlide(63)" width="300" height="168.75"></li>
+        <img src="http://fotodirbrowser.local:9080/VideoHandler.php?fileLocation=/data/2020/2020-09-17/VID_20200917_155310.mp4&amp;size=300"
+            onclick="openModal();currentSlide(64)" width="300" height="168.75"></li>
+        <img src="http://fotodirbrowser.local:9080/VideoHandler.php?fileLocation=/data/2020/2020-09-17/VID_20200917_160230.mp4&amp;size=300"
+            onclick="openModal();currentSlide(65)" width="300" height="168.75"></li>
+        <img src="http://fotodirbrowser.local:9080/VideoHandler.php?fileLocation=/data/2020/2020-09-17/VID_20200917_163649.mp4&amp;size=300"
+            onclick="openModal();currentSlide(66)" width="300" height="168.75"></li>
+    </div>
+    <script>
+        $('#myMosaic').Mosaic({
+            maxRowHeight: 300,
+            maxRowHeightPolicy: 'oversize',
+            innerGap: 1
+        });
+    </script>
+
+    <!-- The Modal/Lightbox -->
+    <div id="myModal" class="modal" style="display: none;">
+        <span class="close cursor" onclick="closeModal()">×</span>
+        <div class="modal-content">
+            <div class="mySlides" style="width: 720px; display: block;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_141104.jpg&amp;size=960"
+                    width="720" height="960"></div>
+            <div class="mySlides" style="width: 960px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_145416.jpg&amp;size=960"
+                    width="960" height="720"></div>
+            <div class="mySlides" style="width: 960px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_145422.jpg&amp;size=960"
+                    width="960" height="720"></div>
+            <div class="mySlides" style="width: 960px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_145450.jpg&amp;size=960"
+                    width="960" height="720"></div>
+            <div class="mySlides" style="width: 960px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_145453.jpg&amp;size=960"
+                    width="960" height="720"></div>
+            <div class="mySlides" style="width: 960px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_145455.jpg&amp;size=960"
+                    width="960" height="720"></div>
+            <div class="mySlides" style="width: 720px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_145508.jpg&amp;size=960"
+                    width="720" height="960"></div>
+            <div class="mySlides" style="width: 720px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_145510.jpg&amp;size=960"
+                    width="720" height="960"></div>
+            <div class="mySlides" style="width: 720px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_150123.jpg&amp;size=960"
+                    width="720" height="960"></div>
+            <div class="mySlides" style="width: 960px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_150134.jpg&amp;size=960"
+                    width="960" height="720"></div>
+            <div class="mySlides" style="width: 960px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_150137.jpg&amp;size=960"
+                    width="960" height="720"></div>
+            <div class="mySlides" style="width: 960px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_150139.jpg&amp;size=960"
+                    width="960" height="720"></div>
+            <div class="mySlides" style="width: 960px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_150654.jpg&amp;size=960"
+                    width="960" height="720"></div>
+            <div class="mySlides" style="width: 960px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_150656.jpg&amp;size=960"
+                    width="960" height="720"></div>
+            <div class="mySlides" style="width: 960px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_150807.jpg&amp;size=960"
+                    width="960" height="720"></div>
+            <div class="mySlides" style="width: 960px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_151419.jpg&amp;size=960"
+                    width="960" height="720"></div>
+            <div class="mySlides" style="width: 960px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_151702.jpg&amp;size=960"
+                    width="960" height="720"></div>
+            <div class="mySlides" style="width: 720px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_152416.jpg&amp;size=960"
+                    width="720" height="960"></div>
+            <div class="mySlides" style="width: 720px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_152750.jpg&amp;size=960"
+                    width="720" height="960"></div>
+            <div class="mySlides" style="width: 960px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_153839.jpg&amp;size=960"
+                    width="960" height="720"></div>
+            <div class="mySlides" style="width: 720px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_153847.jpg&amp;size=960"
+                    width="720" height="960"></div>
+            <div class="mySlides" style="width: 720px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_154613.jpg&amp;size=960"
+                    width="720" height="960"></div>
+            <div class="mySlides" style="width: 720px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_154754.jpg&amp;size=960"
+                    width="720" height="960"></div>
+            <div class="mySlides" style="width: 720px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_154922.jpg&amp;size=960"
+                    width="720" height="960"></div>
+            <div class="mySlides" style="width: 960px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_155118.jpg&amp;size=960"
+                    width="960" height="720"></div>
+            <div class="mySlides" style="width: 720px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_155137.jpg&amp;size=960"
+                    width="720" height="960"></div>
+            <div class="mySlides" style="width: 720px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_155430.jpg&amp;size=960"
+                    width="720" height="960"></div>
+            <div class="mySlides" style="width: 720px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_155435.jpg&amp;size=960"
+                    width="720" height="960"></div>
+            <div class="mySlides" style="width: 720px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_155452.jpg&amp;size=960"
+                    width="720" height="960"></div>
+            <div class="mySlides" style="width: 960px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_155846.jpg&amp;size=960"
+                    width="960" height="720"></div>
+            <div class="mySlides" style="width: 960px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_155851.jpg&amp;size=960"
+                    width="960" height="720"></div>
+            <div class="mySlides" style="width: 960px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_155904.jpg&amp;size=960"
+                    width="960" height="720"></div>
+            <div class="mySlides" style="width: 960px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_155938.jpg&amp;size=960"
+                    width="960" height="720"></div>
+            <div class="mySlides" style="width: 960px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_155939.jpg&amp;size=960"
+                    width="960" height="720"></div>
+            <div class="mySlides" style="width: 960px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_155945_Bokeh.jpg&amp;size=960"
+                    width="960" height="720"></div>
+            <div class="mySlides" style="width: 720px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_163127.jpg&amp;size=960"
+                    width="720" height="960"></div>
+            <div class="mySlides" style="width: 720px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_163130.jpg&amp;size=960"
+                    width="720" height="960"></div>
+            <div class="mySlides" style="width: 960px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_163245.jpg&amp;size=960"
+                    width="960" height="720"></div>
+            <div class="mySlides" style="width: 960px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_163248.jpg&amp;size=960"
+                    width="960" height="720"></div>
+            <div class="mySlides" style="width: 960px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_163717.jpg&amp;size=960"
+                    width="960" height="720"></div>
+            <div class="mySlides" style="width: 960px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_163727.jpg&amp;size=960"
+                    width="960" height="720"></div>
+            <div class="mySlides" style="width: 720px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_163856.jpg&amp;size=960"
+                    width="720" height="960"></div>
+            <div class="mySlides" style="width: 720px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_164051.jpg&amp;size=960"
+                    width="720" height="960"></div>
+            <div class="mySlides" style="width: 720px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_164113.jpg&amp;size=960"
+                    width="720" height="960"></div>
+            <div class="mySlides" style="width: 720px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_164116.jpg&amp;size=960"
+                    width="720" height="960"></div>
+            <div class="mySlides" style="width: 720px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_164145.jpg&amp;size=960"
+                    width="720" height="960"></div>
+            <div class="mySlides" style="width: 720px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_164150.jpg&amp;size=960"
+                    width="720" height="960"></div>
+            <div class="mySlides" style="width: 720px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_164156.jpg&amp;size=960"
+                    width="720" height="960"></div>
+            <div class="mySlides" style="width: 720px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_165350.jpg&amp;size=960"
+                    width="720" height="960"></div>
+            <div class="mySlides" style="width: 720px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_165357.jpg&amp;size=960"
+                    width="720" height="960"></div>
+            <div class="mySlides" style="width: 720px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_165940.jpg&amp;size=960"
+                    width="720" height="960"></div>
+            <div class="mySlides" style="width: 960px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_165958.jpg&amp;size=960"
+                    width="960" height="720"></div>
+            <div class="mySlides" style="width: 960px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_170002.jpg&amp;size=960"
+                    width="960" height="720"></div>
+            <div class="mySlides" style="width: 720px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_171728.jpg&amp;size=960"
+                    width="720" height="960"></div>
+            <div class="mySlides" style="width: 720px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_175412.jpg&amp;size=960"
+                    width="720" height="960"></div>
+            <div class="mySlides" style="width: 720px; display: none;"><img loading="lazy"
+                    src="http://fotodirbrowser.local:9080/ImageHandler.php?fileLocation=/data/2020/2020-09-17/IMG_20200917_175432.jpg&amp;size=960"
+                    width="720" height="960"></div>
+            <div class="mySlides" style="display: none;"><video preload="none" controls="" width="960" height="540">
+                    <source src="http://fotodirbrowser.local:9080/VideoHandler.php?fileLocation=/data/2020/2020-09-17/VID_20200917_150147.mp4">
+                </video></div>
+            <div class="mySlides" style="display: none;"><video preload="none" controls="" width="960" height="540">
+                    <source src="http://fotodirbrowser.local:9080/VideoHandler.php?fileLocation=/data/2020/2020-09-17/VID_20200917_152727.mp4">
+                </video></div>
+            <div class="mySlides" style="display: none;"><video preload="none" controls="" width="960" height="540">
+                    <source src="http://fotodirbrowser.local:9080/VideoHandler.php?fileLocation=/data/2020/2020-09-17/VID_20200917_154524.mp4">
+                </video></div>
+            <div class="mySlides" style="display: none;"><video preload="none" controls="" width="960" height="540">
+                    <source src="http://fotodirbrowser.local:9080/VideoHandler.php?fileLocation=/data/2020/2020-09-17/VID_20200917_154600.mp4">
+                </video></div>
+            <div class="mySlides" style="display: none;"><video preload="none" controls="" width="960" height="540">
+                    <source src="http://fotodirbrowser.local:9080/VideoHandler.php?fileLocation=/data/2020/2020-09-17/VID_20200917_154738.mp4">
+                </video></div>
+            <div class="mySlides" style="display: none;"><video preload="none" controls="" width="960" height="540">
+                    <source src="http://fotodirbrowser.local:9080/VideoHandler.php?fileLocation=/data/2020/2020-09-17/VID_20200917_155155.mp4">
+                </video></div>
+            <div class="mySlides" style="display: none;"><video preload="none" controls="" width="960" height="540">
+                    <source src="http://fotodirbrowser.local:9080/VideoHandler.php?fileLocation=/data/2020/2020-09-17/VID_20200917_155207.mp4">
+                </video></div>
+            <div class="mySlides" style="display: none;"><video preload="none" controls="" width="960" height="540">
+                    <source src="http://fotodirbrowser.local:9080/VideoHandler.php?fileLocation=/data/2020/2020-09-17/VID_20200917_155310.mp4">
+                </video></div>
+            <div class="mySlides" style="display: none;"><video preload="none" controls="" width="960" height="540">
+                    <source src="http://fotodirbrowser.local:9080/VideoHandler.php?fileLocation=/data/2020/2020-09-17/VID_20200917_160230.mp4">
+                </video></div>
+            <div class="mySlides" style="display: none;"><video preload="none" controls="" width="960" height="540">
+                    <source src="http://fotodirbrowser.local:9080/VideoHandler.php?fileLocation=/data/2020/2020-09-17/VID_20200917_163649.mp4">
+                </video></div>
+        </div>
+   
+
+    <!-- Next/previous controls -->
+    <a class="prev" onclick="plusSlides(-1)">❮</a>
+    <a class="next" onclick="plusSlides(1)">❯</a>
+
+    </div>
+    <script>
+        // Open the Modal
+        function openModal() {
+            document.body.style.overflow = "hidden";
+            document.getElementById("myModal").style.display = "block";
+        }
+
+        // Close the Modal
+        function closeModal() {
+            document.body.style.overflow = "auto";
+            document.getElementById("myModal").style.display = "none";
+        }
+
+        var slideIndex = 1;
+        showSlides(slideIndex);
+
+        // Next/previous controls
+        function plusSlides(n) {
+            showSlides(slideIndex += n);
+        }
+
+        // Thumbnail image controls
+        function currentSlide(n) {
+            showSlides(slideIndex = n);
+        }
+
+        function showSlides(n) {
+            var i;
+            var slides = document.getElementsByClassName("mySlides");
+            var dots = document.getElementsByClassName("demo");
+            var captionText = document.getElementById("caption");
+            if (n > slides.length) {
+                slideIndex = 1
+            }
+            if (n < 1) {
+                slideIndex = slides.length
+            }
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            for (i = 0; i < dots.length; i++) {
+                dots[i].className = dots[i].className.replace(" active", "");
+            }
+            slides[slideIndex - 1].style.display = "block";
+            dots[slideIndex - 1].className += " active";
+            captionText.innerHTML = dots[slideIndex - 1].alt;
+        }
+    </script>
+
+    <div class="tags">
+
+        <form method="post" action="/DirHandler.php?fileLocation=/2020/2020-09-17">
+            <input name="tag" type="text"><input type="submit" value="OK">
+        </form>
+
+
+    </div>
+
+
+    <script type="text/javascript">
+        var availableHeight = window.innerHeight - 20;
+        document.getElementById("center").style.height = availableHeight;
+
+        window.onresize = resize;
+
+        function resize() {
+            var availableHeight = window.innerHeight - 20;
+            document.getElementById("center").style.height = availableHeight;
+        }
+    </script>
+
+</body>
+
+</html>
