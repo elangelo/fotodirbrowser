@@ -67,15 +67,27 @@ function getChildren($dir, $dal)
 function addFileToMongodb($event, $dir, $filename)
 {
     $supportedExtensions = array("jpg", "mp4", "m4v");
-    $ext = pathinfo($filename, PATHINFO_EXTENSION);
-    if (in_array(strtolower($ext), $supportedExtensions)) {
+    $fullpath = $dir . $filename;
+    if (is_dir($fullpath)) {
         require_once('Dal.php');
         $dal = new Dal();
-        echo "adding new media: " . $dir . DIRECTORY_SEPARATOR . $filename . "\n";
+        echo "adding directory: " . $fullpath . "\n";
         $media = Media::withAbsoluteDirAndFilename($dir, $filename);
         if ($media != null) {
             $files[] = $media;
             $dal->insertRecords($files);
+        }
+    } else {
+        $ext = pathinfo($filename, PATHINFO_EXTENSION);
+        if (in_array(strtolower($ext), $supportedExtensions)) {
+            require_once('Dal.php');
+            $dal = new Dal();
+            echo "adding new media: " . $dir . $filename . "\n";
+            $media = Media::withAbsoluteDirAndFilename($dir, $filename);
+            if ($media != null) {
+                $files[] = $media;
+                $dal->insertRecords($files);
+            }
         }
     }
 }
