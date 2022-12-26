@@ -23,7 +23,9 @@ class Video extends Media implements MongoDB\BSON\Persistable
 
     public function getPreviewUrl()
     {
-        return "<video id=\"preview_" . $this->id . "\" class=\"demo\" preload=\"none\" alt=\"" . $this->fileName . "\" controls><source src=\"VideoHandler.php?fileLocation=" . $this->saveFilename . "\" /></video>";
+        echo "<video controls id=\"preview_" . $this->id . "\" class=\"demo\" preload=\"auto\" alt=\"" . $this->fileName . "\" >";
+        echo "<source src=\"VideoHandler.php?fileLocation=" . $this->saveFilename . "\" type=\"video/mp4\" />";
+        echo "</video>";
     }
 
     public function getThumbUrl(int $counter)
