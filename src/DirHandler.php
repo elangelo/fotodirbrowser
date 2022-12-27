@@ -67,7 +67,7 @@
         <?php
         include "includes.inc";
         require_once("src/functions.php");
-        require_once( "src/Media.php");
+        require_once("src/Media.php");
 
         $dir = "/";
         if (array_key_exists("fileLocation", $_GET)) {
@@ -244,7 +244,13 @@
                 // slides[slideIndex - 1].style.display = "block";
                 dots[slideIndex - 1].style.display = "flex";
                 dots[slideIndex - 1].className += " active";
-                captionText.innerHTML = dots[slideIndex - 1].alt;
+                tagName = dots[slideIndex - 1].tagName;
+                if (tagName === "VIDEO") {
+                    alt = dot[slideIndex - 1].title;
+                } else {
+                    alt = dot[slideIndex - 1].alt;
+                }
+                captionText.innerHTML = alt;
             } else {
                 closeModal();
             }
