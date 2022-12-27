@@ -246,9 +246,9 @@
                 dots[slideIndex - 1].className += " active";
                 tagName = dots[slideIndex - 1].tagName;
                 if (tagName === "VIDEO") {
-                    alt = dot[slideIndex - 1].title;
+                    alt = dots[slideIndex - 1].title;
                 } else {
-                    alt = dot[slideIndex - 1].alt;
+                    alt = dots[slideIndex - 1].alt;
                 }
                 captionText.innerHTML = alt;
             } else {
