@@ -34,11 +34,8 @@ if (array_key_exists('fileLocation', $_GET)) {
         readfile($resizedImage);
     } else {
         $fullPath = $fileLocation;
-        file_put_contents('php://stdout', 'gonna stream');
         include_once('./src/VideoStream.php');
-        file_put_contents('php://stdout', 'got the stream class');
         $stream = new VideoStream($fullPath);
-        file_put_contents('php://stdout', 'lets stream!');
         $stream->start();
     }
 }
