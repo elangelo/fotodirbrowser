@@ -191,24 +191,37 @@ class Dal
 
             // Remove the duplicate documents except for the first one (keeping the original)
             $firstDocument = true;
+            $duplicateIds = [];
             foreach ($duplicates as $duplicate) {
                 if ($firstDocument) {
                     $firstDocument = false;
                     continue;
                 }
 
-                // Delete the duplicate document from the collection
-                $result = $this->mediacollection->deleteOne(['_id' => $duplicate->id]);
-                // echo "Deleted document with _id: " . $duplicate->id . ' and relativePath: ' . $duplicate->relativePath . PHP_EOL;
+                // Store the duplicate document's _id for deletion
+                $duplicateIds[] = $duplicate->id;
+                echo "Marked document with _id: " . $duplicate->id . " for deletion. RelativePath: " . $duplicate->relativePath . PHP_EOL;
+            }
 
-                // Inspect the DeleteResult
+            // Delete the duplicate documents from the collection using deleteMany()
+            if (!empty($duplicateIds)) {
+                $filter = ['_id' => ['$in' => $duplicateIds]];
+                $result = $this->mediacollection->deleteMany($filter);
+
+                // Check if the operation was successful
                 if ($result->isAcknowledged()) {
-                    echo "Document with _id: " . $duplicate->id . ' and relativePath: ' . $duplicate->relativePath . " was deleted successfully." . PHP_EOL;
-                    echo "Deleted count: " . $result->getDeletedCount() . PHP_EOL;
+                    echo "Deleted " . $result->getDeletedCount() . " duplicate documents." . PHP_EOL;
                 } else {
-                    echo "Failed to delete document with _id: " . $duplicate->id . PHP_EOL;
-                    // Optionally, you can log or handle the error in some way
+                    echo "Failed to delete duplicate documents" . PHP_EOL;
+                    // Check for write errors
+                    $writeErrors = $result->getWriteErrors();
+                    foreach ($writeErrors as $error) {
+                        echo "Write Error Code: " . $error->getCode() . PHP_EOL;
+                        echo "Write Error Message: " . $error->getMessage() . PHP_EOL;
+                    }
                 }
+            } else {
+                echo "No duplicates found for deletion." . PHP_EOL;
             }
         }
 
