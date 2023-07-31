@@ -199,7 +199,16 @@ class Dal
 
                 // Delete the duplicate document from the collection
                 $result = $this->mediacollection->deleteOne(['_id' => $duplicate->id]);
-                echo "Deleted document with _id: " . $duplicate->id . ' and relativePath: ' . $duplicate->relativePath . PHP_EOL;
+                // echo "Deleted document with _id: " . $duplicate->id . ' and relativePath: ' . $duplicate->relativePath . PHP_EOL;
+
+                // Inspect the DeleteResult
+                if ($result->isAcknowledged()) {
+                    echo "Document with _id: " . $duplicate->id . ' and relativePath: ' . $duplicate->relativePath . " was deleted successfully." . PHP_EOL;
+                    echo "Deleted count: " . $result->getDeletedCount() . PHP_EOL;
+                } else {
+                    echo "Failed to delete document with _id: " . $duplicate->id . PHP_EOL;
+                    // Optionally, you can log or handle the error in some way
+                }
             }
         }
 
