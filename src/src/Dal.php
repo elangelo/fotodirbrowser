@@ -178,12 +178,12 @@ class Dal
         ];
 
         // Execute the aggregation pipeline
-        $result = $this->mediacollection->aggregate($pipeline);
+        $cursor = $this->mediacollection->aggregate($pipeline);
 
         // Check if there are any duplicates
         if (!$cursor->isDead() && $cursor->count() > 0) {
             // Process and display duplicate documents
-            foreach ($result as $duplicateGroup) {
+            foreach ($cursor as $duplicateGroup) {
                 $relativePath = $duplicateGroup['_id'];
                 $count = $duplicateGroup['count'];
 
