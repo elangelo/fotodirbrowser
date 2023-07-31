@@ -150,6 +150,53 @@ class Dal
         }
     }
 
+    public function detectDoubles()
+    {
+        // Aggregation pipeline to find duplicates based on 'relativePath'
+        $pipeline = [
+            [
+                '$group' => [
+                    '_id' => ['$trim' => ['$relativePath']], // Trim to handle any whitespace variations
+                    'count' => ['$sum' => 1]
+                ]
+            ],
+            [
+                '$match' => [
+                    'count' => ['$gt' => 1] // Find groups with count greater than 1 (duplicates)
+                ]
+            ],
+            [
+                '$sort' => [
+                    'count' => -1 // Sort by count in descending order
+                ]
+            ]
+        ];
+
+        // Execute the aggregation pipeline
+        $result = $this->mediacollection->aggregate($pipeline);
+
+        // Check if there are any duplicates
+        if ($result->isSuccessful() && count($result->toArray()) > 0) {
+            // Process and display duplicate documents
+            foreach ($result as $duplicateGroup) {
+                $relativePath = $duplicateGroup['_id'];
+                $count = $duplicateGroup['count'];
+
+                // Find the actual duplicate documents in the collection
+                $duplicates = $this->mediacollection->find(['$trim' => ['$relativePath' => $relativePath]]);
+
+                // Process or display the duplicate documents as per your requirement
+                echo "Found $count duplicates with relativePath: $relativePath" . PHP_EOL;
+                foreach ($duplicates as $duplicate) {
+                    // Process or display each duplicate document here
+                    var_dump($duplicate);
+                }
+            }
+        } else {
+            echo "No duplicates found." . PHP_EOL;
+        }
+    }
+
     public function drop()
     {
         $this->mediacollection->drop();
