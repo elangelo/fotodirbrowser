@@ -94,6 +94,7 @@ function addFileToMongodb($event, $dir, $filename)
 
 echo ("checking for doubles\n");
 $dal->detectDoubles();
+echo ("duplicates removed\n");
 
 echo ("starting watcher\n");
 
