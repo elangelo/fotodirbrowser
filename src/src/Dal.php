@@ -181,23 +181,25 @@ class Dal
         $cursor = $this->mediacollection->aggregate($pipeline);
 
         // Check if there are any duplicates
-        if (!$cursor->isDead() && $cursor->count() > 0) {
-            // Process and display duplicate documents
-            foreach ($cursor as $duplicateGroup) {
-                $relativePath = $duplicateGroup['_id'];
-                $count = $duplicateGroup['count'];
+        $counter = 0;
+        foreach ($cursor as $duplicateGroup) {
+            $counter++;
+            $cleanRelativePath = $duplicateGroup['_id']['match'];
+            $count = $duplicateGroup['count'];
 
-                // Find the actual duplicate documents in the collection
-                $duplicates = $this->mediacollection->find(['$trim' => ['$relativePath' => $relativePath]]);
+            // Find the actual duplicate documents in the collection
+            $duplicates = $this->mediacollection->find(['relativePath' => ['$regex' => $cleanRelativePath]]);
 
-                // Process or display the duplicate documents as per your requirement
-                echo "Found $count duplicates with relativePath: $relativePath" . PHP_EOL;
-                foreach ($duplicates as $duplicate) {
-                    // Process or display each duplicate document here
-                    var_dump($duplicate);
-                }
+            // Process or display the duplicate documents as per your requirement
+            echo "Found $count duplicates with relativePath: $cleanRelativePath" . PHP_EOL;
+            foreach ($duplicates as $duplicate) {
+                // Process or display each duplicate document here
+                var_dump($duplicate);
             }
-        } else {
+        }
+
+        // Check if there are any duplicates
+        if ($counter === 0) {
             echo "No duplicates found." . PHP_EOL;
         }
     }
