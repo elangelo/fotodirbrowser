@@ -196,6 +196,10 @@ class Dal
                 // Process or display each duplicate document here
                 var_dump($duplicate);
             }
+
+            // Pause after processing each duplicate
+            echo "Press Enter to continue to the next duplicate...";
+            fgets(STDIN); // Wait for user input
         }
 
         // Check if there are any duplicates
