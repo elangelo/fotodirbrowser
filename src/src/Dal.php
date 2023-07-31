@@ -198,7 +198,7 @@ class Dal
                 }
 
                 // Delete the duplicate document from the collection
-                $result = $this->mediacollection->deleteOne(['_id' => $duplicate['_id']]);
+                $result = $this->mediacollection->deleteOne(['_id' => $duplicate->i]);
                 echo "Deleted document with _id: " . $duplicate->id . ' and relativePath: ' . $duplicate->relativePath . PHP_EOL;
             }
         }
