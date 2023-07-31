@@ -31,7 +31,7 @@ class Video extends Media implements MongoDB\BSON\Persistable
     public function getThumbUrl(int $counter)
     {
         $newDimensions = $this->getResizedDimension(self::$maxThumbSize);
-        return "<img class=\"grid\" id=\"thumb_" . $this->id . "\" src=\"VideoHandler.php?fileLocation=" . $this->saveFilename . "&size=300\" width=\"" . $newDimensions[0] . "\" height=\"" . $newDimensions[1] . "\"  onclick=\"openModal();currentSlide(" . $counter + 1 . ")\" />";
+        return "<img class=\"grid\" id=\"thumb_" . $this->id . "\" src=\"VideoHandler.php?fileLocation=" . $this->saveFilename . "&size=300\" width=\"" . $newDimensions[0] . "\" height=\"" . $newDimensions[1] . "\"  onclick=\"openModal();currentSlide(" . $counter + 1 . ")\"  alt=\"" . $this->fileName . "\"/>";
     }
 
     public function bsonSerialize()
