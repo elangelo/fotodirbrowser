@@ -155,8 +155,13 @@ class Dal
         // Aggregation pipeline to find duplicates based on 'relativePath'
         $pipeline = [
             [
+                '$addFields' => [
+                    'cleanRelativePath' => ['$regexFind' => ['input' => '$relativePath', 'regex' => '\S+']]
+                ]
+            ],
+            [
                 '$group' => [
-                    '_id' => ['$trim' => ['$relativePath']], // Trim to handle any whitespace variations
+                    '_id' => '$cleanRelativePath', // Uses the newly created field 'cleanRelativePath'
                     'count' => ['$sum' => 1]
                 ]
             ],
