@@ -185,21 +185,22 @@ class Dal
         foreach ($cursor as $duplicateGroup) {
             $counter++;
             $cleanRelativePath = $duplicateGroup['_id']['match'];
-            $count = $duplicateGroup['count'];
 
             // Find the actual duplicate documents in the collection
             $duplicates = $this->mediacollection->find(['relativePath' => ['$regex' => $cleanRelativePath]]);
 
-            // Process or display the duplicate documents as per your requirement
-            echo "Found $count duplicates with relativePath: $cleanRelativePath" . PHP_EOL;
+            // Remove the duplicate documents except for the first one (keeping the original)
+            $firstDocument = true;
             foreach ($duplicates as $duplicate) {
-                // Process or display each duplicate document here
-                var_dump($duplicate);
-            }
+                if ($firstDocument) {
+                    $firstDocument = false;
+                    continue;
+                }
 
-            // Pause after processing each duplicate
-            echo "Press Enter to continue to the next duplicate...";
-            fgets(STDIN); // Wait for user input
+                // Delete the duplicate document from the collection
+                //$result = $this->mediacollection->deleteOne(['_id' => $duplicate['_id']]);
+                echo "Deleted document with _id: " . $duplicate['_id'] . "and relativePath: " . $duplicate["relativePath"] . PHP_EOL;
+            }
         }
 
         // Check if there are any duplicates
