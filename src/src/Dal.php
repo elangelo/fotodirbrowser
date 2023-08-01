@@ -1,6 +1,7 @@
 <?php
 
 use MongoDB\Operation\Count;
+use MongoDB\BSON\ObjectID;
 
 require __DIR__ . '/../vendor/autoload.php';
 require_once('functions.php');
@@ -199,7 +200,7 @@ class Dal
                 }
 
                 // Store the duplicate document's _id for deletion
-                $duplicateIds[] = $duplicate->id;
+                $duplicateIds[] = new ObjectID($duplicate->id);
                 echo "Marked document with _id: " . $duplicate->id . " for deletion. RelativePath: " . $duplicate->relativePath . PHP_EOL;
             }
 
