@@ -108,9 +108,19 @@ class Dal
         return $this->mediacollection->findOne(['fullPath' => $fileName], ['showRecordId' => true]);
     }
 
-    public function insertRecords($media)
+    public function insertRecords($records)
     {
-        $this->mediacollection->insertMany($media);
+        // Assuming $documents is an array of documents you want to insert
+        $bulk = new MongoDB\Driver\BulkWrite;
+
+        foreach ($records as $record) {
+            $filter = ['relativePath' => $record['relativePath']];
+            $update = ['$set' => $record];
+            $bulk->update($filter, $update, ['upsert' => true]);
+        }
+
+        $result = $this->client->executeBulkWrite('media', $bulk);
+        // $this->mediacollection->insertMany($media);
     }
 
     public function setScanned($directoryName)
