@@ -206,6 +206,10 @@ class Dal
             // Delete the duplicate documents from the collection using deleteMany()
             if (!empty($duplicateIds)) {
                 $filter = ['_id' => ['$in' => $duplicateIds]];
+
+                $deleteQuery = json_encode(['deleteMany' => ['media' => $filter]]);
+                error_log("Delete Query: " . $deleteQuery);
+
                 $result = $this->mediacollection->deleteMany($filter);
 
                 // Check if the operation was successful
