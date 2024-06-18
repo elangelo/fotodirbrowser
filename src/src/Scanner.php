@@ -3,7 +3,8 @@
 <?php
 $shortopts = "";
 $longopts = array(
-    "dropdb"
+    "dropdb",
+    "forcescan"
 );
 
 $options = getopt($shortopts, $longopts);
@@ -26,6 +27,15 @@ $dal = new Dal();
 if (array_key_exists("dropdb", $options)  && !$options["dropdb"]) {
     print "Dropping db\r\n";
     $dal->drop();
+}
+
+if (array_key_exists("forcescan", $options)) {
+    print "Scan forced";
+    if ($handle = opendir($baseDir)) {
+        getChildren($baseDir, $dal);
+    }
+
+    closedir($handle);
 }
 
 $baseDir = getenv('BASEDIR');
