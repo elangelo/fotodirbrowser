@@ -4,7 +4,7 @@
 $shortopts = "";
 $longopts = array(
     "dropdb",
-    "forcescan"
+    "forcescan::"
 );
 
 $options = getopt($shortopts, $longopts);
@@ -41,9 +41,11 @@ if (!$dal->mediaCollectionExists()) {
 }
 
 if (array_key_exists("forcescan", $options)) {
-    print "Scan forced";
-    if ($handle = opendir($baseDir)) {
-        getChildren($baseDir, $dal);
+    $forceScanValue = $options["forcescan"];
+    print "Forcescan for the year {$forceScanValue} is triggered\r\n";
+    $subdir = $baseDir . "/" . $forceScanValue;
+    if ($handle = opendir($subdir)) {
+        getChildren($subdir, $dal);
     }
 
     closedir($handle);
