@@ -16,7 +16,9 @@
             ],
             "env": {
                 "XDEBUG_MODE": "debug,develop",
-                "XDEBUG_CONFIG": "client_port=${port}"
+                "XDEBUG_CONFIG": "client_port=${port}",
+                "MONGO_DB": "test",
+                "MONGO_URL": "mongodb://root:example@localhost:27017"
             }
         },
         {

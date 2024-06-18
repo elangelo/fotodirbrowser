@@ -10,9 +10,13 @@ $file1= '/home/samuel/source/fotodirbrowser/docs/example/2020/2020-09-17/IMG_202
 
 $media = Media::withAbsoluteDirAndFilename('/home/samuel/source/fotodirbrowser/docs/example/2020/2020-09-17','IMG_20200917_141104.jpg');
 
+var_dump(getenv("MONGO_URL"));
+
 $dal = new Dal();
 $records = array();
-$records[] = $media;
+array_push($records, $media);
+
+// $records[] = $media;
 
 $dal->insertRecords($records);
 

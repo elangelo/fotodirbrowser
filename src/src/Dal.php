@@ -11,6 +11,7 @@ require_once('functions.php');
 class Dal
 {
     public readonly MongoDB\Client $client;
+    private readonly MongoDB\Driver\Manager $manager;
     private readonly MongoDB\Collection $mediacollection;
     private readonly MongoDB\Collection $logscollection;
     private readonly string $dbname;
@@ -20,6 +21,7 @@ class Dal
         $mongourl = getenv('MONGO_URL');
         $this->dbname = getenv('MONGO_DB');
         $this->client = new MongoDB\Client($mongourl);
+        $this->manager = new MongoDB\Driver\Manager($mongourl);
         $this->mediacollection = $this->client->{$this->dbname}->media;
         $this->logscollection = $this->client->{$this->dbname}->logs;
     }
@@ -112,14 +114,13 @@ class Dal
     {
         // Assuming $documents is an array of documents you want to insert
         $bulk = new MongoDB\Driver\BulkWrite;
-
+        var_dump($records);
         foreach ($records as $record) {
-            $filter = ['relativePath' => $record['relativePath']];
+            $filter = ['relativePath' => $record->relativePath];
             $update = ['$set' => $record];
             $bulk->update($filter, $update, ['upsert' => true]);
         }
-
-        $result = $this->client->executeBulkWrite('media', $bulk);
+        $result = $this->manager->executeBulkWrite($this->mediacollection->getNamespace(), $bulk);
         // $this->mediacollection->insertMany($media);
     }
 

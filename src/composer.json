@@ -15,6 +15,6 @@
   "require": {
     "jcupitt/vips": "2.0.0",
     "php-ffmpeg/php-ffmpeg": "^1.0",
-    "mongodb/mongodb": "^1.13"
+    "mongodb/mongodb": "  1.19.1"
   }
 }
