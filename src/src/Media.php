@@ -110,7 +110,7 @@ class Media
                 return $instance;
             }
         } catch (Exception $ex) {
-            echo "scanning ${directoryName}/${fileName} failed, exception occurred:\r\n$ex";
+            echo "scanning {$directoryName}/{$fileName} failed, exception occurred:\r\n{$ex}";
         }
         return null;
     }

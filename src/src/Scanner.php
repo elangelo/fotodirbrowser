@@ -29,15 +29,6 @@ if (array_key_exists("dropdb", $options)  && !$options["dropdb"]) {
     $dal->drop();
 }
 
-if (array_key_exists("forcescan", $options)) {
-    print "Scan forced";
-    if ($handle = opendir($baseDir)) {
-        getChildren($baseDir, $dal);
-    }
-
-    closedir($handle);
-}
-
 $baseDir = getenv('BASEDIR');
 $thumbDir = getenv('THUMBDIR');
 
@@ -49,9 +40,18 @@ if (!$dal->mediaCollectionExists()) {
     closedir($handle);
 }
 
+if (array_key_exists("forcescan", $options)) {
+    print "Scan forced";
+    if ($handle = opendir($baseDir)) {
+        getChildren($baseDir, $dal);
+    }
+
+    closedir($handle);
+}
+
 function getChildren($dir, $dal)
 {
-    echo "scanning directory: ${dir}\r\n";
+    echo "scanning directory: {$dir}\r\n";
     if ($handle = opendir($dir)) {
         while (false !== ($file = readdir($handle))) {
             if ($file != "." && $file != "..") {
