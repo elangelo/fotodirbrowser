@@ -8,7 +8,7 @@ RUN composer install --no-dev --no-scripts --ignore-platform-reqs
 COPY src/ .
 RUN composer dumpautoload --optimize
 
-FROM php:8.1-fpm
+FROM php:8.2-fpm
 WORKDIR /app
 
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
