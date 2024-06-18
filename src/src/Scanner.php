@@ -45,11 +45,11 @@ if (array_key_exists("forcescan", $options)) {
     print "Forcescan for the year {$forceScanValue} is triggered\r\n";
     $subdir = $baseDir . "/" . $forceScanValue;
     echo ($subdir);
-    // if ($handle = opendir($subdir)) {
-    //     getChildren($subdir, $dal);
-    // }
+    if ($handle = opendir($subdir)) {
+        getChildren($subdir, $dal);
+    }
 
-    // closedir($handle);
+    closedir($handle);
 }
 
 function getChildren($dir, $dal)

@@ -114,7 +114,7 @@ class Dal
     {
         // Assuming $documents is an array of documents you want to insert
         $bulk = new MongoDB\Driver\BulkWrite;
-        var_dump($records);
+        //var_dump($records);
         foreach ($records as $record) {
             $filter = ['relativePath' => $record->relativePath];
             $update = ['$set' => $record];
