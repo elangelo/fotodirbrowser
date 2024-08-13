@@ -21,9 +21,13 @@ if (array_key_exists('fileLocation', $_GET)) {
             header('Last-Modified: ' . gmdate('D, d M Y H:i:s', filemtime($resizedImage)) . ' GMT', true, 200);
             header('Content-Length: ' . filesize($resizedImage));
             header('Content-Type: image/jpeg');
+            // $basename = basename($resizedImage);
+            // $fileParts = explode(".", $basename);
+            // $newfilename = basename($fileParts[0] . '_' . $size . '.' . $fileParts[1]);
+            // header('Content-Disposition: attachment; filename=' . $newfilename);
             $basename = basename($resizedImage);
-            $fileParts = explode(".", $basename);
-            $newfilename = basename($fileParts[0] . '_' . $size . '.' . $fileParts[1]);
+            $fileParts = pathinfo($basename);
+            $newfilename = $fileParts['filename'] . '_' . $size . '.' . $fileParts['extension'];
             header('Content-Disposition: attachment; filename=' . $newfilename);
         }
 
