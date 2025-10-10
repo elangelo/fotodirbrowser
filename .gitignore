@@ -8,3 +8,62 @@ example/
 .env
 src/vendor
 deploy/mongodb/db
+
+# Node.js / Frontend
+node_modules/
+frontend/node_modules/
+frontend/dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.yarn/
+package-lock.json
+
+# Go
+# Binaries
+go-backend/*.exe
+go-backend/*.exe~
+go-backend/*.dll
+go-backend/*.so
+go-backend/*.dylib
+go-backend/photoserver
+go-backend/cmd/server/server
+
+# Test binaries
+*.test
+
+# Go workspace file
+go.work
+go.work.sum
+
+# Go build cache
+go-backend/.cache/
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+
+# Thumbnails cache (if you implement one)
+.thumbnails/
+cache/
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Temporary files
+tmp/
+temp/

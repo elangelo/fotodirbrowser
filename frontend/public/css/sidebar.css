@@ -1,0 +1,299 @@
+/* Side panel styles */
+
+.side-panel {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 400px;
+    height: 100%;
+    background-color: #1a1a1a;
+    border-left: 1px solid #333;
+    z-index: 2000;
+    transition: right 0.3s ease;
+    box-shadow: -5px 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.side-panel.open {
+    right: 0;
+}
+
+.side-panel-content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.side-panel-header {
+    padding: 20px;
+    border-bottom: 1px solid #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #2a2a2a;
+}
+
+.side-panel-header h3 {
+    margin: 0;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.close-btn:hover {
+    background-color: #333;
+}
+
+.side-panel-body {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+/* Action buttons */
+.action-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 30px;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px 20px;
+    background-color: #333;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    text-align: left;
+    width: 100%;
+}
+
+.action-btn:hover {
+    background-color: #444;
+    transform: translateY(-1px);
+}
+
+.action-btn:active {
+    transform: translateY(0);
+}
+
+.action-btn.delete-btn {
+    background-color: #d32f2f;
+}
+
+.action-btn.delete-btn:hover {
+    background-color: #f44336;
+}
+
+.action-btn svg {
+    flex-shrink: 0;
+}
+
+/* File information */
+.file-info {
+    background-color: #2a2a2a;
+    border-radius: 8px;
+    padding: 20px;
+    border: 1px solid #333;
+}
+
+.file-info h4 {
+    margin: 0 0 15px 0;
+    color: #4CAF50;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.info-group {
+    margin-bottom: 20px;
+}
+
+.info-group:last-child {
+    margin-bottom: 0;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #333;
+}
+
+.info-item:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    color: #ccc;
+    font-weight: 500;
+    min-width: 100px;
+}
+
+.info-value {
+    color: #fff;
+    text-align: right;
+    word-break: break-all;
+}
+
+/* File thumbnail in sidebar */
+.file-preview {
+    width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #333;
+}
+
+/* Tags in sidebar */
+.file-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+}
+
+.file-tag {
+    background-color: #4CAF50;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* Progress indicator for actions */
+.action-progress {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #333;
+    border-radius: 8px;
+    border-left: 4px solid #4CAF50;
+}
+
+.action-progress.error {
+    border-left-color: #f44336;
+    background-color: rgba(244, 67, 54, 0.1);
+}
+
+.action-progress.success {
+    border-left-color: #4CAF50;
+    background-color: rgba(76, 175, 80, 0.1);
+}
+
+.progress-text {
+    color: #fff;
+    font-size: 14px;
+    margin: 0;
+}
+
+/* Responsive side panel */
+@media (max-width: 768px) {
+    .side-panel {
+        width: 100%;
+        right: -100%;
+    }
+    
+    .side-panel.open {
+        right: 0;
+    }
+    
+    .side-panel-header {
+        padding: 15px;
+    }
+    
+    .side-panel-body {
+        padding: 15px;
+    }
+    
+    .action-btn {
+        padding: 12px 15px;
+        font-size: 15px;
+    }
+    
+    .file-info {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .side-panel-header h3 {
+        font-size: 16px;
+    }
+    
+    .action-btn {
+        padding: 10px 12px;
+        font-size: 14px;
+        gap: 10px;
+    }
+    
+    .action-btn svg {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .info-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+    
+    .info-value {
+        text-align: left;
+    }
+}
+
+/* Animation for opening */
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+.side-panel.open .side-panel-content {
+    animation: slideInRight 0.3s ease;
+}
+
+/* Backdrop for mobile */
+.side-panel-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.side-panel-backdrop.show {
+    opacity: 1;
+    pointer-events: all;
+}
+
+@media (min-width: 769px) {
+    .side-panel-backdrop {
+        display: none;
+    }
+}

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Browser</title>
+    <link rel="stylesheet" href="/css/mosaic.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/modal.css">
+    <link rel="stylesheet" href="/css/breadcrumb.css">
+    <link rel="stylesheet" href="/css/sidebar.css">
+</head>
+<body>
+    <!-- Loading overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Breadcrumb navigation -->
+    <div class="navigation">
+        <div>
+            <ul id="breadcrumb" class="breadcrumb">
+                <!-- Breadcrumb items will be populated by JavaScript -->
+            </ul>
+        </div>
+        <div class="split">
+            <!-- Previous/Next navigation -->
+            <span id="prev-nav" class="inactivenavigation">&lt;</span>
+            <span id="next-nav" class="inactivenavigation">&gt;</span>
+        </div>
+    </div>
+    
+    <div style="clear:both"></div>
+
+    <!-- Main gallery container -->
+    <div id="gallery" class="gallery-container">
+        <!-- Gallery items will be populated by JavaScript -->
+    </div>
+
+    <!-- Modal/Lightbox -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <!-- Close button -->
+            <span class="close" id="modal-close">&times;</span>
+            
+            <!-- Main media container -->
+            <div id="modal-media" class="modal-media">
+                <!-- Media content will be populated by JavaScript -->
+            </div>
+            
+            <!-- Navigation arrows -->
+            <a class="prev" id="modal-prev">&#10094;</a>
+            <a class="next" id="modal-next">&#10095;</a>
+            
+            <!-- Thumbnail strip -->
+            <div id="modal-thumbnails" class="modal-thumbnails">
+                <!-- Thumbnail navigation will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Side panel -->
+    <div id="side-panel" class="side-panel">
+        <div class="side-panel-content">
+            <div class="side-panel-header">
+                <h3 id="side-panel-title">File Actions</h3>
+                <button id="side-panel-close" class="close-btn">&times;</button>
+            </div>
+            <div class="side-panel-body">
+                <div class="action-group">
+                    <button id="action-download" class="action-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="7,10 12,15 17,10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        Download
+                    </button>
+                    <button id="action-delete" class="action-btn delete-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="3,6 5,6 21,6"/>
+                            <path d="m19,6v14a2,2 0 0,1 -2,2H7a2,2 0 0,1 -2,-2V6m3,0V4a2,2 0 0,1 2,-2h4a2,2 0 0,1 2,2v2"/>
+                        </svg>
+                        Delete
+                    </button>
+                    <button id="action-info" class="action-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="l 12,16 0,-4"/>
+                            <path d="l 12,8 0,0"/>
+                        </svg>
+                        Info
+                    </button>
+                </div>
+                <div id="file-info" class="file-info">
+                    <!-- File information will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript bundle -->
+    <script src="/js/bundle.js"></script>
+</body>
+</html>

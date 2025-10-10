@@ -1,0 +1,39 @@
+{
+  "name": "foto-browser-ng",
+  "version": "1.0.0",
+  "description": "Modern Node.js photo/video browser frontend - converted from PHP",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js --dev",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --mode production",
+    "build:dev": "webpack --mode development",
+    "watch": "webpack --watch --mode development",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "photo-browser",
+    "video-gallery",
+    "nodejs",
+    "express",
+    "vanilla-javascript"
+  ],
+  "author": "Samuel Verstraete",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mime-types": "^2.1.35",
+    "multer": "^1.4.5-lts.1",
+    "path-to-regexp": "^6.2.1"
+  },
+  "devDependencies": {
+    "copy-webpack-plugin": "^13.0.1",
+    "nodemon": "^3.0.1",
+    "webpack": "^5.102.1",
+    "webpack-cli": "^6.0.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

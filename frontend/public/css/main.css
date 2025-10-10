@@ -1,0 +1,355 @@
+/* Main CSS styles for Photo Browser */
+
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+    background-color: #000;
+    color: #fff;
+    line-height: 1.6;
+}
+
+/* Loading overlay */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.3s ease;
+}
+
+.loading-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 3px solid #333;
+    border-top: 3px solid #fff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Navigation styles */
+.navigation {
+    background-color: #1a1a1a;
+    padding: 15px 20px;
+    border-bottom: 1px solid #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.split {
+    display: flex;
+    gap: 10px;
+}
+
+.split a,
+.split span {
+    color: #fff;
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    background-color: #333;
+    transition: background-color 0.2s ease;
+    cursor: pointer;
+    user-select: none;
+}
+
+.split a:hover {
+    background-color: #555;
+}
+
+.inactivenavigation {
+    background-color: #222 !important;
+    color: #666 !important;
+    cursor: not-allowed !important;
+}
+
+/* Base navigation link styles */
+a.baseNavigation {
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a.baseNavigation:hover {
+    color: #4CAF50;
+}
+
+/* Gallery container */
+.gallery-container {
+    padding: 0;
+    min-height: calc(100vh - 80px);
+}
+
+/* Justified gallery styles */
+.justified-gallery {
+    padding: 20px;
+    line-height: 0; /* Remove unwanted spacing */
+}
+
+.justified-row {
+    display: flex;
+    margin-bottom: 2px;
+    overflow: hidden;
+}
+
+/* Thumbnail styles */
+.thumb {
+    position: relative;
+    background-color: #222;
+    border-radius: 6px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.thumb:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    z-index: 10;
+}
+
+.thumb img,
+.thumb video {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.thumbimg {
+    position: relative;
+    overflow: hidden;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #333 0%, #222 100%);
+}
+
+.thumblabel {
+    background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.9) 100%);
+    color: #fff;
+    padding: 8px 12px;
+    font-size: 11px;
+    font-weight: 500;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .justified-gallery {
+        padding: 10px;
+    }
+    
+    .justified-row {
+        margin-bottom: 1px;
+    }
+    
+    .thumb {
+        min-height: 160px !important;
+    }
+    
+    .thumblabel {
+        font-size: 10px !important;
+        padding: 6px !important;
+        height: 35px !important;
+        position: absolute !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        z-index: 2 !important;
+    }
+    
+    .thumbimg {
+        height: calc(100% - 35px) !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .thumb {
+        min-height: 140px !important;
+    }
+    
+    .thumblabel {
+        font-size: 9px !important;
+        padding: 4px !important;
+        height: 30px !important;
+    }
+    
+    .thumbimg {
+        height: calc(100% - 30px) !important;
+    }
+}
+
+/* Folder icon styles */
+.folder-icon {
+    width: 48px;
+    height: 48px;
+    fill: #4CAF50;
+}
+
+/* Video icon styles */
+.video-icon {
+    width: 24px;
+    height: 24px;
+    fill: #fff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.8;
+}
+
+/* Tag cloud styles */
+.tagcloud {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    z-index: 10;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    max-width: calc(100% - 10px);
+}
+
+.thumbtag {
+    background-color: rgba(76, 175, 80, 0.8);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 12px;
+    font-size: 11px;
+    white-space: nowrap;
+    backdrop-filter: blur(5px);
+}
+
+/* Folder specific styles */
+.folder-thumb {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    max-height: 250px;
+    background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+    border: 1px solid #333;
+}
+
+.folder-thumb .thumbimg {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 150px;
+}
+
+.folder-thumb svg {
+    width: 60px;
+    height: 60px;
+    fill: #4CAF50;
+}
+
+/* Video overlay */
+.video-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 50%;
+    padding: 15px;
+    pointer-events: none;
+}
+
+.video-overlay svg {
+    width: 30px;
+    height: 30px;
+    fill: white;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .navigation {
+        padding: 10px;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .gallery-container {
+        padding: 10px;
+    }
+    
+    .thumblabel {
+        font-size: 12px;
+        padding: 8px;
+    }
+}
+
+/* Error states */
+.error-message {
+    color: #f44336;
+    text-align: center;
+    padding: 40px 20px;
+    font-size: 16px;
+}
+
+.empty-directory {
+    text-align: center;
+    padding: 60px 20px;
+    color: #666;
+}
+
+.empty-directory svg {
+    width: 80px;
+    height: 80px;
+    fill: #444;
+    margin-bottom: 20px;
+}
+
+/* Utility classes */
+.hidden {
+    display: none !important;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}

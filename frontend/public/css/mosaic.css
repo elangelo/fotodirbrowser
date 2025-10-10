@@ -1,0 +1,196 @@
+/* Mosaic grid layout styles - Modern CSS Grid implementation */
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-auto-rows: max-content;
+    gap: 16px;
+    padding: 20px;
+    align-items: start;
+}
+
+/* Dynamic grid for better mosaic effect */
+.gallery-masonry {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-auto-rows: 20px;
+    gap: 16px;
+    padding: 20px;
+}
+
+.gallery-masonry .thumb {
+    grid-row-end: span var(--grid-rows, 10);
+}
+
+/* Alternative flexbox mosaic for complex layouts */
+.gallery-flex {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 20px;
+    justify-content: center;
+}
+
+.gallery-flex .thumb {
+    flex: 0 0 auto;
+    max-width: 400px;
+    min-width: 200px;
+}
+
+/* Thumb size calculations for mosaic effect */
+.thumb.size-small {
+    --grid-rows: 8;
+    flex: 0 0 calc(25% - 12px);
+}
+
+.thumb.size-medium {
+    --grid-rows: 12;
+    flex: 0 0 calc(33.333% - 11px);
+}
+
+.thumb.size-large {
+    --grid-rows: 16;
+    flex: 0 0 calc(50% - 8px);
+}
+
+.thumb.size-xlarge {
+    --grid-rows: 20;
+    flex: 0 0 calc(66.666% - 6px);
+}
+
+/* Image/video container within thumbs */
+.thumb .media-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 8px 8px 0 0;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 150px;
+    max-height: 300px;
+}
+
+.thumb .media-container img,
+.thumb .media-container video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.thumb:hover .media-container img,
+.thumb:hover .media-container video {
+    transform: scale(1.05);
+}
+
+/* Aspect ratio containers for consistent layout */
+.aspect-ratio {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+
+.aspect-ratio::before {
+    content: '';
+    display: block;
+    padding-top: var(--aspect-ratio, 75%); /* Default 4:3 ratio */
+}
+
+.aspect-ratio > * {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Common aspect ratios */
+.aspect-1-1 { --aspect-ratio: 100%; }    /* Square */
+.aspect-4-3 { --aspect-ratio: 75%; }     /* 4:3 */
+.aspect-16-9 { --aspect-ratio: 56.25%; } /* 16:9 */
+.aspect-3-2 { --aspect-ratio: 66.67%; }  /* 3:2 */
+.aspect-2-1 { --aspect-ratio: 50%; }     /* 2:1 */
+
+/* Responsive mosaic */
+@media (max-width: 1200px) {
+    .gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+    
+    .gallery-masonry {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 12px;
+        padding: 15px;
+    }
+    
+    .gallery-masonry {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 12px;
+        padding: 15px;
+    }
+    
+    .gallery-flex {
+        gap: 12px;
+        padding: 15px;
+    }
+    
+    .gallery-flex .thumb {
+        flex: 0 0 calc(50% - 6px);
+        min-width: 150px;
+    }
+}
+
+@media (max-width: 480px) {
+    .gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 8px;
+        padding: 10px;
+    }
+    
+    .gallery-masonry {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 8px;
+        padding: 10px;
+    }
+    
+    .gallery-flex .thumb {
+        flex: 0 0 calc(100% - 0px);
+    }
+}
+
+/* Loading animation for mosaic items */
+.thumb.loading {
+    background: linear-gradient(90deg, #333 25%, #444 50%, #333 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* Hover effects for better user experience */
+.thumb {
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.thumb:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    filter: brightness(1.1);
+}
+
+.thumb:active {
+    transform: translateY(-2px);
+    transition: transform 0.1s ease;
+}
