@@ -104,9 +104,12 @@ Hints and sketches are folded away. Open them only when you're stuck.
   - `"GET /health"` matches one method and path. A `GET` pattern also answers `HEAD`.
   - `"GET /api/thumb/{id}/{size}"` captures segments; read them with `r.PathValue("id")`.
   - `"GET /api/media/{path...}"` captures the rest of the path.
-  - `"/"` matches anything no more specific pattern matched.
+  - `"GET /"` matches any GET request that no more specific pattern matched: the catch-all for the frontend.
 
-  The most specific pattern wins, so registration order doesn't matter. A wrong method gets an automatic `405 Method Not Allowed`.
+  The most specific pattern wins, so registration order doesn't matter. A request whose path only matches patterns for *other* methods gets an automatic `405 Method Not Allowed`.
+- **Give every route a method.**
+  - A pattern without a method, like a plain `"/"`, accepts every method. `POST /health` would then fall through to the frontend's file server and get a 404 instead of a 405.
+  - Mixing `"GET /"` with a method-less route like `"/api/directory"` panics at startup: neither pattern is more specific than the other.
 - **Middleware** is a function `func(http.Handler) http.Handler` that returns a handler wrapping the next one. It's a *closure*: the returned function captures `next`. Same idea as ASP.NET middleware, without the framework.
 - **Struct embedding:** a struct that embeds `http.ResponseWriter` gets all its methods ("promoted"), and you override only the one you need. It's composition that looks like inheritance. Also give it an `Unwrap() http.ResponseWriter` method, so `http.ResponseController` can still reach the real writer; Phase 1 needs that for streaming.
 - **`defer` + `recover()`:** a deferred function runs when the surrounding function returns, including during a panic, and `recover()` inside it stops the panic. Use it in one place at the edge (a middleware), never for normal control flow.
@@ -123,23 +126,56 @@ func withHeader(name, value string, next http.Handler) http.Handler {
 }
 ```
 
-**Do:**
-1. In `main.go`, replace `chi.NewRouter()` with `http.NewServeMux()`. Register the same routes with method patterns:
-   - `GET /health`
-   - `GET /api/directory` (your existing handler)
-   - `GET /api/media/{path...}` (the file server; keep the `http.StripPrefix`)
-   - `/` for the frontend (step 0.5 fills it in)
-2. Write two middlewares in `internal/api/middleware.go` and wrap the mux in them:
-   - `logRequests` logs method, path, status and duration. `ResponseWriter` doesn't expose the status, so wrap it in a struct that embeds it and records the `WriteHeader` call.
-   - `recoverPanics` turns a panic into a 500 and logs it.
-3. Drop CORS. The frontend is served from the same origin, so it isn't needed.
-4. Run `go mod tidy`; chi and cors disappear from `go.mod`.
+**Do it in three small rounds, and run the server after each one.**
+
+**Round 1: swap the router, no middleware yet.** Translate `setupRouter` line by line:
+
+| chi | standard library |
+|---|---|
+| `r := chi.NewRouter()` | `mux := http.NewServeMux()` |
+| `r.Get("/health", healthCheckHandler)` | `mux.HandleFunc("GET /health", healthCheckHandler)` |
+| `r.Handle("/api/directory", dirHandler)` | `mux.Handle("GET /api/directory", dirHandler)` |
+| `r.Handle("/api/media/*", http.StripPrefix(…))` | `mux.Handle("GET /api/media/{path...}", http.StripPrefix(…))` |
+| `r.Handle("/*", frontendServer)` | `mux.Handle("GET /", frontendServer)` (step 0.5 replaces the file server) |
+| `r.Use(middleware.Logger)`, `r.Use(middleware.Recoverer)` | gone for now; rounds 2 and 3 wrap the mux instead, because `ServeMux` has no `Use` |
+| `r.Use(cors.Handler(…))` | gone: the frontend is served from the same origin |
+| `func setupRouter(…) *chi.Mux` … `return r` | `func setupRouter(…) http.Handler` … `return mux` |
+
+- `HandleFunc` takes a plain function. `Handle` takes a value that has a `ServeHTTP` method, like your `DirectoryHandler` or what `http.StripPrefix` returns.
+- The return type becomes `http.Handler` because after round 2 you return the mux *wrapped* in middleware, and that's no longer a `*http.ServeMux`.
+- Run `go mod tidy`: chi and cors disappear from `go.mod`.
+
+**Round 2: a logger that doesn't know the status yet.**
+- Create `cmd/fotodirbrowser/middleware.go` in `package main`.
+- Write `logRequests`, logging method, path and duration. It's the `withHeader` example above with different code before and after `next.ServeHTTP`.
+- Return `logRequests(mux)` from `setupRouter`.
+
+Why `package main` and not `internal/api`? Names starting with a lowercase letter are invisible outside their own package. If you'd rather put it in `internal/api`, call it `LogRequests` and use `api.LogRequests(mux)`.
+
+**Round 3: status codes and panics.**
+- **Status:** `ResponseWriter` doesn't let you read the status back. Pass the handler a wrapper struct instead: it embeds the real writer and records the `WriteHeader` call.
+- **Panics:** add `recoverPanics`, which turns a panic into a 500 and logs it.
+- **Wiring:** wrap both, `return logRequests(recoverPanics(mux))`.
+
+<details><summary>Errors you might hit</summary>
+
+- **`cannot use healthCheckHandler (value of type func(w http.ResponseWriter, r *http.Request)) as http.Handler value in argument to mux.Handle: … (missing method ServeHTTP)`**
+  You passed a plain function to `Handle`. Use `HandleFunc`, or convert it with `http.HandlerFunc(healthCheckHandler)`.
+- **`panic: pattern "/api/directory" (registered at …) conflicts with pattern "GET /" (registered at …)`**
+  One route has a method and another doesn't. Give every route a method.
+- **Images return 404, everything else works.**
+  You kept chi's `/api/media/*`. In the standard library, `*` is just a literal character. Use `{path...}`, or a trailing slash, `"GET /api/media/"`, which also matches everything below it.
+- **`undefined: api.logRequests`, although the function is right there.**
+  It's lowercase, so it isn't visible from `package main`. Capitalize it, or move it into `package main`.
+- **`POST /health` returns 404 instead of 405.**
+  The frontend is registered as `"/"` rather than `"GET /"`, so it accepts the POST.
+</details>
 
 ✅ From the repo root:
 ```bash
 MEDIA_DIR=docs/example go run ./cmd/fotodirbrowser &
 curl -i localhost:3000/health                      # 200
-curl -i -X POST localhost:3000/health              # 405
+curl -i -X POST localhost:3000/health              # 405, with "Allow: GET, HEAD"
 curl -s 'localhost:3000/api/directory?path=/2020'  # JSON
 kill %1
 ```
@@ -269,7 +305,7 @@ A map does the job: `env := map[string]string{"MEDIA_DIR": dir}`, then pass `fun
 3. In `main.go`, pick the filesystem and serve it:
    - `var static fs.FS = web.Files`;
    - if `cfg.Dev`, use `os.DirFS("web")` instead;
-   - `mux.Handle("/", http.FileServerFS(static))`.
+   - `mux.Handle("GET /", http.FileServerFS(static))`.
 4. Delete what's left of `frontend/`: `server.js`, `package.json`, `webpack.config.js`, `README.md` and `.github/`. Remove the Node.js entries from `.gitignore`.
 5. Delete the dead code:
    - `web/js/mosaic.js` and `web/css/mosaic.css`, plus its `<link>` in `index.html`;
