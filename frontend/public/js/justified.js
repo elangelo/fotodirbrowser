@@ -305,11 +305,21 @@ export class JustifiedLayout {
     getItemAspectRatio(item) {
         if (!item) return 1;
 
-        // Check if aspect ratio is cached
+        // Check if aspect ratio is already set from API data (best source!)
         if (item.dataset.aspectRatio) {
             return parseFloat(item.dataset.aspectRatio);
         }
 
+        // Check if we have width and height from API
+        if (item.dataset.width && item.dataset.height) {
+            const width = parseFloat(item.dataset.width);
+            const height = parseFloat(item.dataset.height);
+            const aspectRatio = width / height;
+            item.dataset.aspectRatio = aspectRatio.toFixed(4);
+            return aspectRatio;
+        }
+
+        // Fallback: Try to get from loaded media (for backwards compatibility)
         const media = item.querySelector('img, video');
         let aspectRatio = 1; // Default square ratio
 

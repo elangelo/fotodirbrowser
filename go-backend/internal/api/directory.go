@@ -3,11 +3,16 @@ package api
 import (
 	"encoding/json" // For JSON encoding/decoding
 	"fmt"
+	"image"
+	_ "image/jpeg"
 	"io/fs" // File system interfaces
 	"net/http"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
+
+	"github.com/rwcarlsen/goexif/exif"
 )
 
 // DirectoryHandler handles /api/directory requests
@@ -139,6 +144,127 @@ func (h *DirectoryHandler) readDirectory(fullPath, relativePath string) (*Direct
 	return response, nil
 }
 
+func getImageDimensions(filePath string) (int, int, int, error) {
+	file, err := os.Open(filePath)
+	if err != nil {
+		return 0, 0, 0, err
+	}
+	defer file.Close()
+
+	// Get raw dimensions from actual image data (always accurate)
+	config, format, err := image.DecodeConfig(file)
+	if err != nil {
+		return 0, 0, 0, err
+	}
+
+	width := config.Width
+	height := config.Height
+	orientation := 0
+
+	// For JPEG files, check EXIF ONLY for orientation
+	if format == "jpeg" {
+		// Reopen file for EXIF reading (DecodeConfig consumed the reader)
+		file.Close()
+		file, err = os.Open(filePath)
+		if err != nil {
+			// Can't read EXIF, return dimensions without rotation
+			return width, height, 0, nil
+		}
+		defer file.Close()
+
+		// Try to read EXIF data
+		x, err := exif.Decode(file)
+		if err != nil {
+			// No EXIF data - return raw dimensions
+			return width, height, 0, nil
+		}
+
+		// Get orientation tag
+		orientTag, err := x.Get(exif.Orientation)
+		if err != nil {
+			// No orientation tag
+			return width, height, 0, nil
+		}
+
+		orient, err := orientTag.Int(0)
+		if err != nil {
+			return width, height, 0, nil
+		}
+
+		orientation = orient
+
+		// Swap width and height for rotated images
+		// Orientations 5, 6, 7, 8 need swap (90° or 270° rotation)
+		if orientation >= 5 && orientation <= 8 {
+			width, height = height, width
+		}
+	}
+
+	return width, height, orientation, nil
+}
+
+// Change this function (around line 135):
+// getVideoDimensions uses ffprobe to get video dimensions
+func getVideoDimensions(filePath string) (int, int, int, error) { // Changed: filepath -> filePath
+	// Run ffprobe to get video info
+	cmd := exec.Command("ffprobe",
+		"-v", "error",
+		"-select_streams", "v:0",
+		"-show_entries", "stream=width,height:stream_tags=rotate",
+		"-of", "json",
+		filePath, // Changed: filepath -> filePath
+	)
+
+	output, err := cmd.Output()
+	if err != nil {
+		return 0, 0, 0, fmt.Errorf("ffprobe failed: %w", err)
+	}
+
+	// Parse JSON output
+	var result struct {
+		Streams []struct {
+			Width  int `json:"width"`
+			Height int `json:"height"`
+			Tags   struct {
+				Rotate string `json:"rotate"`
+			} `json:"tags"`
+		} `json:"streams"`
+	}
+
+	if err := json.Unmarshal(output, &result); err != nil {
+		return 0, 0, 0, err
+	}
+
+	if len(result.Streams) == 0 {
+		return 0, 0, 0, fmt.Errorf("no video streams found")
+	}
+
+	stream := result.Streams[0]
+	width := stream.Width
+	height := stream.Height
+
+	orientation := videoRotationToExifOrientation(stream.Tags.Rotate)
+
+	if orientation == 6 || orientation == 8 {
+		width, height = height, width
+	}
+
+	return width, height, orientation, nil
+}
+
+func videoRotationToExifOrientation(rotation string) int {
+	switch rotation {
+	case "90":
+		return 6 // Rotate 90° CW
+	case "180":
+		return 3 // Rotate 180°
+	case "270", "-90":
+		return 8 // Rotate 90° CCW (270° CW = -90°)
+	default:
+		return 1 // Normal/no rotation
+	}
+}
+
 // createMediaItem creates a MediaItem from a directory entry
 func (h *DirectoryHandler) createMediaItem(relativePath string, entry fs.DirEntry) (MediaItem, error) {
 	name := entry.Name()
@@ -150,20 +276,34 @@ func (h *DirectoryHandler) createMediaItem(relativePath string, entry fs.DirEntr
 		return MediaItem{}, err
 	}
 
+	width, height, orientation := 0, 0, 0
+
 	// Determine media type
 	mediaType := "image"
 	if isVideoFile(name) {
 		mediaType = "video"
+		width, height, orientation, err = getVideoDimensions(filepath.Join(h.MediaRoot, relativePath, name))
+		if err != nil {
+			return MediaItem{}, err
+		}
+	} else {
+		width, height, orientation, err = getImageDimensions(filepath.Join(h.MediaRoot, relativePath, name))
+		if err != nil {
+			return MediaItem{}, err
+		}
 	}
 
 	// Create media item
 	item := MediaItem{
-		Type:      mediaType,
-		Name:      name,
-		Path:      filepath.Join(relativePath, name),
-		Thumbnail: filepath.Join("/api/media", relativePath, name), // For now, same as full path
-		Size:      info.Size(),
-		Modified:  info.ModTime().Unix(),
+		Type:        mediaType,
+		Name:        name,
+		Path:        filepath.Join(relativePath, name),
+		Thumbnail:   filepath.Join("/api/media", relativePath, name), // For now, same as full path
+		Size:        info.Size(),
+		Modified:    info.ModTime().Unix(),
+		Width:       width,
+		Height:      height,
+		Orientation: orientation,
 	}
 
 	return item, nil

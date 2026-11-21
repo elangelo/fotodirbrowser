@@ -14,6 +14,11 @@ body {
     line-height: 1.6;
 }
 
+/* Prevent browser from auto-rotating images (we handle rotation in backend) */
+img {
+    image-orientation: none;
+}
+
 /* Loading overlay */
 .loading-overlay {
     position: fixed;

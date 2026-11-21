@@ -67,6 +67,18 @@ export class GalleryRenderer {
         element.dataset.type = item.type;
         element.dataset.path = item.relativePath;
 
+        // Store dimensions from API for layout calculations
+        if (item.width && item.height) {
+            element.dataset.width = item.width;
+            element.dataset.height = item.height;
+            element.dataset.aspectRatio = (item.width / item.height).toFixed(4);
+        }
+
+        // Store orientation for potential CSS transforms
+        if (item.orientation) {
+            element.dataset.orientation = item.orientation;
+        }
+
         if (item.type === 'folder') {
             element.innerHTML = this.createFolderHTML(item);
             element.classList.add('folder-thumb');
