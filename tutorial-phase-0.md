@@ -147,7 +147,8 @@ func withHeader(name, value string, next http.Handler) http.Handler {
 
 **Round 2: a logger that doesn't know the status yet.**
 - Create `cmd/fotodirbrowser/middleware.go` in `package main`.
-- Write `logRequests`, logging method, path and duration. It's the `withHeader` example above with different code before and after `next.ServeHTTP`.
+- Write `logRequests`, logging method, path and duration. Its signature is `func logRequests(next http.Handler) http.Handler`: only `next`, because a logger needs no settings. Don't copy `withHeader`'s `name, value string` parameters; that example needed them to know which header to set.
+- If a middleware does need settings, write a function that takes the settings and *returns* a `func(http.Handler) http.Handler`. Chi's `RequestLogger` does exactly that.
 - Return `logRequests(mux)` from `setupRouter`.
 
 Why `package main` and not `internal/api`? Names starting with a lowercase letter are invisible outside their own package. If you'd rather put it in `internal/api`, call it `LogRequests` and use `api.LogRequests(mux)`.
